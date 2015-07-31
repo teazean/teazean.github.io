@@ -1,0 +1,108 @@
+---
+layout: post
+title: fonticon快速制作
+category: lbs-fe
+tags: fonticon css
+---
+
+##fonticon学习与制作
+
+###fonticon的应用场景
+fonticon的应用场景：适用于`纯色` `icon`的地方。
+
+使用fonticon的优点：
+
++ fonticon是矢量图标，字体放大并不会显示比较模糊
++ 减少图标总大小
+    
+<table>
+    <tr><th>类别</th><th>导入的图片大小</th><th>.woff增加的大小</th></tr>
+    <tr>
+        <td>无图标(只有null)</td>
+        <td></td>
+        <td>3000B左右</td>
+    </tr>
+    <tr>
+        <td>添加一个图标</td>
+        <td></td>
+        <td>字体总大小：1910B</td>
+    </tr>
+    <tr>
+        <td>增加一个图标</td>
+        <td>663B</td>
+        <td>110B</td>
+    </tr><tr>
+        <td>增加一个图标（上一个png放大100倍）</td>
+        <td>26.26k</td>
+        <td>420B</td>
+    </tr>
+</table>
+
+<!--break-->
+
+####注意：
+
+1. 导入的图片大小：这里是ps-web导出显示的数据大小，不是最终的png大小。在最终生成png图片的时候会添加1-2kb的大小。
+2. 每个字体里面必须保留null字标，否则浏览器无法识别字体。
+3. 奇怪的是只有一个null的woff字体，会比添加一个图标的字体大？试了多少次，每次结果都一样。新建的字体只保留null，基本上都有3000B大小。
+
+###fonticon制作
+
+本来在mac下想使用`fontlab`，无奈一直无法编辑字体。于是装了个xp虚拟机，跑`fontcreator`工具。步骤如下:
+
+1. 新建字体，删除除null之外的所有图标。
+2. 插入字符，双击一个字符，点击确定。
+3. 双击新添加的字符，进入编辑界面。横着有5条线，这里我们只要关注2个。
+    + WinAscent:字符显示的上边界
+    + WinDescent:字符显示的下边界
+4. 插入图片，图片在字符之后，将其等比拉伸到相对大小。大家估摸着自己的图标在什么位置，将其放到对应位置。如果插入的图片变形比较严重，可以再插入之前将png图片等比放大，再插入。
+<img src="/images/fonticon/typography_line_terms.png">
+5. 调整好图标位置之后，然后就要纠正左右轴线的位置。在视图->工具栏->变换->轴线。左右轴线相当于padding，一般设为0。
+    + 左轴线：标志与上一个字符的位置，若是负，与上一个字符发生重叠。若是正，距离上一个字符多少位置。
+    + 右轴线：标志与下一个字符的位置，若是负，与下一个字符发生重叠。若是正，距离下一个字符多少位置。
+6. 退出。可以看字符属性，这里有两个需要侧重：
+    + 名称：如果是单字符，比如k，我们就可以使用`<span>k</span>`或者`content:"\0069"`，多字符则不行。
+    + 代码点：通过代码点，我们来对应这个字体。如代码点是$6B,我们就可以使用`<span>&#x69;</span>`、`content:"\69"`或者`content:"\0069"`;
+7. 导出字体即可。（我这里保存为woff格式）
+
+再贴一张自己制作字体的截图，以供参考：
+<img src="/images/fonticon/fontcreator1.png">
+
+###使用
+这里只写一般使用结构，如浏览器兼容写法，可以参照网上一些写法。
+
+css
+
+    @font-face{
+        font-family: 'mytest2';
+        src: url('others/test4-3.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+    #font-icon span{
+        font-family: 'mytest2';
+        font-size: 40px;
+        letter-spacing: 10px;
+    }
+    #font-icon span:before{
+        font-family: 'mytest2';
+        content:"\6B"; /*或者content:"k"*/
+        font-size: 40px;
+        padding-right:10px; 
+    }
+
+html
+
+    <div class="demo">
+        <h3>font-icon</h3>
+        <div class="content"  id="font-icon">
+            <span>&#x69;</span> <!--或者 <span>k</span> -->
+        </div>
+    </div>
+
+###推荐
+
+推荐在网上专门的fonticon字体库中寻找自己需要的图标或者上传设计好的svg图标，网站会生成fonticon。如：
+
+* [fontello.com](http://fontello.com/f)
+* [iconfont.cn](http://www.iconfont.cn/)
