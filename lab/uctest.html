@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #log{
+            font-size: 40px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <p id="log"></p>
+    <script>
+    var log = document.querySelector("#log");
+    log.innerHTML = navigator.userAgent;
+    </script>
+</body>
+</html>
