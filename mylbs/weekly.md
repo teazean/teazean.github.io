@@ -68,6 +68,9 @@ title: 周报
 >1. 文中讲了许多前段加密算法，第一个技术方案的核心思想就是增加阅读、解密的难度，降低代码可读性。
 >2. 其他技术包括：执行字符串代码，将js放入其他位置如png、css（content中）,防止开发者工具，混合加密等。
 
-
+**Facebook移动端照片预览背后的技术**        
+[http://www.infoq.com/cn/news/2015/08/facebook-photo-preview?utm_source=infoq&utm_medium=popular_widget&utm_campaign=popular_content_list&utm_content=homepage]()   
+>1. 在2g(32k/s)网络下,在请求封面的时候会有两个请求：GraphQL获取图片URL和通过URL从CDN获取图片。这一过程会异常缓慢
+>2. facebook设计在GraphQL请求的时候，返回200B大小的缩略图，采用JPEG压缩，并且将JPEG固定的头信息放到App里面，获取图片内容后，在通过App组装成JPEG图片。并且为JPEG中因图而异的Huffman表，增加版本号，以便对Huffman添加版本控制。
 
 
