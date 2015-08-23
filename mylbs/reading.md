@@ -1,9 +1,10 @@
 ---
 layout: post
-title: 周报
+title: 阅读：雁过拔毛
+class: mylbs
 ---
 
-##周报-阅读
+##阅读
 
 ###2015-08-03
 

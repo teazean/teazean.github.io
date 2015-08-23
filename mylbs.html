@@ -1,0 +1,36 @@
+---
+layout: page
+title: MyLBS
+header: MyLBS
+group: navigation
+---
+{% include JB/setup %}
+<div class="row-fluid">
+  <div class="span12">
+    <div class = "card">
+        <h2 class="hat_title">MYLBS</h2>
+        <ul>
+        {% assign pages_list = site.pages %}
+        {% if site.JB.pages_list.provider == "custom" %}
+          {% include custom/pages_list %}
+        {% else %}
+          {% for node in pages_list %}
+            {% if node.title != null and node.class == "mylbs"%}
+              {% if group == null or group == node.group %}
+                {% if page.url == node.url %}
+                <li class="active"><a href="{{ BASE_PATH }}{{node.url}}" class="active">{{node.title}}</a></li>
+                {% else %}
+                <li><a href="{{ BASE_PATH }}{{node.url}}">{{node.title}}</a></li>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% assign pages_list = nil %}
+        {% assign group = nil %}
+        </ul>
+    </div>
+  </div>
+</div>
+
+

@@ -97,6 +97,10 @@ requirejs总是通过script标签来加载执行js。也就是说：所有的js�
     + fetch()：创建script标签，加载js，注册completeLoad事件的封装
     + enable()：激活当前Module，对它的每一个依赖depMod注册defined监听事件。在结尾调用check();
     + check()：检查当前Module的状态，1. 是否加载；2. 检查depCount值，若为0，返回exports，并触发自身的defined事件。
+    + on(name,cb)：供其他Module监听自己的状态，常用的defined 和error
+    + emit(name,evt)：触发某一个状态，触发observer的callback.
+
+    > Module之间依赖关系是一种Observer模式。每一个Module监听它的所以依赖的defined事件以及error事件。
 
 
 ####context上下文

@@ -1,9 +1,10 @@
 ---
 layout: post
-title: 周报
+title: LBS-YY新人
+class: mylbs
 ---
 
-##LBS 新手一枚
+##LBS运营 新手一枚
 
 notes：一下内容默认移动端开发。
 
@@ -31,9 +32,9 @@ notes：一下内容默认移动端开发。
 >最后确定出是部分三星、摩托的部分国行Android手机“阉割”了谷歌GMS服务包，导致HTML5的geolocation无法使用wifi和基站定位服务导致。
 
 + **关于微信下分享的说明**    
->[朋友圈规则大起底](http://mp.weixin.qq.com/s?__biz=MjM5NjM4MDAxMg==&mid=209206514&idx=1&sn=29ad2bda65c238442d6d1c15c1c6911a&scene=0&key=0acd51d81cb052bcd05365f4642be4b507800fb2cd835700c63d849879c3f2a7beb720bea6350f74af55e1f20b6f93a6&ascene=1&uin=MTkzMDA2NjU%3D&devicetype=Windows+7&version=61020019&pass_ticket=gN1VvcvYHglGx8tve0615%2BXEvi4n%2FgyaYjYYBM7Eea8%3D)
->[诱导行为->诱导分享](https://mp.weixin.qq.com/cgi-bin/readtemplate?token=790407390&t=business/faq_operation_tmpl&type=info#3dot3_3)
->[哪种行为或内容不应在朋友圈出现？](http://kf.qq.com/faq/131117ne2MV7141117JzI32q.html)
+>[朋友圈规则大起底](http://mp.weixin.qq.com/s?__biz=MjM5NjM4MDAxMg==&mid=209206514&idx=1&sn=29ad2bda65c238442d6d1c15c1c6911a&scene=0&key=0acd51d81cb052bcd05365f4642be4b507800fb2cd835700c63d849879c3f2a7beb720bea6350f74af55e1f20b6f93a6&ascene=1&uin=MTkzMDA2NjU%3D&devicetype=Windows+7&version=61020019&pass_ticket=gN1VvcvYHglGx8tve0615%2BXEvi4n%2FgyaYjYYBM7Eea8%3D)     
+>[诱导行为->诱导分享](https://mp.weixin.qq.com/cgi-bin/readtemplate?token=790407390&t=business/faq_operation_tmpl&type=info#3dot3_3)    
+>[哪种行为或内容不应在朋友圈出现？](http://kf.qq.com/faq/131117ne2MV7141117JzI32q.html)     
 
 + **微信内是不允许location跳转到其他非同域名网站。**   
 >location.href = "place.html"是可以的。但location.href = "http://api.map.baidu.com/direction?"是不允许的，但可以用a.trigger("click")来模拟。

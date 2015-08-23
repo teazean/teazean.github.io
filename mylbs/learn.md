@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 学习笔记
+class: mylbs
 ---
 
 ##学习笔记
