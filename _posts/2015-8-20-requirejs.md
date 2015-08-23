@@ -140,6 +140,7 @@ requirejs总是通过script标签来加载执行js。也就是说：所有的js�
     }
 
 > completeLoad函数干了两件事：
+
 > 1. 如果当前js文件调用了define(name,deps,callback)，在registry队列中取出或者新建`id=name`的Module，并调用init(deps,callback);
 > 2. 如果在当前js文件中没有define(name=moduleName,deps,callback),那就模拟一次define(name=moduleName,deps,callback)。
 
