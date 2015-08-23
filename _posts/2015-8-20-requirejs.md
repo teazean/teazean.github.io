@@ -205,7 +205,7 @@ requirejs总是通过script标签来加载执行js。也就是说：所有的js�
 require.js执行过程中调用了两次：
 
 1. req({}):创建contexts["_"]执行上下文
-2. req(cfg):在执行这行代码之前，之前已将data-main指定的入口函数添加到cfg.deps中，会执行一次`localRequire(cfg.deps,callback)`;
+2. req(cfg):在执行这行代码之前，之前已将data-main指定的入口函数添加到cfg.deps中，会执行一次`localRequire(cfg.deps,callback)`;具体执行见下面流程图。
 
 ###require.js入口函数：require
 
