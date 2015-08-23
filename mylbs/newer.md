@@ -35,3 +35,5 @@ notes：一下内容默认移动端开发。
 >[诱导行为->诱导分享](https://mp.weixin.qq.com/cgi-bin/readtemplate?token=790407390&t=business/faq_operation_tmpl&type=info#3dot3_3)
 >[哪种行为或内容不应在朋友圈出现？](http://kf.qq.com/faq/131117ne2MV7141117JzI32q.html)
 
++ **微信内是不允许location跳转到其他非同域名网站。**   
+>location.href = "place.html"是可以的。但location.href = "http://api.map.baidu.com/direction?"是不允许的，但可以用a.trigger("click")来模拟。
