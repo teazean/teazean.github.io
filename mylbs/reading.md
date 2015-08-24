@@ -74,4 +74,12 @@ class: mylbs
 >1. 在2g(32k/s)网络下,在请求封面的时候会有两个请求：GraphQL获取图片URL和通过URL从CDN获取图片。这一过程会异常缓慢
 >2. facebook设计在GraphQL请求的时候，返回200B大小的缩略图，采用JPEG压缩，并且将JPEG固定的头信息放到App里面，获取图片内容后，在通过App组装成JPEG图片。并且为JPEG中因图而异的Huffman表，增加版本号，以便对Huffman添加版本控制。
 
+###2015-08-24   
+**Web 研发模式演变**  
+[https://github.com/lifesinger/lifesinger.github.com/issues/184]()                
+>1. web1.0 ，页面由java、php在服务器生成，浏览器只负责展示。
+>2. 后端为主的MVC时代，在第一种模式的基础上，以后端为出发点，对Web Server分层架构，比如Structs、Spring MVC。
+>3. Ajax带来的SPA时代：Ajax的兴起、以及CDN托管html、css、js等静态资源，前后端的关键协作点转为Ajax接口。但这种模式只是将服务端的代码复杂度挪到了前段。
+>4. 前段为主的MV*时代，对前端架构进行分层。如Backbone、AngularJS。
+>5. Node带来的全站时代：第三、四中模式，依旧是把繁重的JS代码放在Browser中，通过Node带来前后端分离，Browser进行展示页面，Node处理路由、模板、`应用逻辑`，而后端专注于处理`业务逻辑`。
 
