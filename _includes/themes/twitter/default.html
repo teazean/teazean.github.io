@@ -92,6 +92,12 @@
           oldP = st;
         }
       })();
+
+      $(function(){
+        $(".content.card a").each(function(i,e){
+          e.target = "_blank"; 
+        });
+      });
     </script>
   </body>
 </html>

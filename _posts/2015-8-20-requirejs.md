@@ -9,19 +9,21 @@ tags: js requirejs
 
 requirejs是目前前端模块管理应用最广泛的架构，它的思想是前段模块化编程不可缺失的。
 
-通常来说搞懂一个项目的数据结构，基本上就把这个项目的基本逻辑搞清楚了。这里分两部分来介绍requirejs：      
+通常来说搞懂一个项目的数据结构，基本上就把这个项目的基本逻辑搞清楚了。这里先介绍数据结构，然后再做分析。      
 
 1. 综述
 2. 数据结构
 3. require.js的关键函数
 4. require.js加载执行与入口函数流程：define、require
+5. 使用
 
 ###1. 综述
 
-requirejs总是通过script标签来加载执行js。也就是说：所有的js均在全局模式下执行，对于支持requirejs的模块，变量通过`define`函数导出。不支持requirejs的模块，总是会输出全局变量如：jQuery,nativeAppAdapter等，不过这些也是可以通过requirejs的shim配置来管理。
-
+requirejs总是通过script标签来加载执行js。也就是说：所有的js均在全局模式下执行，对于支持requirejs的模块，变量通过`define`函数导出。不支持requirejs的模块，总是会输出undefined，但可以通过全局变量来使用，如：jQuery,nativeAppAdapter等，这些也是可以通过requirejs的shim配置来管理。
     
 <!--break--> 
+
+requirejs嵌套比较深，这篇文章主要讲述主干的流程。
 
 ###2. 数据结构
 
@@ -42,15 +44,11 @@ requirejs总是通过script标签来加载执行js。也就是说：所有的js�
 
 这里有一些说明：        
 
-* Module有6种状态：这些状态并不是互斥的。没种状态只表示一种设置完成。
+* Module的状态：这些状态并不是互斥的。没种状态只表示一种设置完成。
+<img src="/images/requirejs/module.png">
     + inited：表明Module是否已经初始化，设置依赖、回调等。设置inited=true之后是不会在执行fetch()的。
-    + enabling：enable()中进入enabled过程锁。
     + enabled：enabled状态，这种状态表示Module是被激活状态。
     + fetched：标志Module的js是否被加载，在check()函数中检查，如果没有加载，将执行module.fetch()函数。
-
-        >module.fetch()->module.load()->context.load()->req.load()，req.load()完成创建script标签，并注册`onload=context.completeLoad`.
-
-    + defining：check()函数中进入defined过程锁
     + defined：Module已经被定义完成，进入defined队列，`defined[mod.map.id] = mod.exports`
 
 * 创建Module的三种途径
@@ -86,7 +84,7 @@ requirejs总是通过script标签来加载执行js。也就是说：所有的js�
         3. 如果defined队列不存在，并且registry队列也不存在，在registry中新建depModule，并且直接调用enable()方法。
 
             >- deps Module,这里的deps有两种来源：`define(name,deps,callback)`和`require(deps,callback)`。如果没有特殊配置paths，默认的deps均是相对于baseUrl需找js文件。这里将为每一个dependency创建一个`id=dependecy`的Module,如`deps=['../jquery-1.12.1']`,将创建一个`id="../jquery-1.12.1"`的Module。变量ModuleName=deps[i]; 
-            >- 第三种模式创建的deps Module，因为deps[i].js这个文件还没加载，无法得知它的依赖，以及callback，所以第一次尝试调用enable()->check()，在check()中，监测到`inited = undefined`, 执行fetch()加载js文件,文件加载成功之后，在completeLoad()中，就可以知晓该Module的deps和callback，间接调用init()方法(设置`inited = true`)。
+            >- 第三种模式创建的deps Module，因为deps[i].js这个文件还没加载，无法得知它的依赖，以及callback，所以第一次尝试调用enable()->check()，在check()中，监测到`inited = undefined`, 执行fetch()加载js文件,文件加载成功之后，在completeLoad()中，就可以知晓该Module的deps和callback，调用init()(设置`inited = true`)->check()。
 
 * Module主要方法与变量
     
@@ -95,6 +93,8 @@ requirejs总是通过script标签来加载执行js。也就是说：所有的js�
     + map = {id:'jquery'...}：Module的一些属性，如id等
     + init(depMaps, factory, errback, options)：设置Module的依赖，以及回调（factory）
     + fetch()：创建script标签，加载js，注册completeLoad事件的封装
+
+        >module.fetch()->module.load()->context.load()->req.load()，req.load()完成创建script标签，并注册`onload=context.completeLoad`.
     + enable()：激活当前Module，对它的每一个依赖depMod注册defined监听事件。在结尾调用check();
     + check()：检查当前Module的状态，1. 是否加载；2. 检查depCount值，若为0，返回exports，并触发自身的defined事件。
     + on(name,cb)：供其他Module监听自己的状态，常用的defined 和error
@@ -224,10 +224,90 @@ require.js执行过程中调用了两次：
 1. globalDefQueue.push([name,deps,callback]);
 2. 等待js加载完成调用completeLoad()(详情见上);
 
+###5. 使用
+
+####定义模块
+
+以下是jQuery中定义模块的实现。
+
+    define( "jquery", [], function() {
+        return jQuery;
+    });
+
+> define(name,deps,callback);对应参数为模块名、依赖、exports函数（必须有返回值）。有意思的是当`typeof callback === "object"`的时候，该模块的输出就直接是该Object。这样是可以解释requirejs jsonp的调用。
+
+####引入模块
+
+    require(["jquery"], function($) {
+        //do something with $
+    });
 
 
+####配置
+
+requirejs的配置项有很多，这里介绍几种常用的。细节可以看：<http://requirejs.org/docs/api.html#config>
+
+    require.config({
+        //设置查找一个模块的基础路径，默认是data-main指定的。
+        baseUrl: "/another/path",
+        //设置模块对应路径
+        paths: {
+            "some": "some/v1.0"
+        },
+        //requirejs对不支持AMD规范的模块的管理配置
+        shim: {
+            'backbone': {
+                //These script dependencies should be loaded before loading
+                //backbone.js
+                deps: ['underscore', 'jquery'],
+                //Once loaded, use the global 'Backbone' as the
+                //module value.
+                exports: 'Backbone'
+            },
+            'underscore': {
+                exports: '_'
+            },
+            'foo': {
+                deps: ['bar'],
+                exports: 'Foo',
+                init: function (bar) {
+                    return this.Foo.noConflict();
+                }
+            }
+        }
+    });
+
+###插件
+
+requirejs有很多插件，如domready、text、jsonp等，见<https://github.com/jrburke/requirejs/wiki/Plugins>
+
+下面是text.js插件的使用:
+
+    require(["some/module", "text!some/module.html", "text!some/module.css"],
+        function(module, html, css) {
+            
+        }
+    );
+
+>对于"text!some/module.html",requirejs会判断moduleName中否包含"!",如果包含，"!"之前的就是插件，会去请求text.js插件加载'some/modudle.html'。(在fetch()中有实现；text.js放至于baseUrl下。)
 
 
+###requirejs jsonp
+
+    require(["http://map.baidu.com/event/interfaces/pf/info?callback=define"], function(data){
+        console.log(data);
+    });
+
+    //结果:
+    {
+        "errno": 0,
+        "errmsg": "Success",
+        "data": {}
+    }
+
+>解释：只有当jsonp返回的data是对象的时候，才能有requirejs的调用。
+>这种实现逻辑是:URL返回的结果是define(data),（经过层层逻辑），会创建一个key为URL，exports为data的Module。这样该URL模块的输出为data，作为参数传入到require(deps,callback)中。   
+    
 
 
 

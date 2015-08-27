@@ -34,7 +34,7 @@ class: mylbs
     >2. 最小匹配
 
 + **Viewport**  
-[https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/UsingtheViewport/UsingtheViewport.html]()   
+<https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/UsingtheViewport/UsingtheViewport.html>  
 
     >1. viewport是移动浏览器的页面的可视区域，如果不设置viewport，移动浏览器会默认以宽度980px加载页面，然后缩放适应屏幕。
     >2. 可以设置viewport的width为固定像素，但一般设置为device-width（特殊值）。
@@ -52,10 +52,22 @@ class: mylbs
 
 + **script load 与 error**    
 >script load事件是指script`完全加载完成并执行完之后`(执行完之后)触发的事件，兼容放面有onreadystatechange事件。
->script error事件是指script执行错误的事件。
+>script error事件是指script加载出错，包括文件未找到和执行出错。
 
 + **img load 与 error**     
 >img load事件也是指img完全加载完成、显示完之后触发的事件。
 >img error事件是指加载img出错的事件。
 
 + **script标签动态添加，哪一个先加载完先执行哪一个**
+
++ **addEventListener 与 element.on* **   
+>使用addEventListener和（element.onclick onload）等添加事件，两种方式之间是相互独立的。彼此之间并不会发生覆盖事件。
+>但是在引入其他模块的情况下，尽量不要使用window.onload，防止覆盖其他模块的事件。
+
++ **浏览器缓存的一些说明**    
+>当浏览器发送请求给图片时候，将会发生两件事情：        
+> 
+>1. 因为浏览器从来没有打开过这张图片，所以没有额外的头信息，服务器将返回一个状态码：200 Success 接着返回图片数据给浏览器，之后浏览器会缓存文件的HTTP头信息当中的Last-Modified(文件最后修改时间)和ETag(被请求变量的实体值)
+>2. 浏览器检查if-none-match或者if-modified-since头信息，会与返回的头信息Last-Moidified进行比较，如果没做修改，将会不加载图片数据，直接返回Status:304 Not Modified(没有更新)。同时我们把Last-Moidified头信息用$header['if-modified-since']替换掉$now()，所以每次返回的内容都将是一样的。
+>
+>Cache-Control是http1.1的实现，Pragma、Expires是http1.0的实现。如果设置Cache-Control:no-cache，要同事设置Pragma:no-cache，兼容http1.0；Cache-Control:max-age=*会覆盖Expires。

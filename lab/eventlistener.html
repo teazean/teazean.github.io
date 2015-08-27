@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript">
+        window.onload = function(){
+            console.log("onload:"+111);
+        }
+        window.addEventListener("load",function(){
+            console.log("eventListener:"+111);
+        });
+    </script>
+</head>
+<body>
+    <p id="log"></p>
+    <script type="text/javascript">
+        window.onload = function(){
+            console.log("onload:"+2222);
+        }
+        window.addEventListener("load",function(){
+            console.log("eventListener:"+222);
+        });
+    </script>
+</body>
+</html>
