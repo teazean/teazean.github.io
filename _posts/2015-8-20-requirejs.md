@@ -95,7 +95,7 @@ requirejs嵌套比较深，这篇文章主要讲述主干的流程。
     + fetch()：创建script标签，加载js，注册completeLoad事件的封装
 
         >module.fetch()->module.load()->context.load()->req.load()，req.load()完成创建script标签，并注册`onload=context.completeLoad`.
-    + enable()：激活当前Module，对它的每一个依赖depMod注册defined监听事件。在结尾调用check();
+    + enable()：当调用enable(),也就意味着我们需要去加载这个模块，包括加载它的依赖。
     + check()：检查当前Module的状态，1. 是否加载；2. 检查depCount值，若为0，返回exports，并触发自身的defined事件。
     + on(name,cb)：供其他Module监听自己的状态，常用的defined 和error
     + emit(name,evt)：触发某一个状态，触发observer的callback.
