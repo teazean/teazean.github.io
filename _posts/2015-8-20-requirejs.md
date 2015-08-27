@@ -228,13 +228,27 @@ require.js执行过程中调用了两次：
 
 ####定义模块
 
-以下是jQuery中定义模块的实现。
+>AMD推崇：依赖前置，提前执行依赖。CMD推崇：依赖就近，哪里用到在哪里执行。
 
-    define( "jquery", [], function() {
-        return jQuery;
+定义模块的AMD写法：
+
+    define("c", ["a","b"], function() {
+        return c;
     });
 
 > define(name,deps,callback);对应参数为模块名、依赖、exports函数（必须有返回值）。有意思的是当`typeof callback === "object"`的时候，该模块的输出就直接是该Object。这样是可以解释requirejs jsonp的调用。
+
+定义模块的CMD写法：
+
+    define(function(require, exports, module){
+        var a = require('a');
+        //a.dosomething();
+        var b = require('b');
+        //b.dosomething();
+        module.exports = {myModule: 1};
+    })
+
+> 在define中，如果监测到 `isArray(deps)===fasle`，且callback为函数，则为deps赋值为['require','exports','module'];name没定义即设置为moduleName
 
 ####引入模块
 
