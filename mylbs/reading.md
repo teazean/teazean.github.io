@@ -83,3 +83,16 @@ class: mylbs
 >4. 前段为主的MV*时代，对前端架构进行分层。如Backbone、AngularJS。
 >5. Node带来的全站时代：第三、四中模式，依旧是把繁重的JS代码放在Browser中，通过Node带来前后端分离，Browser进行展示页面，Node处理路由、模板、`应用逻辑`，而后端专注于处理`业务逻辑`。
 
+**module-loader-webpack-vs-requirejs-vs-browserify**    
+<http://hackhat.com/p/110/module-loader-webpack-vs-requirejs-vs-browserify/>
+>这篇文章做了requirejs、webpack、browserify的比较，总得来说:     
+> 
+>1. requirejs是属于纯browser js，只要在页面中引入js即可；而webpack、browerify属于在部署前预编译本地js文件，对本地js文件打包，browserify直接引入打包后的js文件。
+>2. 基于第一条的特性，webpack、browserify支持nodejs modules，以及nodejs modules的书写格式。
+
+**Google V8的垃圾回收引擎**    
+<http://www.infoq.com/cn/news/2015/08/Google-V8>    
+>1. V8采用的是分代(Generational)垃圾回收器，将内存分为新生代和老生代。
+>2. 新生代采用scavenge算法，即移动-复制的策略。若果一个对象经多次移动，仍存在，对象将移动只老生代。
+>3. 老生代采用mark-sweep、mark-compat的结合。主要采用mark-sweep，当内存不足以分配给从新生代晋升的对象的时候，采用mark-compact(移动内存，效率最低)。
+>4. 对堆栈执行大回收时，时间跨度可能超过100ms，这种全停顿会使页面卡着，因此V8使用增量标记的算法，把完整的标记分成许多部分，每执行一部分停下来，让javascript线程执行一会。
