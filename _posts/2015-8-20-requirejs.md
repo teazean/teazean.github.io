@@ -100,7 +100,7 @@ requirejs嵌套比较深，这篇文章主要讲述主干的流程。
     + on(name,cb)：供其他Module监听自己的状态，常用的defined 和error
     + emit(name,evt)：触发某一个状态，触发observer的callback.
 
-    > Module之间依赖关系是一种Observer模式。每一个Module监听它的所以依赖的defined事件以及error事件。
+    > Module之间依赖关系是一种订阅/发布的模式。每一个Module监听它的所以依赖的defined事件以及error事件。
 
 
 ####context上下文

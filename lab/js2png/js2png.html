@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        var img = document.createElement("img");
+        var canvas = document.querySelector("#canvas");
+        img.onload = function(){
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            var context = canvas.getContext("2d");
+            context.drawImage(img, 0, 0);
+            var imageData = context.getImageData(0, 0, canvas.width, canvas.height),
+                pixcels = imageData.data;
+
+            var buffer = [];
+            for(var i =0 ,len = pixcels.length;i < len;i++){
+                buffer.push(String.fromCharCode(pixcels[i]));
+            }
+            console.log(buffer.join(""));
+        }
+        img.src = "output.png";
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>divImage</title>
+    <style>
+        #image{
+            width: 1px;
+            height: 1px;
+            background: black;
+        }
+    </style>
+</head>
+<body> 
+    <h3>下面是canvas画出来的图</h3>
+    <canvas id="canvas"></canvas>
+    <br><br><br><br>
+    <h3>boxshadow image：利用getImageData，获取canvas的颜色值，创建box-shadow串，下图是box-shadow画出来的。</h3>
+    <div id="image" style=""></div>
+    <script>
+        var canvas = document.querySelector("#canvas");
+        var div = document.querySelector("#image");
+        var image = document.createElement("img");
+        image.onload = function(){
+            var w = canvas.height = image.height;
+            var h = canvas.width = image.width;
+            var context = canvas.getContext("2d");
+            context.drawImage(image, 0, 0);
+            var imageData = context.getImageData(0, 0, canvas.width, canvas.height),
+                pixcels = imageData.data;
+
+            var boxShadow = "";
+            for(var i = 0, len = pixcels.length/4; i < len; i++){
+                var k = 4*i;
+                var tmp = "rgba(" + pixcels[k] + "," + pixcels[k+1] + "," + pixcels[k+2] + "," + pixcels[k+3]/255 +")";
+                // var tmp = "#";
+                // // var k = 4*i;
+                // var arr = [pixcels[k], pixcels[k+1], pixcels[k+2]];
+                // for(var j = 0; j < arr.length; j++) {
+                //     var s = pixcels[k + j].toString(16);
+                //     if(s.length === 1){
+                //         s = "0" + s;
+                //     }
+                //     tmp += s;
+                // }
+                
+                if(i===(len -1)){
+                    boxShadow += (i%w + "px " + Math.floor(i/w) + "px " + tmp);
+                } else {
+                    boxShadow += (i%w + "px " + Math.floor(i/w) + "px " + tmp +",");
+                }
+                
+            }
+
+            // div.style.boxShadow = "0px 0px #000000,1px 0px #000000";
+            // console.log(boxShadow);
+            div.style.boxShadow = boxShadow;
+        };
+        image.src = "../$images/bm.png";
+    </script>
+</body>
+</html>
