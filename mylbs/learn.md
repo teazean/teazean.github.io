@@ -71,3 +71,11 @@ class: mylbs
 >2. 浏览器检查if-none-match或者if-modified-since头信息，会与返回的头信息Last-Moidified进行比较，如果没做修改，将会不加载图片数据，直接返回Status:304 Not Modified(没有更新)。同时我们把Last-Moidified头信息用$header['if-modified-since']替换掉$now()，所以每次返回的内容都将是一样的。
 >
 >Cache-Control是http1.1的实现，Pragma、Expires是http1.0的实现。如果设置Cache-Control:no-cache，要同事设置Pragma:no-cache，兼容http1.0；Cache-Control:max-age=*会覆盖Expires。
+
++ **querySelectorAll性能**    
+>通常来说querySelector的性能优能，但在通过Class名选择元素的这一项是不如getElementByClassName的。
+
++ **关于移动浏览器下的ele.style**      
+>1. ele.style只能获取标签上的style属性的值。
+>2. 在部分移动浏览器下，style.transform等一些属性是无法设置，也无法获取的。可以通过cssText设置，获取。
+>3. style.cssText是值标签上style的值，设置新的cssText会使之前的标签style上的属性失效(完全覆盖)。

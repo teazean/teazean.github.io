@@ -34,6 +34,7 @@
     <!--    font-awesome-->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   </head>
 
   <body>
@@ -68,7 +69,6 @@
     </div>
 
     {% include JB/analytics %}
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script>
       $(function() {
         $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto');
@@ -98,6 +98,25 @@
           e.target = "_blank"; 
         });
       });
+
+      $(window).on("load",function(e){
+        var hash = location.hash;
+        if(!hash)
+          return;
+        var key = hash.substr(1);
+
+        Array.prototype.some.call($("h3,h4,.content>p>strong"),function(e, i){
+          var text = $(e).text();
+          if(text.indexOf(key) > -1){
+            window.scrollTo(0, e.offsetTop - 60);
+            return true;
+          }
+        });
+      });
     </script>
+    {% case page.class %}
+    {% when "mylbs" %}
+        <script src="/js/mylbs.js"></script>
+    {% endcase %}
   </body>
 </html>

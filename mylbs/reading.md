@@ -96,3 +96,36 @@ class: mylbs
 >2. 新生代采用scavenge算法，即移动-复制的策略。若果一个对象经多次移动，仍存在，对象将移动只老生代。
 >3. 老生代采用mark-sweep、mark-compat的结合。主要采用mark-sweep，当内存不足以分配给从新生代晋升的对象的时候，采用mark-compact(移动内存，效率最低)。
 >4. 对堆栈执行大回收时，时间跨度可能超过100ms，这种全停顿会使页面卡着，因此V8使用增量标记的算法，把完整的标记分成许多部分，每执行一部分停下来，让javascript线程执行一会。
+
+###2015-08-31   
+**Why Moving Elements With Translate() Is Better Than Pos:abs Top/left**    
+<http://www.paulirish.com/2012/why-moving-elements-with-translate-is-better-than-posabs-topleft/>   
+>1. 当left发生变化的时候，浏览器中的变化从Recalculate Style -> layout -> update Layer Tree -> Paint ->Composite Layers.
+>2. 通过translate平移，浏览器中的变化从Recalculate Style -> Composite Layers。中间比left的方案少了更新dom tree的过程，所以效率会更高。
+
+**微信ANDROID客户端-会话速度提升70%的背后**       
+<http://mp.weixin.qq.com/s?mid=207548094&idx=1&sn=1a277620bc28349368b68ed98fbefebe&__biz=MzAwNDY1ODY2OQ==>  
+>提升Android会话打开速度优化
+>
+>1. 使用Fragment代替Activity，实现会话窗口的重用。
+>2. 优化sqllite索引结构，采用数字代替字符串作索引，降低关键字段的大小。
+
+**Javascript高性能动画与页面渲染**        
+<http://www.infoq.com/cn/articles/javascript-high-performance-animation-and-page-rendering>             
+>1. 页面显示是一帧一桢的，使用setTimeout、setInterval并不能保证在理想的桢显示之前触发，会有延迟。并且使用Timer会有丢帧的可能，以及setInterval的性能问题。
+>2. 建议使用新接口[requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame):在渲染下一桢之前所要做的函数。如果回调函数过于耗时，requestAnimationFrame会降低帧数，保证帧数的稳定性，动画的连串性。
+>3. html在浏览器中会被转化为DOM树，DOM树的每一个节点都会转化为RenderObject, 多个RenderObject可能又会对应一个或多个RenderLayer。浏览器渲染的流程如下：
+>
+>    1. 获取 DOM 并将其分割为多个层(RenderLayer)
+>    2. 将每个层栅格化，并独立的绘制进位图中
+>    3. 将这些位图作为纹理上传至 GPU
+>    4. 复合多个层来生成最终的屏幕图像(终极layer)。
+>4. 一般使用3d属性(perspective、tranlate3d等)、css动画、css滤镜、以及3d canvas均可以创建一个独立的layer，layer的样式改变，影响的只是自己，并不会引起repaint。这也是css动画、变换性能比较高的原理。
+>5. Too much of a good thing is often a bad thing。太多layer的时候，会引起页面动画的抖动。[Apple首页动画分析](http://wesleyhales.com/blog/2013/10/26/Jank-Busting-Apples-Home-Page/)
+>6. 关于使用tranlate3d代替tanslate2d，会启用GPU来渲染动画，在大多数浏览器中会更流畅。<http://jsperf.com/translate3d-vs-xy/28>
+
+**How (not) to trigger a layout in WebKit**     
+<http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html>   
+<http://webcache.googleusercontent.com/search?q=cache:DUblmOr9XskJ:gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html+&cd=1&hl=en&ct=clnk&gl=hk>  
+>1. Parts of the render tree (or the whole tree) will need to be revalidated and the node dimensions recalculated. This is called a reflow, or layout, or layouting.
+>2. what triggers layout? 文中列举了一些能引发回流一些属性和方法。如获取属性clientHeight、client*、scroll*、offset*等，这些获取属性的操作均是比较耗时的。
