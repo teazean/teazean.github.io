@@ -79,3 +79,10 @@ class: mylbs
 >1. ele.style只能获取标签上的style属性的值。
 >2. 在部分移动浏览器下，style.transform等一些属性是无法设置，也无法获取的。可以通过cssText设置，获取。
 >3. style.cssText是值标签上style的值，设置新的cssText会使之前的标签style上的属性失效(完全覆盖)。
+
++ **z-index与stacking context**      
+>1. z-index只对position为非static有效
+>2. z-index只决定该box在当前stacking context中的位置.
+>3. stacking context对内：Within a stacking context, child elements are stacked according to the same rules previously explained. Importantly, the z-index values of its child stacking contexts only have meaning in this parent. 
+>4. stacking context对外：Stacking contexts are treated atomically as a single unit in the parent stacking context.
+>5. <https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context>，创建stacking context的元素见上链接，主要的有transform ,opactity , position && z-index.
