@@ -23,7 +23,8 @@ class: mylbs
 <http://www.punkchip.com/autoplay-is-still-bad-for-all-users/> 
 >1. Apple认为自动播放对用户来说是不友好的，所有的IOS设备均禁掉了preload、autoplay。只有当`用户真正发生交互`的时候才回去下载音频、视频资源。
 >2. Android也开始认为自动播放对用户来说是不友好的。导致一部分android移动可以自动播放，另外一部分不可以。
->3. trigger('click')、setTimeout均无效。甚至我也对documentElement、body监听最开始的touchstart事件，在android会触发资源的下载、播放，但在ios下失效。
+>3. trigger('click')、setTimeout均无效。
+>4. 经测试可以对document、body监听最开始的touchstart事件，在android、ios下均会触发资源的下载、播放。
 
 **何实现跨浏览器的SVG Sprites**     
 <http://www.w3cplus.com/html5/how-to-implement-cross-browser-svg-sprites.html>
@@ -129,3 +130,6 @@ class: mylbs
 <http://webcache.googleusercontent.com/search?q=cache:DUblmOr9XskJ:gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html+&cd=1&hl=en&ct=clnk&gl=hk>  
 >1. Parts of the render tree (or the whole tree) will need to be revalidated and the node dimensions recalculated. This is called a reflow, or layout, or layouting.
 >2. what triggers layout? 文中列举了一些能引发回流一些属性和方法。如获取属性clientHeight、client*、scroll*、offset*等，这些获取属性的操作均是比较耗时的。
+
+###2015-09-07   
+
