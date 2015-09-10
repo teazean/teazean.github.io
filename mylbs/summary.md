@@ -1,7 +1,6 @@
 ---
 layout: post
 title: 项目总结
-class: mylbs
 ---
 
 ##LBS项目总结
