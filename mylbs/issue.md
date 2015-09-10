@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 奇妙的ISSUE记录
+title: 记录：奇妙的ISSUE
 class: mylbs
 ---
 

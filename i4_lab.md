@@ -1,7 +1,7 @@
 ---
 layout: lab
-title: Lab
-header: Lab
+title: 实验室
+header: 实验室
 group: navigation
 ---
 

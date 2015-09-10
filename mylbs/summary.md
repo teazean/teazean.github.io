@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 项目总结
+class: none
 ---
 
 ##LBS项目总结

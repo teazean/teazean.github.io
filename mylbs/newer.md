@@ -1,6 +1,6 @@
 ---
 layout: post
-title: LBS-YY新人
+title: 新人：lbs-yy-常识
 class: mylbs
 ---
 

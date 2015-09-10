@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 学习笔记
+title: 学习：烂笔头
 class: mylbs
 ---
 
