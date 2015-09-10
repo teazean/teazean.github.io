@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Chrome Extension Development-LastingMemory
+category: fe
 tags: toast chrome
 ---
 ##chrome插件-LastingMemory

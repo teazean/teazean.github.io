@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 监测Developer Tool是否打开
-category: lbs-fe
-tags: fonticon css
+category: fe
+tags: developer-tools
 ---
 
 ###监测Developer Tool是否打开  

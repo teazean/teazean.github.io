@@ -1,8 +1,8 @@
 ---
 layout: post
 title: requirejs 源码与架构分析
-category: requirejs
-tags: js requirejs
+category: fe
+tags: requirejs
 ---
 
 ##requirejs 源码与架构分析

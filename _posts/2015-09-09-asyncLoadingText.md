@@ -1,7 +1,8 @@
 ---
 layout: post
 title: html异步加载文本以及onload、onerror的触发
-tags: XMLHttpRequest onload onerror 
+category: fe
+tags: onload onerror 
 ---
 
 ##html异步加载文本以及onload、onerror的触发
