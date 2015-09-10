@@ -50,14 +50,6 @@ class: mylbs
 + **webkitAnimationEnd、webkitTransitionEnd**    
 >在移动端下，动画、过渡效果结束要监测webkitAnimationEnd、webkitTransitionEnd事件，监测animationEnd、transitionEnd是无效的。
 
-+ **script load 与 error**    
->script load事件是指script`完全加载完成并执行完之后`(执行完之后)触发的事件，兼容放面有onreadystatechange事件。
->script error事件是指script加载出错，包括文件未找到和执行出错。
-
-+ **img load 与 error**     
->img load事件也是指img完全加载完成、显示完之后触发的事件。
->img error事件是指加载img出错的事件。
-
 + **script标签动态添加，哪一个先加载完先执行哪一个**
 
 + **addEventListener 与 element.on* **   

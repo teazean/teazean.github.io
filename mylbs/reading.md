@@ -132,4 +132,24 @@ class: mylbs
 >2. what triggers layout? 文中列举了一些能引发回流一些属性和方法。如获取属性clientHeight、client*、scroll*、offset*等，这些获取属性的操作均是比较耗时的。
 
 ###2015-09-07   
+**尾调用**     
+<https://zh.wikipedia.org/wiki/%E5%B0%BE%E8%B0%83%E7%94%A8>     
+>1. 尾调用定义：指一个函数里的最后一个动作是一个函数调用。
+>2. 特性：尾调用的重要性在于它可以不在调用栈上面添加一个新的堆栈帧——而是更新它。不会增加堆栈的深度。
+>3. 语言标准一般都要求编译器或者虚拟机去实现尾调用优化，即在尾调用的情况下，尾部函数的堆栈去更新调用函数的堆栈，而非新建堆栈。
+>4. 可以利用尾调用去优化一些函数或者递归：
+
+>原函数实现：
+    
+    function factorial(n) {
+        if (n === 1) return 1;
+        return n * factorial(n - 1);
+    }
+
+>函数优化
+
+    function factorial(n, total) {
+        if (n === 1) return total;
+        return factorial(n - 1, n * total);
+    }
 
