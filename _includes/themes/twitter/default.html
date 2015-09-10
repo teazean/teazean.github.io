@@ -34,6 +34,9 @@
     <!--    font-awesome-->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
+    {% for s in page.styles %}
+    <link rel="stylesheet" href="/css/{{s}}.css">
+    {% endfor %}
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   </head>
 
@@ -114,8 +117,7 @@
         });
       });
     </script>
-  {% assign scripts = page.scripts %}
-  {% for s in scripts %}
+  {% for s in page.scripts %}
       <script src="/js/{{s}}.js"></script>
   {% endfor %}
   </body>
