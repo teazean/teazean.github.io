@@ -153,3 +153,8 @@ class: mylbs
         return factorial(n - 1, n * total);
     }
 
+###2015-09-14   
+**Configuring Web Applications**    
+<https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html>     
+>在iphone上，我们可以使用apple-touch-icon以及apple-mobile-web-app-capable一起结合去为一个html5页面创建一个本地app快捷方式。
+
