@@ -1,1 +1,11 @@
-a{word-break: break-all;}
+a{
+    word-break: break-all;
+}
+
+img.left{
+    float: left;
+    margin-right:40px; 
+}
+
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+.clearfix{*+height:1%;}

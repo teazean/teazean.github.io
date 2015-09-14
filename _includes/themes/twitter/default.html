@@ -40,7 +40,9 @@
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   </head>
 
-  <body>
+  <body {% if page.bodyClass != null %}
+          class="{{page.bodyClass}}"
+        {% endif %} >
     <div class="navbar">
       <div class="navbar-inner">
        <div class="nav-narrow">

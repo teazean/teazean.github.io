@@ -78,3 +78,11 @@ class: mylbs
 >3. stacking context对内：Within a stacking context, child elements are stacked according to the same rules previously explained. Importantly, the z-index values of its child stacking contexts only have meaning in this parent. 
 >4. stacking context对外：Stacking contexts are treated atomically as a single unit in the parent stacking context.
 >5. <https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context>，创建stacking context的元素见上链接，主要的有transform ,opactity , position && z-index.
+
++ **CSS Image Values and Replaced Content Module Level 3**  
+<http://www.w3.org/TR/css3-images/>     
+>文章中定义了css3关于image、object类型的定义以及sizing、position，统一称为object
+>
+>1. object sizing算法：明确的width、height > 保持高宽比 > contain约束 > 标签默认大小。(contain约束包括:object-fit、background-size)
+>2. 适用于object sizing的属性：`background-image`、`list-style-image`、`border-image`、`cursor`、`content`。
+>3. object-fit(fill、cover、contain)、object-position是定义object类型的计算布局尺寸、定位的属性。

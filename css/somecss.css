@@ -26,3 +26,126 @@
 .t-columns p{
     text-indent: 2em;
 }
+
+.t-filter{
+    text-align: center;
+}
+
+.t-filter img{
+    box-sizing: border-box;
+    display: inline-block;
+    box-shadow: none;
+    width: 22%;
+}
+
+.t-filter img.blur{
+    filter: blur(5px);
+    -moz-filter: blur(5px);
+    -webkit-filter: blur(5px);
+}
+
+.t-filter img.grayscale{
+    filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
+
+.t-filter img.brightness{
+    filter: brightness(0.4);
+    -moz-filter: brightness(0.4);
+    -webkit-filter: brightness(0.4);
+}
+
+.t-filter img.contrast{
+    filter: contrast(200%);
+    -moz-filter: contrast(200%);
+    -webkit-filter: contrast(200%);
+}
+
+
+.t-filter img.dropShadow{
+    filter: drop-shadow(4px 6px 4px blue);
+    -moz-filter: drop-shadow(4px 6px 4px blue);
+    -webkit-filter: drop-shadow(4px 6px 4px blue);
+}
+
+.t-filter img.hueRotate{
+    filter: hue-rotate(90deg);
+    -moz-filter: hue-rotate(90deg);
+    -webkit-filter: hue-rotate(90deg);
+}
+
+.t-filter img.invert{
+    filter: invert(75%);
+    -moz-filter: invert(75%);
+    -webkit-filter: invert(75%);
+}
+
+.t-filter img.opacity{
+    filter: opacity(50%);
+    -moz-filter: opacity(50%);
+    -webkit-filter: opacity(50%);
+}
+
+.t-filter img.saturate{
+    filter: saturate(30%);
+    -moz-filter: saturate(30%);
+    -webkit-filter: saturate(30%);
+}
+
+.t-filter img.sepia{
+    filter: sepia(60%);
+    -moz-filter: sepia(60%);
+    -webkit-filter: sepia(60%);
+}
+
+.t-filter img.blurAgray{
+    filter: blur(5px) grayscale(100%);
+    -moz-filter: blur(5px) grayscale(100%);
+    -webkit-filter: blur(5px) grayscale(100%);
+}
+
+.t-linear-gradient{
+    height: 40px;
+    background-image: linear-gradient(0deg, red, orange, yellow, green, blue, indigo, violet);
+    background-image: -moz-linear-gradient(0deg, red, orange, yellow, green, blue, indigo, violet);
+    background-image: -webkit-linear-gradient(0deg, red, orange, yellow, green, blue, indigo, violet);
+}
+
+.t-radial-gradient1{
+    height: 100px;
+    /*参数依次为：类型、约束、中心点的位置(同transform-origin)、颜色点~*/
+    background-image: radial-gradient(circle farthest-side at center, red, orange, yellow, green, blue, indigo, violet, rgba(0,0,0,0));
+}
+
+.t-radial-gradient2{
+    height: 100px;
+    /*参数依次为：类型、约束、中心点的位置(同transform-origin)、颜色点~*/
+    background-image: radial-gradient(circle closest-side at center, red, orange, yellow, green, blue, indigo, violet, rgba(0,0,0,0));
+}
+
+.t-repeating-linear-gradient{
+    height: 100px;
+    background-image: repeating-linear-gradient(45deg, red 0px, red 20px, orange 20px, orange 40px, yellow 40px, yellow 60px, green 60px, green 80px, blue 80px, blue 100px, indigo 100px, indigo 120px, violet 120px, violet 140px);
+}
+
+.t-repeating-radial-gradient{
+    height: 100px;
+    /*background-image: repeating-radial-gradient(circle, red 0px, red 20px, orange 20px, orange 40px, yellow 40px, yellow 60px, green 60px, green 80px, blue 80px, blue 100px, indigo 100px, indigo 120px, violet 120px, violet 140px);*/
+    background-image: repeating-radial-gradient(circle closest-side at center, red, orange, yellow, green, blue, indigo, violet);
+}
+
+.t-counter ol{
+    counter-reset: section;
+    list-style-type: none;
+}
+.t-counter ol li:before{
+    counter-increment: section;
+    content: counters(section, ".") " ";
+}
+
+.t-multi-background{
+    height: 200px;
+    background: linear-gradient(to right, rgba(30, 75, 115, 1), rgba(255, 255, 255, 0)), url(/images/somecss/monkey.jpg) no-repeat;
+    background-size: 100%, 100% 100%;
+}
