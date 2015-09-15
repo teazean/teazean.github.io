@@ -40,6 +40,10 @@ tags: meta
     <meta name="full-screen" content="yes">
     <!-- UC应用模式 -->
     <meta name="browsermode" content="application">
+    <!-- UC强制显示图片-->
+    <meta name="imagemode" content="force"/>
+    <!-- UC强制标准浏览器模式显示页面-->
+    <meta name="layoutmode" content="standard" /><!-- fitscreen-->
     <!-- QQ强制竖屏 -->
     <meta name="x5-orientation" content="portrait"><!-- landscape-->
     <!-- QQ强制全屏 -->
