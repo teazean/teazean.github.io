@@ -3,6 +3,7 @@ layout: post
 title: 监测Developer Tool是否打开
 category: fe
 tags: developer-tools
+keywords: developer tool detector 开发者工具 监测
 ---
 
 ###监测Developer Tool是否打开  

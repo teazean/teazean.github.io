@@ -3,6 +3,7 @@ layout: post
 title: requirejs 源码与架构分析
 category: fe
 tags: requirejs
+keywords: requirejs源码 架构 分析
 ---
 
 ##requirejs 源码与架构分析

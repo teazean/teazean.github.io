@@ -3,6 +3,7 @@ layout: post
 title: html异步加载文本以及onload、onerror的触发
 category: fe
 tags: onload onerror 
+keywords: onload触发 onerror触发 总结
 ---
 
 ##html异步加载文本以及onload、onerror的触发

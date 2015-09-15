@@ -3,6 +3,7 @@ layout: post
 title: 移动浏览器屏幕适配小结
 category: mobile
 tags: meta 
+keywords: 移动屏幕 适配 requestFullscreen 横竖屏切换 window.orientation
 ---
 
 ##移动浏览器屏幕适配小结
