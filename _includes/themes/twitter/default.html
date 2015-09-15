@@ -3,14 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>{{ page.title }}</title>
-    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
     <meta name="author" content="{{ site.author.name }}">
-    {% for s in page.tags %}
-    <meta name="keywords" content="{{ s }}">
-    {% endfor %} 
-    {% for s in page.keywords %}
-    <meta name="keywords" content="{{ s }}">
-    {% endfor %}    
+    {% if page.description %}
+    <meta name="description" content="{{ page.description }}">
+    {% else page.title %}
+    <meta name="description" content="{{ page.title }}">
+    {% endif %}
+    
+    {% capture keywords %}{% if page.tags %}{% for s in page.tags %}{{s}}, {% endfor %}{% endif %}{% if page.keywords %}{% for s in page.keywords %}{{s}},{% endfor %}{% endif %}{% endcapture %}
+    <meta name="keywords" content="{{ keywords }}">
     <!-- Enable responsive viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
