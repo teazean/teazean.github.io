@@ -14,6 +14,7 @@ tags: meta
 3. requestFullscreen
 4. 横竖屏切换
 
+<!--break-->  
 
 ###各浏览器的meta
 
