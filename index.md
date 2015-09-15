@@ -23,6 +23,6 @@ title: Teazean' Hive
 {% endfor %}
 
 <div class = "card">
-    <a class="fa fa-link" href="archive.html">  查看更多&hellip;</a>
+    <a class="fa fa-link" href="i1_archive.html">  查看更多&hellip;</a>
 </div>
 

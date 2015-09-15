@@ -158,3 +158,7 @@ class: mylbs
 <https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html>     
 >在iphone上，我们可以使用apple-touch-icon以及apple-mobile-web-app-capable一起结合去为一个html5页面创建一个本地app快捷方式。
 
+**Safari开始支持WebRTC**    
+<http://www.infoq.com/cn/news/2015/09/webkit-webrtc-safari>     
+>WebRTC是基于浏览器端对端的实时通信接口，只要支持通过浏览器进行点对点视频、音频。
+>PC端firefox、webkit基本上都支持，移动短android4.4也开始全面支持，这次safari添加支持，是对移动浏览器视频、音频上迈进的一大步。
