@@ -175,3 +175,21 @@ class: mylbs
 >1. domain hash：将页面资源放置于多个域名下，增加并发数，提高加载速度(domain hash)，一般控制在2-4个，过多会增加域名解析的代价;
 >2. cookie free：并且将静态资源放至于不同于主站的域名下（cookie free），这样可以使得请求静态资源并不附加主站的cookie，减少请求数据；
 >3. css-spirit、js/css combine、max expires time、loading images on demand
+
+###2015-09-21
+
++ **There are only two hard things in Computer Science: cache invalidation(缓存失效) and naming things(命名). -- Phil Karlton**
+
++ **在使用缓存时应该注意哪些问题？**   
+<http://www.infoq.com/cn/news/2015/09/cache-problems> 
+>1. 缓存数据难以推断
+>2. 缓存数据可能导致"视觉"bug
+>3. 涉及缓存的行为难以重现
+>4. 访问模式变化可以损害性能
+>5. 进程内缓存可能会增加GC压力
+>6. 缓存失败恢复困难
+
++ **Mcrouter 介绍 —— 来自 Facebook 的 memcached 协议路由器**      
+<http://www.oschina.net/translate/introducing-mcrouter-a-memcached-protocol-router-for-scaling-memcached-deployments>   
+>1. Mcrouter是memcached的一层proxy，充当路由的角色，对外提供的协议和memcached一致，对内充当memcached的一个客户端，管理memcached。
+>2. 他有很多特性：支持标砖开源的memcached ASCII编码、连接池、多种灵活的散列方法、`前缀路由`、热加载、Destination心跳监测和自动故障转移等等。
