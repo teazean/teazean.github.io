@@ -86,3 +86,17 @@ class: mylbs
 >1. object sizing算法：明确的width、height > 保持高宽比 > contain约束 > 标签默认大小。(contain约束包括:object-fit、background-size)
 >2. 适用于object sizing的属性：`background-image`、`list-style-image`、`border-image`、`cursor`、`content`。
 >3. object-fit(fill、cover、contain)、object-position是定义object类型的计算布局尺寸、定位的属性。
+
++ **HTTP keep-alive**   
+>1. 普通模式(非keep-alive)的http请求，在请求结束后会断开连接。而keep-alive是持久连接，使客户端(如浏览器)到服务器的连接持续有效，当出现对服务器的后续请求时，keep-alive功能避免了建立或者重新建立连接。
+>2. http1.0中默认关闭keep-alive。http1.1默认打开keep-alive
+>3. keep-alive是客户端与服务器的交互方式，需要双方的支持。
+
++ **服务器缓存ehcache、memcached、redis**     
+>1. 缓存就是在内存中临时存在一些高访问的数据，以提高查询效率。对于单服务器模式而言，缓存比较简略，以下均为集群模式下的缓存说明。分布式集群下一般都有独立的缓存服务器集群统一提供缓存服务。（当然也是可以在分布式集群中各个应用服务器提供自己的缓存。）
+>2. memcached在内存中以key-value形式存储，memcached本身不支持分布式，需要程序客户端（应用服务器）通过像一致性哈希这样的分布式算法来实现memcached的分布式存储（这种情况下缓存服务器添加、删除的代价是很高的）。
+>3. redis是在memcached写出来，本身支持多种数据结构和数据持久化，并且redis本身也支持集群分布式存储，redis集群各个服务器之间通过异步复制来保证数据一致性，但无法保证强一致性。
+>4. ehcache是java下的缓存框架。ehcache本身是支持分布式存储的：
+>       + 缓存与应用服务器一起：支持的通过RMI、JGroups(组播、广播)或JMS（消息队列）进行的异步或同步的缓存复制
+>       + 独立的缓存服务器：ehcache server
+
