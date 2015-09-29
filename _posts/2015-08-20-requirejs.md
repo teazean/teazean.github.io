@@ -26,6 +26,8 @@ requirejs总是通过script标签来加载执行js。也就是说：所有的js�
 
 requirejs嵌套比较深，这篇文章主要讲述主干的流程。
 
+> name与ModuleName的区别。requirejs中name是指的是define(name,deps)中明确确定的name，而ModuleName是指当js文件的文件模块名，当引入的js`没有define模块`或者`define(deps)匿名模块`，requirejs会默认name=moduleName。ModuleName只和文件名相关，如果引入`js/jquery-1.11.3.js`和`js/22/jquery-1.11.3.js`两个文件，最终只会有一个`jquery-1.11.3.js`的js文件被加载，且该模块的`name=moduleName=jquery-1.11.3`。(只和文件名有关，文件名！文件名！文件名！)
+
 ###2. 数据结构
 
 >这里讨论的所有数据结构均是requirejs封装在自己内部的，比如：require全局变量是指require模块内部的全局变量
@@ -81,10 +83,10 @@ requirejs嵌套比较深，这篇文章主要讲述主干的流程。
     + 当一个Module调用enable()方法的时候，它的所有依赖deps也将被enable()，对于该依赖depMod
 
         1. 若果defined队列中存在depMod，直接获取结果；
-        2. 如果defined队列中不存在，但在registry队列存在，这种模式就是通过`define(name,deps,callback)`（此处的name!=Modulename）,定义出来的，inited = true;
+        2. 如果defined队列中不存在，但在registry队列存在，这种模式就是通过`define(name,deps,callback)`,定义出来的，inited = true;
         3. 如果defined队列不存在，并且registry队列也不存在，在registry中新建depModule，并且直接调用enable()方法。
 
-            >- deps Module,这里的deps有两种来源：`define(name,deps,callback)`和`require(deps,callback)`。如果没有特殊配置paths，默认的deps均是相对于baseUrl需找js文件。这里将为每一个dependency创建一个`id=dependecy`的Module,如`deps=['../jquery-1.12.1']`,将创建一个`id="../jquery-1.12.1"`的Module。变量ModuleName=deps[i]; 
+            >- deps Module,这里的deps有两种来源：`define(name,deps,callback)`和`require(deps,callback)`。如果没有特殊配置paths，默认的deps均是相对于baseUrl需找js文件。这里将为每一个dependency创建一个`name=dependecy`的Module,如`deps=['../jquery-1.12.1']`,将创建一个`name="jquery-1.12.1"`的Module。变量ModuleName=deps[i]; 
             >- 第三种模式创建的deps Module，因为deps[i].js这个文件还没加载，无法得知它的依赖，以及callback，所以第一次尝试调用enable()->check()，在check()中，监测到`inited = undefined`, 执行fetch()加载js文件,文件加载成功之后，在completeLoad()中，就可以知晓该Module的deps和callback，调用init()(设置`inited = true`)->check()。
 
 * Module主要方法与变量
@@ -117,7 +119,7 @@ requirejs嵌套比较深，这篇文章主要讲述主干的流程。
 * defined = {}：存放所有的Module exports结果的对象，`defined[mod.map.id] = mod.exports`，这是一种key-vaule的形式。
 * urlFetched = {}：存放所有已成功获取的url的对象。
     
-    >- 在defined队列中只存在两种：`id=moduleName`的Module和`define(name,deps,callback)`定义出来的`id=name`的Module。(moduleName是指deps=["../jquery-1.12.3","zepto"]中deps[i]指定的模块名).
+    >- 在defined队列中只存在两种：`name=moduleName`的Module和`define(name,deps,callback)`定义出来的`name=name`的Module。(moduleName是指deps=["../jquery-1.12.3","zepto"]中deps[i]指定的模块名).
     >- 在registry队列比defined多了一种匿名Module。所有的Module都是从registry移到defined队列中的。
 
 ###3. require.js关键函数
@@ -250,6 +252,9 @@ require.js执行过程中调用了两次：
     })
 
 > 在define中，如果监测到 `isArray(deps)===fasle`，且callback为函数，则为deps赋值为['require','exports','module'];name没定义即设置为moduleName
+
+> 如果define(deps,callback)，采用匿名，那么默认会定义为`name=moduleName`，并且一般这种js都是作为依赖被加载，那么callback会立即执行，返回模块的结果。很多项目中一种使用这种方式，这样可以做到定义和文件名相关的模块的同时callback代码执行。
+
 
 ####引入模块
 
