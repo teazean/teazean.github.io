@@ -10,7 +10,7 @@ styles: mylbs
 ###2015-08-03
 
 ####别再用MongoDB了！    
-<http://www.infoq.com/cn/news/2015/07/never-ever-mongodb>   
+http://www.infoq.com/cn/news/2015/07/never-ever-mongodb   
 
 1. 文中讲述了MongoDB的一些缺陷，安全性的漏洞、数据丢失等。
 2. （他所列举的内容）部分（也许全部）确有其事。事实上，现在，就假设他所写的都是正确的。我这里不是要说作者是错的。更确切地说，我这里想指出的是，这种博文只能让我了解很少有关MongoDB的知识，但却让我感受到了写这篇博文的人的许多情感。
