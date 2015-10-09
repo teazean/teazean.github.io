@@ -251,6 +251,7 @@ require.js执行过程中调用了两次：
         module.exports = {myModule: 1};
     })
 
+> CMD写法，在`define(callback)`,如果只有callback，define函数会使用`Function.prototype.toString()`先遍历一遍`callback`,获取其中的`require()`,把依赖push到deps中。实质上还是一种依赖前置。<http://requirejs.org/docs/whyamd.html#sugar>     
 > 在define中，如果监测到 `isArray(deps)===fasle`，且callback为函数，则为deps赋值为['require','exports','module'];name没定义即设置为moduleName
 
 > 如果define(deps,callback)，采用匿名，那么默认会定义为`name=moduleName`，并且一般这种js都是作为依赖被加载，那么callback会立即执行，返回模块的结果。很多项目中一种使用这种方式，这样可以做到定义和文件名相关的模块的同时callback代码执行。
@@ -296,6 +297,8 @@ requirejs的配置项有很多，这里介绍几种常用的。细节可以看�
             }
         }
     });
+
+>require.config(cfg) => require(cfg)，内容的实现就是调用一次require函数。
 
 ###插件
 
