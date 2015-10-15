@@ -191,3 +191,17 @@ styles: mylbs
 1. <http://www.oschina.net/translate/introducing-mcrouter-a-memcached-protocol-router-for-scaling-memcached-deployments>   
 1. Mcrouter是memcached的一层proxy，充当路由的角色，对外提供的协议和memcached一致，对内充当memcached的一个客户端，管理memcached。
 2. 他有很多特性：支持标砖开源的memcached ASCII编码、连接池、多种灵活的散列方法、`前缀路由`、热加载、Destination心跳监测和自动故障转移等等。
+
+###2015-10-11
+####在网页布局中合理使用inline formating context（IFC）
+1. <http://blog.ohweb.cn/archives/category/fe>
+2. 利用IFC，纵向撑开容器标签，其余标签`vertical-align:center`以达到垂直居中的效果。
+
+####HTML5 File API
+1. <http://www.w3.org/TR/FileAPI/>
+2. HTML5 FileApi 包括5个方向的内容：
+3. FileList: file的array在`<input type="file">`，对象上。
+4. File对象，包括一个文件的只读属性，如name、lastModified、type、size等。一个File也是一个Blob对象。
+5. Blob对象，代表一个二进制数据块序列，只有三个属性size、type、isClosed。
+6. URL schema对象：代表一个Url schema类型的文件。如blob:550e8400-e29b-41d4-a716-446655440000#aboutABBA;对象。
+7. FileReader: 提供对一个文件的读取的接口、读取过程的各个时期的回调。readAsArrayBuffer、readAsText、readAsDataUrl

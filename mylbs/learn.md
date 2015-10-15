@@ -119,3 +119,11 @@ js继承链上，可以临时创建一个过度函数，避免构造函数需要
         return this._msingleton;
     }
 
+####json、xml、protocol buffer
+1. json、xml、pb都是网络数据传说协议，都需要发送方和接收方约定好。
+2. json、xml传输的是一种语义化的格式数据，而pb传说的是二进制的数据格式，相对来说比较安全，更轻量。
+3. json、xml在各语言编译器或者库中都有实现编码解析。而pb则使用双方约定好的`*.proto`定义数据格式，编码、解析的代码相对就会少一些。
+
+####非刷新上传文件的实现
+1. form target属性指定隐藏的iframe。监听iframe的onload事件获取上传是否成功。并且可以以轮询的方式请求上传的进度，但需要后端的配合。
+2. XMLHttpRequest2.0支持发送文件，有两种方法：1.直接send(file) 2. formdata
