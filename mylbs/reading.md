@@ -192,7 +192,7 @@ styles: mylbs
 1. Mcrouter是memcached的一层proxy，充当路由的角色，对外提供的协议和memcached一致，对内充当memcached的一个客户端，管理memcached。
 2. 他有很多特性：支持标砖开源的memcached ASCII编码、连接池、多种灵活的散列方法、`前缀路由`、热加载、Destination心跳监测和自动故障转移等等。
 
-###2015-10-11
+###2015-10-12
 ####在网页布局中合理使用inline formating context（IFC）
 1. <http://blog.ohweb.cn/archives/category/fe>
 2. 利用IFC，纵向撑开容器标签，其余标签`vertical-align:center`以达到垂直居中的效果。
@@ -205,3 +205,11 @@ styles: mylbs
 5. Blob对象，代表一个二进制数据块序列，只有三个属性size、type、isClosed。
 6. URL schema对象：代表一个Url schema类型的文件。如blob:550e8400-e29b-41d4-a716-446655440000#aboutABBA;对象。
 7. FileReader: 提供对一个文件的读取的接口、读取过程的各个时期的回调。readAsArrayBuffer、readAsText、readAsDataUrl
+
+###2015-10-19
+####如何安全的存储密码
+1. <https://www.textarea.com/zhicheng/ruhe-anquan-di-cunchu-mima-5/>
+2. <http://wooyun.org/bugs/wooyun-2015-0147763>
+3. 这次爆料的网易邮箱密码泄露造成了巨大的损失，导致与网易邮箱相关的Apple id被泄露，许多iphone变板砖。
+4. 网易邮箱密码被脱裤，并且其中的密码存储为MD5存储，极不安全。
+5. 对于密码设置，建议开启二次认证。
