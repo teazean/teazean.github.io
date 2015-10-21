@@ -39,3 +39,5 @@ notes：一下内容默认移动端开发。
 
 ####微信内是不允许location跳转到其他非同域名网站。    
 location.href = "place.html"是可以的。但location.href = "http://api.map.baidu.com/direction?"是不允许的，但可以用a.trigger("click")来模拟。
+
+####`display:inline`元素上的动画在移动浏览器有肯能会失效，可以改成`display:inline-block;`
