@@ -213,3 +213,31 @@ NaN是js里特殊的一个特殊值，它有一个特性：NaN与任何值总是
 >1. 在evalute匹配串中，其实就是js代码，可以使用任何js语句，只要控制好结构就好。
 >2. 非匹配串之外的文本串，要讲其中的换行符转义，转换成一行，以免`new Function('obj', source)`出错。
 
+以下是一个模板的和它中间产生的render函数:
+	
+	//模板
+	<%_.each(datas, function(item, index){ %>
+		<p>index: <%=index%></p>
+	<%});%>
+
+	//render函数
+	function(obj, _ /**/ ) {
+		var __t,
+			__p = '',
+			__j = Array.prototype.join,
+			print = function() {
+				__p += __j.call(arguments, '');
+			};
+		with(obj || {}) {
+			__p += '\n		';
+			_.each(datas, function(item, index) {
+				__p += '\n			<p>index: ' +
+					((__t = (index)) == null ? '' : __t) +
+					'</p>\n		';
+			});
+			__p += '\n	';
+		}
+		return __p;
+	}
+
+
