@@ -9,3 +9,10 @@ img.left{
 
 .clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
 .clearfix{*+height:1%;}
+
+html,body{
+	font-family: Consolas,"Microsoft yahei" !important;
+}
+code,pre{
+    font-size: 14px;
+}
