@@ -246,4 +246,35 @@ NaN是js里特殊的一个特殊值，它有一个特性：NaN与任何值总是
 		return __p;
 	}
 
+其中source在匹配的各个阶段的值：
+	
+	var source = "__p+='";
+	匹配三次
+	第一次：
+		 source += text.slice(index, offset).replace(escapeRegExp, escapeChar);;
+		 	source = "__p+='";
+		 source += "';\n" + evaluate + "\n__p+='"		
+		 	source = "__p+='';\n_.each(datas, function(item){\n__p+='";
+
+	第二次:
+		source += text.slice(index, offset).replace(escapeRegExp, escapeChar);
+			source = "__p+='';\n_.each(datas, function(item){\n__p+='<p>index: ";
+		source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+			source = "__p+='';\n_.each(datas, function(item){\n__p+='<p>index: '+\n((__t=(item.index))==null?'':__t)+\n'";
+	第三次：
+		source += text.slice(index, offset).replace(escapeRegExp, escapeChar);;
+		 	source = "__p+='';\n_.each(datas, function(item){\n__p+='<p>index: '+\n((__t=(item.index))==null?'':__t)+\n'</p>";
+		source += "';\n" + evaluate + "\n__p+='"		
+		 	source = "__p+='';\n_.each(datas, function(item){\n__p+='<p>index: '+\n((__t=(item.index))==null?'':__t)+\n'</p>';\n});\n__p+='";
+
+	source += "';\n";
+		source="__p+='';\n_.each(datas, function(item){\n__p+='<p>index: '+\n((__t=(item.index))==null?'':__t)+\n'</p>';\n});\n__p+='';\n"
+
+	source = 'with(obj||{}){\n' + source + '}\n'
+		source="with(obj||{}){\n__p+='';\n_.each(datas, function(item){\n__p+='<p>index: '+\n((__t=(item.index))==null?'':__t)+\n'</p>';\n});\n__p+='';\n}\n"
+
+	source = "var __t,__p='',__j=Array.prototype.join," + "print=function(){__p+=__j.call(arguments,'');};\n" + source + 'return __p;\n';
+	    source="var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};\nwith(obj||{}){\n__p+='';\n_.each(datas, function(item){\n__p+='<p>index: '+\n((__t=(item.index))==null?'':__t)+\n'</p>';\n});\n__p+='';\n}\nreturn __p;\n"
+
+	var render = new Function('obj', source);
 
