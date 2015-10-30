@@ -219,9 +219,9 @@ NaN是js里特殊的一个特殊值，它有一个特性：NaN与任何值总是
 	
 	//模板
 	<%_.each(datas, function(item, index){ %>
-		<p>index: <%=index%></p>
+		<p>index: <%=item.index%></p>
 	<%});%>
-
+	
 	//render函数
 	function(obj, _ /**/ ) {
 		var __t,
@@ -234,7 +234,7 @@ NaN是js里特殊的一个特殊值，它有一个特性：NaN与任何值总是
 			__p += '\n		';
 			_.each(datas, function(item, index) {
 				__p += '\n			<p>index: ' +
-					((__t = (index)) == null ? '' : __t) +
+					((__t = (item.index)) == null ? '' : __t) +
 					'</p>\n		';
 			});
 			__p += '\n	';
