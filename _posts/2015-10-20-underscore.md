@@ -158,9 +158,13 @@ NaN是js里特殊的一个特殊值，它有一个特性：NaN与任何值总是
 		var matcher = RegExp([
 			(settings.escape || noMatch).source, (settings.interpolate || noMatch).source, (settings.evaluate || noMatch).source
 		].join('|') + '|$', 'g');
+		//matcher = /<%-([\s\S]+?)%>|<%=([\s\S]+?)%>|<%([\s\S]+?)%>|$/g;
 
 		var index = 0;
 		var source = "__p+='"; //__p是最终的要返回页面文本
+		//match：整个匹配字符串
+		//escape、interpolate、evaluate：子串
+		//offset：匹配字符串的开始相对于整个字符串的偏移
 		text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
 			//非匹配串之外的文本，转换成一行，以免构造函数体时出错。
 			source += text.slice(index, offset).replace(escapeRegExp, escapeChar);
@@ -218,7 +222,7 @@ NaN是js里特殊的一个特殊值，它有一个特性：NaN与任何值总是
 以下是一个模板的和它中间产生的render函数:
 	
 	//模板
-	<%_.each(datas, function(item, index){ %>
+	<%_.each(datas, function(item){ %>
 		<p>index: <%=item.index%></p>
 	<%});%>
 	
@@ -232,7 +236,7 @@ NaN是js里特殊的一个特殊值，它有一个特性：NaN与任何值总是
 			};
 		with(obj || {}) {
 			__p += '\n		';
-			_.each(datas, function(item, index) {
+			_.each(datas, function(item) {
 				__p += '\n			<p>index: ' +
 					((__t = (item.index)) == null ? '' : __t) +
 					'</p>\n		';
