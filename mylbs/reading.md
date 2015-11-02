@@ -213,3 +213,21 @@ styles: mylbs
 3. 这次爆料的网易邮箱密码泄露造成了巨大的损失，导致与网易邮箱相关的Apple id被泄露，许多iphone变板砖。
 4. 网易邮箱密码被脱裤，并且其中的密码存储为MD5存储，极不安全。
 5. 对于密码设置，建议开启二次认证。
+
+###2015-11-01
+####Java重写方法与初始化的隐患
+1. <http://www.jianshu.com/p/cdc5adb40bb7>
+2. 这篇文章主要探索了java继承上，创建子类时，编译器执行过程。
+3. new 的执行过程：父类static成员 -> 子类static成员 -> 父类普通成员初始化和初始化块 -> 父类构造方法 -> 子类普通成员初始化和初始化块 -> 子类构造方法；
+
+####腾讯防刷负责人：基于用户画像大数据的电商防刷架构
+1. <https://mp.weixin.qq.com/s?__biz=MzAwMDU1MTE1OQ==&mid=400931866&idx=1&sn=b96873fc9f726e5705b2653968f1d992&scene=1&srcid=1029bMwQzFXIWKas14S0Cyor&uin=OTczMTMzNTU%3D&key=04dce534b3b035ef61bf9200a04e26cedb8e765505d5dd6553e2c0ab7c53a2edb16aa4c5b9ed187ca83769718e3f8b3d&devicetype=android-19&version=26030531&lang=zh_CN&nettype=WIFI&pass_ticket=Nv1oVMXGQwC47iakTG6UYbJI8Eim5As86lnVY57SNh8%3D>
+2. 采用多纬度进行分析，如手机、帐号、ip等。每种纬度根据平台、业务设置不同的权重；各个纬度根据不同的用户的属性设置不同的标签（画像）作为判断依据，如IP画像：代理IP、国外IP、肉鸡IP等等，设计标签采用网络爬虫、业务建模的结合方式。
+3. 设置多纬度结合的黑白名单方式，减少对正常用户的误伤。
+4. 防御系统与业务分类。
+
+####百度统计js被劫持用来DDOS Github
+1. <http://drops.wooyun.org/papers/5398>
+2. <http://www.netresec.com/?page=Blog&month=2015-03&post=China%27s-Man-on-the-Side-Attack-on-GitHub>
+3. 国外IP访问<http://hm.baidu.com/h.js>会获取到恶意的js代码，形成DDoS攻击。
+4. 估计是GFW被拦截。显示了GFW被动防御之外的全民DDoS功能。

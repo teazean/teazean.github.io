@@ -41,3 +41,7 @@ notes：一下内容默认移动端开发。
 location.href = "place.html"是可以的。但location.href = "http://api.map.baidu.com/direction?"是不允许的，但可以用a.trigger("click")来模拟。
 
 ####`display:inline`元素上的动画在移动浏览器有肯能会失效，可以改成`display:inline-block;`
+
+####绝对布局居中大部分情况下要比line-height居中靠谱。
+
+####使用zepto的swipe*事件，尤其是swipeDown、swipeUp，要使用e.preventDefault()。阻止浏览器的默认行为，如滚动、等。

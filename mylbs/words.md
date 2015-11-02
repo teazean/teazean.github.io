@@ -12,3 +12,5 @@ styles: mylbs
 [REPL](http://shouce.w3cfuns.com/nodejs/repl.html)(Read-Eval-Print Loop)
 偏函数生成器、偏函数(partial function)
 [Spring Boot]()
+[DDoS:Distributed Denial of Service]
+[CSSOM:CSS Object Model]
