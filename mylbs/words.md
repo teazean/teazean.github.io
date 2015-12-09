@@ -14,3 +14,5 @@ styles: mylbs
 [Spring Boot]()
 [DDoS:Distributed Denial of Service]
 [CSSOM:CSS Object Model]
+[AOP] <img src="/collections/aop.jpg" alt="">
+[DI>IOC] <http://blog.csdn.net/it_man/article/details/4402245>
