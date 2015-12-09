@@ -18,12 +18,15 @@ keywords: angularjs, angular, 使用笔记, mvvc
 
 
 notes:
+
 1. ng-view:与ngRoute对应
-2. <http://beletsky.net/2013/11/using-angular-dot-js-with-require-dot-js.html>
-	<http://segmentfault.com/q/1010000003488733>
-	angular在第一次onload事件的时候回执行ng-app命令，如果页面使用requirejs来管理，页面里就不要存在ng-app，要在js代码中使用angular.bootstrap来手动启动。
+2. angular在第一次onload事件的时候回执行ng-app命令，如果页面使用requirejs来管理，页面里就不要存在ng-app，要在js代码中使用angular.bootstrap来手动启动。
+    ><http://beletsky.net/2013/11/using-angular-dot-js-with-require-dot-js.html> 
+    >
+    ><http://segmentfault.com/q/1010000003488733> 	
 3. 动态创建controller
-	<http://stackoverflow.com/questions/15250644/loading-an-angularjs-controller-dynamically>
+	><http://stackoverflow.com/questions/15250644/loading-an-angularjs-controller-dynamically>
+
 	关键是:动态声明controller之后，还要注册才能用,从_invokeQueue中获取。
 
     	var $controller;
@@ -43,8 +46,10 @@ notes:
                 }
             }
         }
-4. ng-bind-html，如果绑定的是angular模板，新建一个directive，https://github.com/incuna/angular-bind-html-compile
-    <http://stackoverflow.com/questions/19726179/how-to-make-ng-bind-html-compile-angularjs-code>
+4. ng-bind-html，如果绑定的是angular模板，新建一个directive
+    ><https://github.com/incuna/angular-bind-html-compile>
+    >
+    ><http://stackoverflow.com/questions/19726179/how-to-make-ng-bind-html-compile-angularjs-code>
 
 5. ng-bind-html与contenteditable冲突。新建一个contenteditable指令.
 
