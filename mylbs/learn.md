@@ -33,6 +33,9 @@ X?、X*、X+、X{m，n}
 
 1. 最大匹配（贪婪型，占有型）
 2. 最小匹配
+3. <http://mmqzlj.blog.51cto.com/2092359/788826>
+4. X？、X*、X+、X{n}、X{n，}、X{n，m}这些为最大匹配
+5. X？？、X*？、X+？、X{n}？、X{n，}？、X{n，m}？这些为最小匹配，多加一个？号
 
 ####Viewport  
 <https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/UsingtheViewport/UsingtheViewport.html>     
@@ -129,3 +132,64 @@ js继承链上，可以临时创建一个过度函数，避免构造函数需要
 2. XMLHttpRequest2.0支持发送文件，有两种方法：1.直接send(file) 2. formdata
 
 ####V8引擎在第一次扫描的时候就确定某些闭包里该存在哪些变量，如果有闭包的函数中没有使用某个变量，那么闭包中是不存在这个变量的。在调试的时候，动态访问函数体外围中的、但又不被函数体使用的变量，会报错。
+
+####document.referrer属性返回载入当前文档的文档的URL，如果当前文档不是通过超链接访问的，怎为null。这个属性是访问Http header得到的。
+
+####单页应用案例：网易云音乐http://music.163.com/#/artist?id=7828
+1. 当点击底部音乐barnner上的歌曲与作者时，页面会动态改变，但音乐不会停止。
+2. 点击歌曲与作者，改变的是URL上的#后面的hash值，并不会引起页面刷新，因此音乐不会停止。
+3. 页面真正的内容区域是通过一个全局的iframe标签加载出来的。iframe监听的是hash值的变化，动态加载来改变内容。
+
+####关于浏览器下载图片：需要服务器设置`Content-Disposition=attachement;filename=xxxx`；如果只有`Content-Disposition=attachement`按原文件名下载。
+
+####location.href
+1. <http://www.cnblogs.com/yeer/archive/2013/01/21/2869827.html>
+2. http请求不包括hash，只包括href+search
+3. 改变hash并不会引起网页重载
+4. 改变hash会改变浏览器的访问历史
+5. html5中有一个新增的事件 onhashchange事件.
+
+####jQuery的attr与prop
+1. <http://www.cnblogs.com/dolphinX/p/3348582.html>
+2. jQuery的attr内部使用setAttribute和removeAttribute，对attribute属性更改都会落实到html上。
+3. jQuery的prop方法，用的是对应dom对象的属性字段property。对property的更改，影响的dom对象的属性。
+4. attribute、property共享一些数据，任何一个更改都会影响双方，如type、id等。
+5. 但并不是所有的attribute和property名字都一样，如class（attribute）和className（property）
+6. 对于true/false的property，如checked等，attribute取得的是HTML文档的字面量，proptery取得的是计算结果，property的改变并不影响attribute字面量，但attribute改变一定会影响property的计算。
+7. 对于一些路径相关的属性，如href，property和attribute的值也不想同，attribute取得的是字面量，而property是完整路径。
+
+####css3 box-shadow
+1. <http://www.cnblogs.com/gaoxue/articles/2287311.html>
+2. inset可以设置成内阴影
+3. inset阴影对于img元素是无效的，我们可以用一个div标签包裹img标签，把box-shadow应用到div标签上；或者在img的父标签上应用:after,:before上。
+4. :hover:after是可以共用的。
+
+####:hover :after
+1. <http://stackoverflow.com/questions/5777210/how-to-write-hover-condition-for-abefore-and-aafter>
+2. 在css的标准中:
+  >  One pseudo-element may be appended to the last sequence of simple selectors in a selector.
+  所有的伪元素必须在一系列选择器的最后。
+3. :after、:before这些是伪元素；:hover、:visited等这些是伪类，也是selector的一种。
+4. 因此合并使用:hover :after的时候，可以先定义div:after通用样式，然后在定义div:hover:after，div:hover下的特定样式。
+5. 这样也说明伪元素只是纯粹的内容元素，并不能和正常元素一样有hover等效果。  
+
+eg:scss语法:
+
+    &::after{
+        content: url(images/RelativeProjectsArr.png);
+        margin-left:30px;
+    }
+    &:hover{
+        &::after{
+            content: url(images/RelativeProjectsArrHover.png);
+        }
+    }
+
+####input[type=color] 
+js调起调色板，关键在于该input不能为hidden，可以使用绝对布局飞出页面，使用`js trigger click`
+
+####html style、currentStyle、getComputedStyle
+1. style只能获取html标签上style属性设置的值。
+2. currentStyle(ie)、getComputedStyle(ff)这些是可以获取runtimeStyle即标签的实时style。
+
+

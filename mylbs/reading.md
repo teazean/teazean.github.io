@@ -15,7 +15,7 @@ styles: mylbs
 3. （他所列举的内容）部分（也许全部）确有其事。事实上，现在，就假设他所写的都是正确的。我这里不是要说作者是错的。更确切地说，我这里想指出的是，这种博文只能让我了解很少有关MongoDB的知识，但却让我感受到了写这篇博文的人的许多情感。
 
 ####互联网时代的降维打击  
-1. <http://www.woshipm.com/pmd/111767.html> 
+1. <http://www.woshipm.com/pmd/111767.html>
 2. 打败百度的不会是另外一个百度（例如360），打败淘宝的不会是另外一个淘宝（例如拍拍），打败微信的不会是另外一个微信（例如来往）。因为在同样的世界中，先来者有自己的优势，加上现在每个能创出一番事业的人，都不会比别人笨，一旦格局形成，想要改变最好的模式就是降维打击。
 
 ####所有放弃讨论“是不是”而直接讨论“为什么是”的问题都是耍流氓。     
@@ -139,7 +139,7 @@ styles: mylbs
 4. 可以利用尾调用去优化一些函数或者递归：
 
 >原函数实现：
-    
+
     function factorial(n) {
         if (n === 1) return 1;
         return n * factorial(n - 1);
@@ -167,7 +167,7 @@ styles: mylbs
 1. 热部署的原理是监听模块即文件变化，用新模块覆盖老模块。更细化的粒度是将当前请求应用于`老模块1`，同时建立`新模块1`，当新的请求来临时，应用于`新模块1`，当下一次热更新时，杀死老模块，`新模块1`变成了`老模块`。
 2. nodejs模块加载位于require.cache数组里。这篇文章讲述了`如何关于更新模块代码`、`如何使用新模块处理请求`、`如何释放老模块的资源等关键问题`。
 
-####浏览器允许的并发请求资源数是什么意思？ 
+####浏览器允许的并发请求资源数是什么意思？
 1. <http://www.zhihu.com/question/20474326>    
 1. 浏览器并发下载资源的请求数一般不会超过8个。浏览器限制并发数是在于自我保护：基于端口数量和线程切换开销的考虑、keep-alive使得复用连接比新建连接更好、将所有请求一起发给服务器，肯能会引发服务器的并发阈值控制而被ban(一个网页100+个资源请求都正常)。
 1. domain hash：将页面资源放置于多个域名下，增加并发数，提高加载速度(domain hash)，一般控制在2-4个，过多会增加域名解析的代价;
@@ -179,7 +179,7 @@ styles: mylbs
 ####There are only two hard things in Computer Science: cache invalidation(缓存失效) and naming things(命名). -- Phil Karlton####
 
 ####在使用缓存时应该注意哪些问题？   
-1. <http://www.infoq.com/cn/news/2015/09/cache-problems> 
+1. <http://www.infoq.com/cn/news/2015/09/cache-problems>
 1. 缓存数据难以推断
 2. 缓存数据可能导致"视觉"bug
 3. 涉及缓存的行为难以重现
@@ -231,3 +231,39 @@ styles: mylbs
 2. <http://www.netresec.com/?page=Blog&month=2015-03&post=China%27s-Man-on-the-Side-Attack-on-GitHub>
 3. 国外IP访问<http://hm.baidu.com/h.js>会获取到恶意的js代码，形成DDoS攻击。
 4. 估计是GFW被拦截。显示了GFW被动防御之外的全民DDoS功能。
+
+###2015-11-08
+####如何让IE支持HTML5新元素
+1. <http://varhi.com/%E5%A6%82%E4%BD%95%E8%AE%A9ie%E6%94%AF%E6%8C%81html5%E6%96%B0%E5%85%83%E7%B4%A0/>
+2. <http://programmers.stackexchange.com/questions/172918/custom-html-tags-are-there-any-specifications-stating-a-standard-way-to-handle>
+3. html在遇到不认的标签时，在w3c标准中，定了一个HTMLUnknownElement接口定义这类标签。通常解析行为：忽视这种未知标签（什么行为也没有），继续解析未知标签的子标签。在dom树中，结构层次按照原来的结构层次。
+4. 在IE6-8中，未知标签的开始标签、结束标签分别解析成一个标签，并且和未知标签的子标签并列。
+5. document.createElement可以创建未知元素。
+
+###2015-11-16
+####1号店11.11：秒杀排队系统设计理念
+1. <http://www.infoq.com/cn/articles/yhd-11-11-queuing-system-design?utm_source=infoq&utm_medium=popular_widget&utm_campaign=popular_content_list&utm_content=homepage>
+2. 一号店应对秒杀场景，突然提高的服务访问，有一个秒杀排队系统，设计理念如下:
+    1. 限流：只有少数消费者能抢购到秒杀商品，意味着大部分用户流量传入后台都是无效的，这样对系统的压力就小许多。
+    2. 削峰：瞬时高峰流量对系统的冲击力很大，一个设计思路是将瞬时高峰流量拉平，使得系统可以在自己处理能力范围内处理请求。
+    3. 异步处理：有了第二条削峰的理念，所有的请求是都是异步处理，在前端提示用户"抢购成功，订单正在处理"。
+    4. 用户体验：无论是哪一种情景，都要对用户有提示，让用户得到充分的信息。
+
+
+###2015-11-23
+####WebKit私有属性
+1. <http://www.smashingmagazine.com/2011/05/the-future-of-css-experimental-css-properties/>
+2. <http://www.css88.com/webkit/-webkit-line-clamp/>
+3. -webkit-*有许多私有属性，我们比较常见的有:
+    + `-webkit-appearance:none`:改变控件的样式
+    + `-webkit-tap-highlight-color:rgba(0,0,0,0);`:控制点击连接、文本框对象、图片时的高亮样式。
+    + `-webkit-touch-callout:none`:在safari下，长按页面的链接、图片，会出现系统默认的菜单项，使用none可以禁用。
+    + `-webkit-text-size-adjust:none`:在屏幕旋转时，有些屏幕字体大小会自己调整，使用此选项可以禁用文字自动调整大小。此属性不继承、一般加在body上即可。
+    + `-webkit-user-select: none`:禁止页面文字选择。此属性不继承、一般加在body上即可。
+
+###2015-12-07
+
+####游览器中有哪些事件会冒泡？
+1. <http://segmentfault.com/q/1010000000687977/a-1020000000688757>
+2. 并不是每一个dom event事件都可以冒泡，`event.bubbles`事件用来标识它是否可以冒泡。
+3. abort、blur、error、focus、load、mouseeneter、mouseleave、resize、unload这些事件不可以冒泡。
