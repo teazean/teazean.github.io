@@ -263,7 +263,19 @@ styles: mylbs
 
 ###2015-12-07
 
-####游览器中有哪些事件会冒泡？
+####浏览器中有哪些事件会冒泡？
 1. <http://segmentfault.com/q/1010000000687977/a-1020000000688757>
 2. 并不是每一个dom event事件都可以冒泡，`event.bubbles`事件用来标识它是否可以冒泡。
 3. abort、blur、error、focus、load、mouseeneter、mouseleave、resize、unload这些事件不可以冒泡。
+
+####主流HTML5游戏框架的分析和对比（Construct2、ImpactJS、CreateJS、Cocos2d-html5)
+1. <http://blog.csdn.net/lw61186938/article/details/12165131>
+2. 开源引擎中，three.js是最火的，但是仅限于开发3D游戏。其次是CreateJS，由Adobe官方赞助且采用Flash类似的API以及模块化开发，是Flash开发者以及将Flash游戏转换成html5不可多得的选择。Turbulenz虽然开源时间比较晚，但颇有后来者居上的趋势，由于其对2D和3D的同时支持，是同时开发2D和3D游戏的最佳选择。LimeJS与Crafty相比的优势在于有一个公司进行维护，相比个人要更稳定，但是需要依赖于Google Closure，也使之成为一个重量级的框架。Crafty体积小、轻量级，更适合于小游戏的开发。Cocos2d-html5作为国产框架的一个优势在于中文文档和教程多，且得到了Google的支持，但相比ImpactJS、CreateJS仍不够成熟。melonJS、Quintus、lycheeJS的开发者和使用者都较少，相关文档和教程也相对少，还有待观察。
+
+###2015-12-14
+####界面之下：还原真实的MV*模式
+1. <https://github.com/livoras/blog/issues/11>
+2. MVC最早是用于PC客户端的，view通知controller，contoller判断调用model接口，model处理业务逻辑(service)，而View通过observer监听Model，当model变化的时候，view会更新。
+3. 当MVC应用到Web上的时候，已经不是严格的MVC，当服务器收到来之View的请求，controller进行处理，对Model对处理，Model执行完业务逻辑之后，controller用数据渲染渲染新的View，返回给客户端。
+4. MVP（Model-View—Presenter）：这里把controller替换为presenter，所有的交互都通过presenter，view调用presenter，presenter修改model；model通知Presenter发生改变，Presenter通知View去更新视图。
+5. MVVM(Model-View-(View-Model)): 和MVP相同，这里把Presenter替换成View-Model，但在view-Model中存在一个Binder，用于Model和View的自动化绑定。以前由Present处理的View和Model的数据同步交由Binder处理。只要显示声明View的内容和Model的哪一个数据绑定即可。
