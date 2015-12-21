@@ -254,12 +254,14 @@ styles: mylbs
 ####WebKit私有属性
 1. <http://www.smashingmagazine.com/2011/05/the-future-of-css-experimental-css-properties/>
 2. <http://www.css88.com/webkit/-webkit-line-clamp/>
+2. <http://blog.csdn.net/hursing/article/details/9186199>
 3. -webkit-*有许多私有属性，我们比较常见的有:
     + `-webkit-appearance:none`:改变控件的样式
     + `-webkit-tap-highlight-color:rgba(0,0,0,0);`:控制点击连接、文本框对象、图片时的高亮样式。
     + `-webkit-touch-callout:none`:在safari下，长按页面的链接、图片，会出现系统默认的菜单项，使用none可以禁用。
     + `-webkit-text-size-adjust:none`:在屏幕旋转时，有些屏幕字体大小会自己调整，使用此选项可以禁用文字自动调整大小。此属性不继承、一般加在body上即可。
     + `-webkit-user-select: none`:禁止页面文字选择。此属性不继承、一般加在body上即可。
+    + `-webkit-overflow-scrolling:touch`:iphone safari下支持的属性，页面的弹性滑动，使用该属性会创建一个新的stacking context,里面的元素超出会弹性滚动。在safari中实现，是为该属性创建一个原生UIScrollView，所以滚动起来更顺畅、流利。
 
 ###2015-12-07
 
@@ -279,3 +281,11 @@ styles: mylbs
 3. 当MVC应用到Web上的时候，已经不是严格的MVC，当服务器收到来之View的请求，controller进行处理，对Model对处理，Model执行完业务逻辑之后，controller用数据渲染渲染新的View，返回给客户端。
 4. MVP（Model-View—Presenter）：这里把controller替换为presenter，所有的交互都通过presenter，view调用presenter，presenter修改model；model通知Presenter发生改变，Presenter通知View去更新视图。
 5. MVVM(Model-View-(View-Model)): 和MVP相同，这里把Presenter替换成View-Model，但在view-Model中存在一个Binder，用于Model和View的自动化绑定。以前由Present处理的View和Model的数据同步交由Binder处理。只要显示声明View的内容和Model的哪一个数据绑定即可。
+
+###2015-12-21
+####占领微博微信们的信息垃圾，Facebook 是怎么处理的？
+1. <http://36kr.com/p/5040803.html>
+2. Facebook使用一个sigma的系统来处理用户所做的任何事情，机器学习是整个sigma的核心。比如，如果一个用户的10的好友请求，9个被拒绝，那么第10个就会被系统拒绝。
+3. 新闻流排序：一个用户每天3000多条新鲜消息，系统会排序只显示40多条，对于每一个内容，根据用户的点赞、分享、评论等各方面行为打分，按照得分顺训对新闻排序。
+4. A/B测试：如何评价一个算法的优劣，使用A/B测试，选择两组数量相同的用户，使用不同的算法，根据结果进行比较。
+
