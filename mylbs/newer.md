@@ -53,3 +53,5 @@ location.href = "place.html"是可以的。但location.href = "http://api.map.ba
 ####IOS端内获取UA，不定期获取不到，无法判断是否端内。
 
 ####移动端最小字体，一般默认为12px，chrome浏览器只支持最小12px的字体，但也有部分浏览器支持最小为9px的字体，但在iphone6+等高分辨率下，会显得特别小。
+
+####引web地图api的时候，可在实例化map的第二个参数加入属性useWebGl为false，避免页面退出后引起地图客户端crash，因为在web地图js中会尝试创建一个webgl.

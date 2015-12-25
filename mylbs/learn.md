@@ -192,4 +192,13 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 1. style只能获取html标签上style属性设置的值。
 2. currentStyle(ie)、getComputedStyle(ff)这些是可以获取runtimeStyle即标签的实时style。
 
+####history
+1. history.pushstate、history.replacestate可以在不刷新页面的情况下改变location.href.
 
+####XSS cross-domain site scripting
+1. 反射型XSS，非持久性XSS，比如我们有一个搜索接口，`http://www.xxx.com/search?name=xyz`，这里我们把xyz替换成`<script>alert("xss")<script>`，在接口的返回页面，`<script>alert("xss")<script>`会被当做结果插入到页面之中，就相当于一个script标签，就构成了一次XSS。
+2. 存储型XSS，比如某一个论坛网站，某个用户发帖里面有`<script>alert("xss")<script>`，当其他用户去访问该用户的这个帖子时，如果不做处理，相当于页面插入了script标签，构成了一次XSS，在这里用户的cookie等信息都不在安全。
+
+####SQL注入，sql注入可以获取用户的信息，严重的sql注入会形成脱库的严重情况。
+1. 比如一个登录页面，有username和password两个字段，如果不做处理，一般会执行`select * from table where username = 'mary' and password = '***'`，但如果一个黑客在登录页username中输入`mary --`，这样sql查询就变成了`select * from table where username = 'mary';`，就可以跳过登录验证，获取mary用户的信息。（`--`是sql的单行注释符，后面的sql语句都不会执行。）
+2. 更为严重的情况，比如一个用户查询接口，`http://www.xxx.com/search?username=xyz`，执行的sql是`select * from where username='xyz'`，但是如果黑客访问`http://www.xxx.com/search?username=xyz' or '1'='1`，执行的sql就是`select * from where usename='xyz' or '1'='1'`达到脱库的现象。
