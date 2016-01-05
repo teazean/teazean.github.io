@@ -16,3 +16,9 @@ html,body{
 code,pre{
     font-size: 14px;
 }
+h4{
+	padding-right: 10px;
+}
+ul,ol{
+	padding-left: 20px;
+}

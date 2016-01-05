@@ -289,3 +289,14 @@ styles: mylbs
 3. 新闻流排序：一个用户每天3000多条新鲜消息，系统会排序只显示40多条，对于每一个内容，根据用户的点赞、分享、评论等各方面行为打分，按照得分顺训对新闻排序。
 4. A/B测试：如何评价一个算法的优劣，使用A/B测试，选择两组数量相同的用户，使用不同的算法，根据结果进行比较。
 
+###2016-01-04
+####前端性能优化 - 资源预加载
+1. <http://bubkoo.com/2015/11/19/prefetching-preloading-prebrowsing/>
+2. 我们可以使用一些`link`标签，告诉浏览器做一些预加载是事情，如`<link rel="dns-prefetch" href="//example.com">`可以告诉浏览器提前解析dns.
+3. 还有一些如`subresource`、`prefetch`、`preconnect`、`prerender`。
+
+####iOS 9对前端做了什么？
+1. <http://mp.weixin.qq.com/s?__biz=MTEwNTM0ODI0MQ==&mid=401732243&idx=1&sn=b4774767c1909565d674ad992d703fd4>
+2. 对于html而言，多了`force touch`的一些事件
+3. css supports在css中做一些特性监测。
+4. 新css属性,`backdrop-filter`(背景滤镜效果)、`CSS Scroll Snapping`(滚动过渡效果)、css4的伪类支持。
