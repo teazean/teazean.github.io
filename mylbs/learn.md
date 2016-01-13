@@ -204,3 +204,7 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 2. 更为严重的情况，比如一个用户查询接口，`http://www.xxx.com/search?username=xyz`，执行的sql是`select * from where username='xyz'`，但是如果黑客访问`http://www.xxx.com/search?username=xyz' or '1'='1`，执行的sql就是`select * from where usename='xyz' or '1'='1'`达到脱库的现象。
 
 ####URI的保留字符`reserved = ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" | "$" | ","`
+
+####在页面静态存在的iframe，如果改变iframe的src或者location，那么iframe的改变记录会被当做浏览器的历史记录，点浏览器的后退键，iframe中加载的页面会改变；但动态创建的iframe并不算做浏览器的历史纪录（firefox）。
+
+####`npm install -g`一般用于安装CLI程序，这种安装的模块无法require是正确的，如果要使用require，建议使用`npm link **`;或者修改NODE_PATH。

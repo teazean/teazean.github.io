@@ -300,3 +300,9 @@ styles: mylbs
 2. 对于html而言，多了`force touch`的一些事件
 3. css supports在css中做一些特性监测。
 4. 新css属性,`backdrop-filter`(背景滤镜效果)、`CSS Scroll Snapping`(滚动过渡效果)、css4的伪类支持。
+
+###2016-01-11
+####[ISUX译]我为css变量狂
+1. <http://isux.tencent.com/why-im-excited-about-native-css-variables.html>
+2. 最新版chrome中已经添加了对css内置变量的支持。
+3. 不同于想sass、less这些预编译器的变量，css的变量可以说是动态的，可以真正的和其他属性如@media query等协同。
