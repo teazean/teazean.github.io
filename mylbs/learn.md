@@ -208,3 +208,12 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 ####在页面静态存在的iframe，如果改变iframe的src或者location，那么iframe的改变记录会被当做浏览器的历史记录，点浏览器的后退键，iframe中加载的页面会改变；但动态创建的iframe并不算做浏览器的历史纪录（firefox）。
 
 ####`npm install -g`一般用于安装CLI程序，这种安装的模块无法require是正确的，如果要使用require，建议使用`npm link **`;或者修改NODE_PATH。
+
+####图像优化
+1. <http://wf.uisdc.com/cn/performance/optimizing-content-efficiency/image-optimization.html>
+2. 矢量图vs位图：svg是矢量图，用简单的点、线、多边形展示一个图像；png、jpg都是位图，一个个像素的保存。
+3. 有损压缩vs无损压缩：gifsicle（创建和优化GIF图像）、jpegtran（优化JPEG图片）、optipng（无损png优化）、pngquant(有损png优化)
+4. 位深（bit-depth）：RGB通道的总共位数。如8位-256色等。
+5. PNG8：只能使用 256色,可以设置透明关系。但有两种方式分别为：索引色透明和Alpha透明。索引色透明只可以简单的指定一个像素点是不是透明（是或者不是）。而Alpha透明则可指定该像素点的透明的程度（透明度）,如30%的透明度。
+6. PNG24：特别需要注意的是 PNG24是不支持透明度设定的,但其可用颜色比 PNG8 丰富的多。注：Photoshop里导出的PNG24支持透明，其实Ps导出的是PNG32
+7. PNG32：PNG32不仅可以使用更多的颜色，而且还支持透明度设定。属于PNG系列中较常用的一种格式。
