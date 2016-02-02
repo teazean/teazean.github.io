@@ -60,11 +60,13 @@ X?、X*、X+、X{m，n}
 使用addEventListener和（element.onclick onload）等添加事件，两种方式之间是相互独立的。彼此之间并不会发生覆盖事件。但是在引入其他模块的情况下，尽量不要使用window.onload，防止覆盖其他模块的事件。
 
 ####浏览器缓存的一些说明    
-当浏览器发送请求给图片时候，将会发生两件事情：        
- 
-1. 因为浏览器从来没有打开过这张图片，所以没有额外的头信息，服务器将返回一个状态码：200 Success 接着返回图片数据给浏览器，之后浏览器会缓存文件的HTTP头信息当中的Last-Modified(文件最后修改时间)和ETag(被请求变量的实体值)
-2. 浏览器检查if-none-match或者if-modified-since头信息，会与返回的头信息Last-Moidified进行比较，如果没做修改，将会不加载图片数据，直接返回Status:304 Not Modified(没有更新)。同时我们把Last-Moidified头信息用$header['if-modified-since']替换掉$now()，所以每次返回的内容都将是一样的。
-3. Cache-Control是http1.1的实现，Pragma、Expires是http1.0的实现。如果设置Cache-Control:no-cache，要同事设置Pragma:no-cache，兼容http1.0；Cache-Control:max-age=*会覆盖Expires。
+1. <http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html> 
+2. 当浏览器第一次访问一个文件的时候，服务端会返回一些头信息。有expires、cache-control、last-modified、etag等，用于做缓存的一些配置。etag是文件唯一标识符，last-modified文件修改时间，expires、cache-control是设置文件的缓存时长。
+3. 当浏览器第二次访问该文件的时候，会先检查expires、cache-control，如果这两个属性标志的缓存没有过期，则直接使用缓存，不去请求（CDN服务器一般设置该属性1年甚至10年）；如果文件缓存已经失效，然后会去相继匹配etag、lasted-modified，并且去重新请求服务器，查看文件在这一段时间内有没有发生更新，若服务器返回304，表示没有更新，继续使用缓存，同时更新缓存的时间戳，如果服务器返回200，则用新的文件替换缓存。
+4. Cache-Control是http1.1的实现，Pragma、Expires是http1.0的实现。如果设置Cache-Control:no-cache，要同事设置Pragma:no-cache，兼容http1.0；Cache-Control:max-age=*会覆盖Expires。
+5. 对没有特殊设置缓存的服务器而言，一般会返回last-modified、etag属性。 
+<img src="/collections/httpcache.png" alt="">       
+
 
 ####querySelectorAll性能    
 通常来说querySelector的性能优能，但在通过Class名选择元素的这一项是不如getElementByClassName的。

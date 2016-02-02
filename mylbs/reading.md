@@ -261,7 +261,7 @@ styles: mylbs
     + `-webkit-touch-callout:none`:在safari下，长按页面的链接、图片，会出现系统默认的菜单项，使用none可以禁用。
     + `-webkit-text-size-adjust:none`:在屏幕旋转时，有些屏幕字体大小会自己调整，使用此选项可以禁用文字自动调整大小。此属性不继承、一般加在body上即可。
     + `-webkit-user-select: none`:禁止页面文字选择。此属性不继承、一般加在body上即可。
-    + `-webkit-overflow-scrolling:touch`:iphone safari下支持的属性，页面的弹性滑动，使用该属性会创建一个新的stacking context,里面的元素超出会弹性滚动。在safari中实现，是为该属性创建一个原生UIScrollView，所以滚动起来更顺畅、流利。
+    + `-webkit-overflow-scrolling:touch`:iphone safari下支持的属性，页面的弹性滑动，使用该属性会创建一个新的stacking context,里面的元素超出会弹性滚动。在safari中实现，是为该属性创建一个原生UIScrollView，所以滚动起来更顺畅、流利。这个属性也是为了解决有时候部分移动浏览器块元素的滑动是页面在滑动。
 
 ###2015-12-07
 
@@ -306,3 +306,21 @@ styles: mylbs
 1. <http://isux.tencent.com/why-im-excited-about-native-css-variables.html>
 2. 最新版chrome中已经添加了对css内置变量的支持。
 3. 不同于想sass、less这些预编译器的变量，css的变量可以说是动态的，可以真正的和其他属性如@media query等协同。
+
+###2016-01-18
+####Node.js背后的V8引擎优化技术
+1. <https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=402199727&idx=1&sn=a15c727229692a89770cab0cd5679d5e&scene=0&key=710a5d99946419d97b87d22cbefa1f2560ee24b8ccfb826db902cfa221e67120a70011e5792c271acdadcd00ec5e6ce9&ascene=0&uin=ODA4NDU3MDIw&devicetype=iMac+MacBookPro11%2C3+OSX+OSX+10.11.3+build(15D21)&version=11020201&pass_ticket=YfiIp2%2FwJd3Hpz0YdaIEuPrd2M%2BzpizjYT4z2PWUHAX1eGmDoHplLb71r2MQw1uz>
+2. V8引擎的隐藏类：每个对象只是一个数据内存块，相同结构的对象都会使用一个相同的隐藏类来解析这个对象。
+    >隐藏类的教训：1. 永远在构造函数中初始化所有对象的成员；2. 总是以相同的顺序初始化类的成员；3. 从不用delete删除莫个对象的属性。（避免产生过多的隐藏类）
+3. Optimized和Deoptimized：js原本是解释型的实现，但现在基本都是运行时编译的实现。V8有两种不同的运行时编译器，为`unoptimized`（完全编译器，编译代码速度超快，使得初次执行代码速度很快）和`optimized`（优化编译器，当v8引擎发现某块代码执行很热的时候，会把代码优化，生成Optimized代码，执行速度超快）。但编译器有可能执行Optimized代码失败，形成`Deoptimized`，退回到`unoptimized状态`，更极端的情况是v8引擎有可能会不断的被optimized,然后失败，被Deoptimized，会极大的浪费性能。
+    >目前v8无法优化forin 和trycatch，有可能会存在一直optimized和deoptimized。
+4. 闭包、timer都是很容易会引起内存泄露。要注意！！！
+    >如在外部有引向闭包的大对象，导致对象无法释放；在一个object的timer中不断的调用自己，导致该object无法释放。
+
+###2016-01-25
+####22个CSS黑魔法
+1. <http://www.ido321.com/1665.html>
+2. 渐变边框的实现：利用伪类较低的z-index+渐变背景
+3. 黑技术实现复选框和单选按钮：`input[type=checkbox] {display: none;}input[type=checkbox] + label:before{}input[type=checkbox]:checked + label:before{}`
+4. `position:sticky`，类似于fixed，但sticky相对于`相对父元素`.
+5. 新的尺寸`vh:viewport height`和`vw:viewport width`，1vw表示浏览器窗口宽度的1%；1vh表示浏览器窗口高度的1%；最重要的是所有浏览器都支持。
