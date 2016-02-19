@@ -113,7 +113,7 @@ styles: mylbs
 
 ####Javascript高性能动画与页面渲染        
 1. <http://www.infoq.com/cn/articles/javascript-high-performance-animation-and-page-rendering>             
-1. 页面显示是一帧一桢的，使用setTimeout、setInterval并不能保证在理想的桢显示之前触发，会有延迟。并且使用Timer会有丢帧的可能，以及setInterval的性能问题。
+1. 页面显示是一帧一桢的，使用setTimeout、setInterval并不能保证在理想的桢显示之前触发，会有延迟。并且使用Timer会有丢帧的可能，以及setInterval的性能问题(setTimeout若进程繁忙，那么该次setTimeout会丢失；setInterval若因为进程繁忙，而setInterval会堆积，最后一起执行。)。
 2. 建议使用新接口[requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame):在渲染下一桢之前所要做的函数。如果回调函数过于耗时，requestAnimationFrame会降低帧数，保证帧数的稳定性，动画的连串性。
 3. html在浏览器中会被转化为DOM树，DOM树的每一个节点都会转化为RenderObject, 多个RenderObject可能又会对应一个或多个RenderLayer。浏览器渲染的流程如下：
     1. 获取 DOM 并将其分割为多个层(RenderLayer)
@@ -324,3 +324,12 @@ styles: mylbs
 3. 黑技术实现复选框和单选按钮：`input[type=checkbox] {display: none;}input[type=checkbox] + label:before{}input[type=checkbox]:checked + label:before{}`
 4. `position:sticky`，类似于fixed，但sticky相对于`相对父元素`.
 5. 新的尺寸`vh:viewport height`和`vw:viewport width`，1vw表示浏览器窗口宽度的1%；1vh表示浏览器窗口高度的1%；最重要的是所有浏览器都支持。
+
+###2016-02-14
+####浏览器URL地址栏欺骗技巧
+1. <http://www.wooyun.org/bugs/wooyun-2010-022071>
+2. 原本`a`标签指向的是"http://www.baidu.com"，当用户把鼠标放上去的时候，状态栏显示的也是baidu，但当用户点击的瞬间改成"http://www.qq.com"，就会跳向qq，这属于一种浏览器欺诈。
+
+####Web移动端Fixed布局的解决方案
+1. <http://efe.baidu.com/blog/mobile-fixed-layout/>
+2. 移动端input框在弹出输入法的时候会出错位等问题，该页面提供了一些解决方案。

@@ -219,3 +219,15 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 5. PNG8：只能使用 256色,可以设置透明关系。但有两种方式分别为：索引色透明和Alpha透明。索引色透明只可以简单的指定一个像素点是不是透明（是或者不是）。而Alpha透明则可指定该像素点的透明的程度（透明度）,如30%的透明度。
 6. PNG24：特别需要注意的是 PNG24是不支持透明度设定的,但其可用颜色比 PNG8 丰富的多。注：Photoshop里导出的PNG24支持透明，其实Ps导出的是PNG32
 7. PNG32：PNG32不仅可以使用更多的颜色，而且还支持透明度设定。属于PNG系列中较常用的一种格式。
+
+####cookie
+1. cookie与storage一样也分为：session cookie与local cookie。
+2. session cookie是那些没有指定expire时间的cookie，这类cookie在浏览器关闭的时候就会清空。
+
+####form跨域：form表单是可以跨域的，完全可以在form的action中执行和本页面完全不同的域的请求。
+
+####window.postMessage可以跨域、跨窗口传递消息
+
+####DOM元素的滚动srollIntoView、scrollIntoViewIfNeeded、scrollByLines、scrollByPages
+1. <http://www.cnblogs.com/meteoric_cry/archive/2011/10/01/2197172.html>
+2. `HTMLElement`上面的方法，`scrollIntoView`、`scrollIntoViewIfNeeded`将元素滚动到页面可视区域；`scrollByLines`、`scrollByPages`滚动页面元素的内容。
