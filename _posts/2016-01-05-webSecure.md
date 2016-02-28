@@ -47,7 +47,7 @@ keywords: web, secure
 5. 内存泄露：指程序申请内存使用后(new)，最后却不释放内存(delete)，就会导致那部分内存无法访问到，系统也无法再分配，形成一次内存泄露；多次发生内存泄露，系统可用内存就会减少，性能降低，最后形成内存溢出。
 
 
-###客户端脚本安全
+###2. 客户端脚本安全
 ####浏览器安全
 - 同源策略：浏览器最核心、最基本的安全功能。同源是指：host、子域名、端口、协议。
 - 向script、img、iframe等src属性以及link的href属性都有跨域的能力；而XMLHttpRequest一般不具有跨域能力，但可以通过服务器设置`Access-Control-Allow-Origin`这个属性设置哪些`源`可以访问该接口。
@@ -63,3 +63,14 @@ keywords: web, secure
 tips：
 1. ie8 css跨域漏洞：利用ie8解析fontFamily属性的漏洞，可以跨域读取html文档的内容。<http://www.2cto.com/Article/201009/73051.html>
 
+####跨站脚本攻击(XSS)
+1. 类型：反射型XSS：根据用户输入的内容或者一个恶意链接，来发射给浏览器，达到攻击目的；存储型XSS：恶意脚本存储到服务器上，每次访问都能攻击，常见于博客论坛上。
+2. 永远不能信任用户能控制的变量
+3. XSS的防御：httpOnly(禁止js访问该cookie)；输入检查；输出检查；处理富文本，使用白名单的方式；
+
+####跨站点请求伪造（CSRF）
+1. CSRF是利用用户身份（cookie）来进行攻击操作的行为；
+
+####点击劫持（ClickJacking）
+1. 点击劫持：是一种视觉上的欺骗，攻击者使用一个透明的iframe覆盖在一个网页上，诱使用户进行操作，实际上用户将在不知情的情况下早做了iframe页面。如flash点击劫持、拖拽劫持等。
+2. 防御：frame-busting：利用js location判断是否是iframe嵌套；http头-X-Frame-Options：控制当前页面是否能加载iframe。

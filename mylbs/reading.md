@@ -333,3 +333,8 @@ styles: mylbs
 ####Web移动端Fixed布局的解决方案
 1. <http://efe.baidu.com/blog/mobile-fixed-layout/>
 2. 移动端input框在弹出输入法的时候会出错位等问题，该页面提供了一些解决方案。
+
+###2016-02-21
+####Faster JavaScript Trim
+1. <http://blog.stevenlevithan.com/archives/faster-trim-javascript>
+2. trim方法性能比较。
