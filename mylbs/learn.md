@@ -231,3 +231,11 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 ####DOM元素的滚动srollIntoView、scrollIntoViewIfNeeded、scrollByLines、scrollByPages
 1. <http://www.cnblogs.com/meteoric_cry/archive/2011/10/01/2197172.html>
 2. `HTMLElement`上面的方法，`scrollIntoView`、`scrollIntoViewIfNeeded`将元素滚动到页面可视区域；`scrollByLines`、`scrollByPages`滚动页面元素的内容。
+
+####html5新的api
+1. application cache:离线应用缓存，通过manifest来来指定缓存列表。window.applicationCache
+2. localStorage、sessionStorage
+3. web SQL & indexed database：openDatabase、transaction、executeSql这三个api。
+4. cache api：浏览器Request/Response的缓存管理工具。window.caches
+5. serviceWorker：放在前端的HTTP拦截器。navigator.serviceWorker
+6. fetch api：用于简洁的捕捉从网络上检索一个资源的意图。和XMLHttpRequst对象类似，但能更好的支持promise模式。window.fetch

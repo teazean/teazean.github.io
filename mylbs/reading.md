@@ -338,3 +338,12 @@ styles: mylbs
 ####Faster JavaScript Trim
 1. <http://blog.stevenlevithan.com/archives/faster-trim-javascript>
 2. trim方法性能比较。
+
+###2016-02-29
+####当前端也拥有 Server 的能力
+1. <http://www.barretlee.com/blog/2016/02/16/when-fe-has-the-power-of-server/>
+1. <http://www.w3ctech.com/topic/854?&from=androidqq>
+2. 主要介绍前端一些类似server端接口的api，有cache api、serviceWorker、fetch api。
+3. cache api：浏览器关于request/response相关的缓存管理工具。
+4. fetch api：类似于XMLHttpRequest，但能更好的支持promise
+5. serviceWorker：前端的请求拦截器，能在前段对请求做一些封装 

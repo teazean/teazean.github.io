@@ -8,6 +8,7 @@ tags: javascript
 ###javascript忍者秘籍
 1. 图形用户界面（GUI）的桌面编程：创建用户界面、进入轮询等待事件触发、调用事件处理程序，浏览器编程没有什么不同，唯一的不同就是，代码不负责事件轮询和事件派发，而是浏览器帮我们处理。
 2. 如下代码，可以给内联函数命名，以提升威力。也可以使用`arguments.callee`属性来访问函数本身，但es5严格模式下禁止使用callee。
+
 	
 	var ninja = {
 		chirp: function sigal(n) {
