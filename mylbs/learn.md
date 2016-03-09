@@ -61,7 +61,7 @@ X?、X*、X+、X{m，n}
 
 ####浏览器缓存的一些说明    
 1. <http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html> 
-2. 当浏览器第一次访问一个文件的时候，服务端会返回一些头信息。有expires、cache-control、last-modified、etag等，用于做缓存的一些配置。etag是文件唯一标识符，last-modified文件修改时间，expires、cache-control是设置文件的缓存时长。
+2. 当浏览器第一次访问一个文件的时候，服务端会返回一些头信息。有expires、cache-control、last-modified、etag等，用于做缓存的一些配置。etag是文件唯一标识符，last-modified文件修改时间，expires、cache-control是设置文件的缓存时长。(etag在多服务器上的同步并不好用，因此又有了last-modified)
 3. 当浏览器第二次访问该文件的时候，会先检查expires、cache-control，如果这两个属性标志的缓存没有过期，则直接使用缓存，不去请求（CDN服务器一般设置该属性1年甚至10年）；如果文件缓存已经失效，然后会去相继匹配etag、lasted-modified，并且去重新请求服务器，查看文件在这一段时间内有没有发生更新，若服务器返回304，表示没有更新，继续使用缓存，同时更新缓存的时间戳，如果服务器返回200，则用新的文件替换缓存。
 4. Cache-Control是http1.1的实现，Pragma、Expires是http1.0的实现。如果设置Cache-Control:no-cache，要同事设置Pragma:no-cache，兼容http1.0；Cache-Control:max-age=*会覆盖Expires。
 5. 对没有特殊设置缓存的服务器而言，一般会返回last-modified、etag属性。 
@@ -239,3 +239,14 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 4. cache api：浏览器Request/Response的缓存管理工具。window.caches
 5. serviceWorker：放在前端的HTTP拦截器。navigator.serviceWorker
 6. fetch api：用于简洁的捕捉从网络上检索一个资源的意图。和XMLHttpRequst对象类似，但能更好的支持promise模式。window.fetch
+
+####CSS样式优先级与!important
+1. <https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html#cascade>
+2. 样式选择器权重值有四种a,b,c,d，内联样式对应a，id对应b，类与伪类对应c，元素标签与伪元素对应d。
+3. 样式选择器权重比较只能是同一个水平level下的比较，一般为`author normal declarations`;!important是属于垂直level的比较，垂直方向上越往下优先级越高，如下：
+    1. user agent declarations：浏览器定义的样式
+    2. user normal declarations：用户自定的样式
+    3. author normal declarations：网页的样式，内联、外链等
+    4. author important declarations：网站的!importang样式
+    5。 user important declarations：用户自定义的!important样式
+

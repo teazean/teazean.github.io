@@ -347,3 +347,14 @@ styles: mylbs
 3. cache api：浏览器关于request/response相关的缓存管理工具。
 4. fetch api：类似于XMLHttpRequest，但能更好的支持promise
 5. serviceWorker：前端的请求拦截器，能在前段对请求做一些封装 
+
+####从输入 URL 到页面加载完成的过程中都发生了什么事情
+1. <http://fex.baidu.com/blog/2014/05/what-happen/#comments>
+2. 该作者以触屏为基本，从硬件+软件的角度分析了这个问题。
+
+####我为何放弃Gulp与Grunt，转投npm scripts
+1. <http://www.infoq.com/cn/news/2016/02/gulp-grunt-npm-scripts-part1>
+2. <http://www.infoq.com/cn/news/2016/02/gulp-grunt-npm-scripts-part2>
+3. <http://www.infoq.com/cn/news/2016/02/gulp-grunt-npm-scripts-part3>
+4. gulp/grunt构建工具的缺点：对插件作者的依赖、令人沮丧的调试、脱节的文档。
+5. 而npm scripts可以更灵活的去管理项目，如使用系统自带的命令、使用pre/post钩子、或者单独制定一个脚本文件。
