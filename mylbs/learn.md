@@ -8,7 +8,7 @@ styles: mylbs
 ##学习笔记
 
 ####js监听css animaiton、transition结束事件    
-可以监听animationend、transitionend事件。但在移动端下测试，监听不到这两个事件.
+可以监听animationend、transitionend事件。但在移动端下测试，需要增加webkit前缀.
 
 ####当请求是一个文件夹时http://127.0.0.1:8080/zt,这种请求方式会请求两次，发生重定向
 
@@ -233,12 +233,12 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 2. `HTMLElement`上面的方法，`scrollIntoView`、`scrollIntoViewIfNeeded`将元素滚动到页面可视区域；`scrollByLines`、`scrollByPages`滚动页面元素的内容。
 
 ####html5新的api
-1. application cache:离线应用缓存，通过manifest来来指定缓存列表。window.applicationCache
+1. application cache:离线应用缓存，通过manifest来来指定缓存列表。window.applicationCache。新版建议使用serviceWorker
 2. localStorage、sessionStorage
 3. web SQL & indexed database：openDatabase、transaction、executeSql这三个api。
-4. cache api：浏览器Request/Response的缓存管理工具。window.caches
-5. serviceWorker：放在前端的HTTP拦截器。navigator.serviceWorker
-6. fetch api：用于简洁的捕捉从网络上检索一个资源的意图。和XMLHttpRequst对象类似，但能更好的支持promise模式。window.fetch
+4. serviceWorker：放在前端的HTTP拦截器。navigator.serviceWorker
+5. cache api：浏览器Request/Response的缓存管理工具。window.caches。 目前仅仅支持serviceWorker。
+6. fetch api：用于简洁的捕捉从网络上检索一个资源的意图。和XMLHttpRequst对象类似，但能更好的支持promise模式。window.fetch。目前仅仅支持serviceWorker。
 
 ####CSS样式优先级与!important
 1. <https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html#cascade>
@@ -250,3 +250,86 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
     4. author important declarations：网站的!importang样式
     5。 user important declarations：用户自定义的!important样式
 
+####http get post
+1. <http://stackoverflow.com/questions/14551194/how-are-parameters-sent-in-an-http-post-request>
+2. http头信息首行一般是`POST /path/script.cgi HTTP/1.0`，方法，url，协议版本。如果方法是get，则会把数据紧跟url；而如果方法是post，数据在请求body里面，在请求头信息之后。
+3. POST数据大小上限在协议中没有限制，tomcat默认是2M；GET方法、URL的长度在协议中也没有限制大小，但浏览器有限制URL的大小：最小的是ie（2083B--2k+53），因此URL最好不超过这么长。
+
+####移动开发那些坑之——safari mobile click事件的冒泡bug
+1. <http://www.tuicool.com/articles/jI3eQzr>
+2. jquery、zepto在ios-safari下用body、document代理click事件，会点击无效；处理方法：添加样式body{cursor:pointer}
+
+####关于display:none与img、背景图片加载的问题
+1. 正常来说img、背景图片无论怎样都是要加载的，与`display:none`无关，但目前浏览器越来越聪明，如果判断出某张图片不需要加载，那么就放弃加载该图片；
+2. 经测试：img元素无论是否`隐藏(display:none、visiable:hidden等)`均加载图片；
+3. 经测试：关于背景图片：`隐藏（display:none）元素`的背景图片会加载，但被`隐藏元素`包裹的元素的背景图片不会加载。
+    
+    <div class="loading" id="loading" style="display: none;background:url(test/2.png)"> <!--背景图片加载-->
+        <div class="loading-p" style="background:url(test/1.png)">  <!--背景图片不加载-->
+            <img src="images/loading.gif"/> <!--图片加载-->
+            <p>loading</p>
+        </div>
+    </div>
+
+####XMLHttpRequest可以通过setRequestHeader()、getResponseHeader()两个方法来操作header；setRequestHeader可以覆盖一些默认的HttpRequestHeader（如accept、cache-control等等）,也可以设置一定自定义的Header（如my-header），总之浏览器是可以控制request header的。
+
+####comet技术
+1. <http://hcnode.github.io/2012/10/31/comet/>
+2. long-polling实现
+
+        特点：
+            1. 服务端会阻塞请求直到有数据传递或者超时才返回。
+            2. 客户端javascript响应处理函数会在处理完服务器返回的信息后，再次发出请求，重新建立连接。
+            3. 当客户端处理接收的数据、重新建立连接时，服务器端可能有新的数据到达；这些信息会被服务器保存直到客户端重新建立连接，客户端才会把当前服务端所有的信息取回。
+        可用载体：
+            1. xmlhttprequest
+            2. jsonp（以html的script标签的方式请求）
+            3. flash xhr(随便跨域，无视浏览器兼容)
+            4. iframe (iframe页面方式请求)
+
+3. streaming方式实现
+
+        特点：
+            使用这种方式，每次数据传送不会关闭连接，连接只会在通信出现错误时，或者是连接重建时关闭（一些防火墙常被设置为丢弃过长的连接，服务器端可以设置一个超时事件，超时后通知客户端重新建立连接，并关闭原来的连接）。
+        可用载体：    
+            1. xmlhttprequest
+            2. Flash xhr
+            3. iframe
+
+####浅谈浏览器端JavaScript跨域解决方法
+1. <https://github.com/rccoder/blog/issues/5>
+2. jsonp
+3. Access-Control-Allow-Origin
+4. window.name：在同一个tab标签页，window.name是共享，利用这点可以传输一些数据。
+5. document.domain：子域跨域问题
+6. location.hash：和window.name差不多，跳转到新页面的时候把数据加到hash中。
+7. window.postMessage
+
+####使用`ln -s source dist`不要使用相对路径，要使用绝对路径。
+
+####在linux下，非root用户不能监听`<1024`的端口，除非有root权限。
+
+####node require加载module的过程
+1. <http://stackoverflow.com/questions/18974436/change-node-modules-location>
+2. 如果不是核心模块或者不是以"/"、"./"等的模块名开始的，node按照下面的过程加载模块：
+3. 在当前目录查找node_module目录，如果找到查找node_module中的莫个模块，如果找到，加载模块，没有下一步；
+4. 在当前目录的上一级目录查找node_module目录，如果找到，查找项目模块，如果找到，加载模块，否则继续往上一次目录查找node_module目录，直到/根目录下；
+        
+        require("bar");
+        /home/ry/projects/node_modules/bar.js
+        /home/ry/node_modules/bar.js
+        /home/node_modules/bar.js
+        /node_modules/bar.js
+
+5. 如果第4步没有找到相应模块，则在全局环境变量NODE_PATH下查找对应模块，有则加载，无则报错。
+
+####MutationObserver
+1. <https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver>
+2. <http://www.cnblogs.com/jscode/p/3600060.html>
+3. html5里新增MutabionObserver api来异步监听dom树的变化，来替换之前的MutationEvent。
+4. Mutation是异步的，会在所有dom操作结束后，以Records的形式传给回调函数。
+
+####Npm Scripts的执行环境
+1. <https://docs.npmjs.com/cli/run-script>
+2. 在npm scripts可以执行的脚本有：1. PATH; 2. node_module/.bin中定义的; 3. locally-installed dependency(devDependency)这一类的也可以直接使用。
+3. `npm run test -- --grep="pattern"`，这一类的npm run会直接将-- 之后的`--grep="pattern"`追加在npm run test的对应的脚本之后。

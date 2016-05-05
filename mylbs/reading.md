@@ -358,3 +358,57 @@ styles: mylbs
 3. <http://www.infoq.com/cn/news/2016/02/gulp-grunt-npm-scripts-part3>
 4. gulp/grunt构建工具的缺点：对插件作者的依赖、令人沮丧的调试、脱节的文档。
 5. 而npm scripts可以更灵活的去管理项目，如使用系统自带的命令、使用pre/post钩子、或者单独制定一个脚本文件。
+
+###2016-03-14
+####State of the Art JavaScript in 2016
+1. <https://medium.com/javascript-and-opinions/state-of-the-art-javascript-in-2016-ab67fc68eb0b>
+2. 2016年js的新潮流；准备关注一下react、redux、lodash、electron。
+
+####Navigation Timing
+1. <https://www.w3.org/TR/navigation-timing/>
+2. window.performance对象下记录了页面的加载时间，包括从准备加载、重定向、dns查询、tcp连接、页面解析、onload事件等一系列的时间。
+
+###2016-03-21
+####WebAssembly：面向Web的通用二进制和文本格式
+1. <http://www.infoq.com/cn/news/2015/06/webassembly-wasm>
+2. webAssembly:是firefox、chrome、microsoft各大浏览器厂商推荐的面向web的二进制格式，可以作为各种编程语言的的编译目标，是应用程序可以在浏览器中运行；
+3. asm.js是firefox下对c/c++编译成javascript的规范。
+
+####Asm.js: The JavaScript Compile Target
+1. <http://ejohn.org/blog/asmjs-javascript-compile-target/>
+2. emscripter把c++转换成LLVM字节码，然后在转换成javacript。而asm.js正是转成换javascript的一个子集规范，能提高js引擎的效率。
+
+###2016-03-28
+####left-pad事件引发的两个思考
+1. 事件：一个开发者对NPM公司不满，unpublish了自己的所有模块。其中包括被广泛使用的left-pad，导致Babel、ReactNative、Ember等大量工具构建失败。目前，Babel已经紧急发布了不包括该模块的新版本。
+2. <http://zhuanlan.zhihu.com/codestory/20669077>：不仅仅是npm包，开源应该是为大众服务的，而非个人的，应当保护作者的利益。
+3. <http://www.haneycodes.net/npm-left-pad-have-we-forgotten-how-to-program/>：单个函数并不是一个库，简简单单的几行函数，为什么我们不能花两分钟去写这个函数？我们难道忘记了怎么去开发？
+
+###2016-04-08
+####使用 SVG 输出 Octicon
+1. <http://efe.baidu.com/blog/delivering-octicons-with-svg/>
+2. github使用了svg代替所有的octions fonticon图标，优势：通过css`fill:`来改变svg的颜色；将svg嵌入到html中，直接对页面渲染的改变，不会再有fonticon等待字体下载的图标闪现的问题；图片尺寸更合适；便于创造；可动态添加效果；
+3. 实现：使用预编译语法`<%= octicon(:symbol => "alert") %>`,这一种格式在最终html生成前会被替换成一个svg标签。
+
+####前端优化不完全指南
+1. <http://aotu.io/notes/2016/03/16/optimization/>
+2. 前端性能优化大杂烩~~~
+
+####Jaspy
+1. <https://github.com/koehlma/jaspy>
+2. 使用js写的python的虚拟机，只能说js语言本身也足够强大；并且这也对未来web上处理其他语言提供了新的方案。
+
+####Typography — Deep Into OpenType Features
+1. <http://blog.ricardofilipe.com/post/deep-into-opentype-features>
+2. opentype字体，支持unicode字符集。并且可以实现多种多样的排版，如下标、上标、分子分母等。
+3. 最关键的是最新版的chrome、firefox支持opentype特点的css属性。
+
+####关于 Android 进程保活，你所需要知道的一切
+1. <http://www.jianshu.com/p/63aafe3c12af>
+2. wow,android应用果然是黑。应用之间相互唤起。
+
+####Hadoop NameNode 高可用 (High Availability) 实现解析
+1. <http://www.ibm.com/developerworks/cn/opensource/os-cn-hadoop-name-node/>
+2. 知识点1: 存在两种不同的NameNode，一种是active，一种是standby，若一个active的NameNode出错，则将standby的NameNode转为Active态。
+3. 知识点2: 在一个NameNode上启动一个独立的进程，并提供一个RPC的接口用户提供该NameNode的机器运行信息，独立的进程不断的访问这个RPC接口，监测该NameNode的状况。若发生错误，向一个公有的ZoopKeeper集群报告，以选举的形式处理下一步。
+3. 对HDFS的EditLog在集群的同步，当一个NameNode进行写操作时，会修改本地的EditLog，同时向JournalNode集群的每一台node发送请求，当大部分请求同步成功后，就可认为这次集群写入EditLog是成功的（这是一个同步阻塞的过程，但因为是大部分成功即可，效率还挺高）。也就是2n+1的node，允许有n台返回失败。

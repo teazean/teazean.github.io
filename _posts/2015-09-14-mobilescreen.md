@@ -14,6 +14,7 @@ keywords: 移动屏幕, 适配, requestFullscreen, 横竖屏切换, window.orien
 2. 部分浏览器如UC、QQ等隐藏地址栏
 3. requestFullscreen
 4. 横竖屏切换
+5. 移动浏览器下的meta
 
 <!--break-->  
 
@@ -81,3 +82,23 @@ keywords: 移动屏幕, 适配, requestFullscreen, 横竖屏切换, window.orien
 
 1. portrait：竖屏`window.orientation===0 || window.orientation===180`
 2. landscape：横屏`window.orientation===90 || window.orientation===-90`
+
+###移动浏览器下的meta
+
+1. format-detection：可以控制页面里的电话、邮件、地址等自动识别。ios浏览器下如果自动识别会用`a`包裹识别的字串，会影响样式。
+    
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="format-detection" content="email=no"/>
+        <meta name="format-detection" content="adress=no"/>
+        <meta name="format-detection" content="telephone=no,email=no,adress=no"/>
+
+2. ios对web app的支持：
+        
+        <!--启动对webapp的支持-->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <!--改变web app下顶部状态栏的颜色-->
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <!--设置webApp的icon。有规格大小设定-->
+        <link rel="apple-touch-icon-precomposed" href="iphone_logo.png" />
+        <!--设置webApp的启动图片，有规格大事设定。-->
+        <link rel="apple-touch-startup-image" href="logo_startup.png" />
