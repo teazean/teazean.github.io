@@ -1,8 +1,8 @@
 ---
 layout: post
-title: javascript阅读摘要
-category: javascript
-tags: javascript
+title: javascript、css阅读摘要
+category: javascript css
+tags: javascript css
 ---
 
 ###javascript忍者秘籍
@@ -34,3 +34,8 @@ tags: javascript
 10. W3C模型是将两者进行中和，在W3C模型中，任何事件发生时，先从顶层开始进行事件捕获，直到事件触发到达了事件源元素。然后，再从事件源往上进行事件冒泡，直到到达document。
 11. 在IE中的DOM元素上绑定的函数如果在某个元素节点上有闭包关联的话，离开页面时会导致内存回收失败。
 12. 可以使用`document.evaluate`来利用XPATH查询dom元素，并且通过id或者简单的标签查找元素的速度永远比纯DOM快。但XPATH方式查询一般是主要供开发者使用。
+
+###css揭秘
+1. currentColor属性自动获取当前字体颜色的值。
+2. 完美计算出来的设计有时候在视觉上并不一定就是完美的。如完美垂直居中的东西在视觉上会靠下；再如相同宽高的正方形、圆形，看起来圆形会小一些（这也是为什么字体设计中，圆形字体如0会比正方形自己稍微放大一些。）
+3. 在css的一些简写属性如background，书写时可能会有一些歧义的值，可以见`/`作为分隔符。如`background: url(br.png) no-repeat top right / 2em 2em`.

@@ -412,3 +412,67 @@ styles: mylbs
 2. 知识点1: 存在两种不同的NameNode，一种是active，一种是standby，若一个active的NameNode出错，则将standby的NameNode转为Active态。
 3. 知识点2: 在一个NameNode上启动一个独立的进程，并提供一个RPC的接口用户提供该NameNode的机器运行信息，独立的进程不断的访问这个RPC接口，监测该NameNode的状况。若发生错误，向一个公有的ZoopKeeper集群报告，以选举的形式处理下一步。
 3. 对HDFS的EditLog在集群的同步，当一个NameNode进行写操作时，会修改本地的EditLog，同时向JournalNode集群的每一台node发送请求，当大部分请求同步成功后，就可认为这次集群写入EditLog是成功的（这是一个同步阻塞的过程，但因为是大部分成功即可，效率还挺高）。也就是2n+1的node，允许有n台返回失败。
+
+###2016-05-09
+####Postcss
+1. <https://github.com/postcss/postcss#articles>
+2. <https://segmentfault.com/a/1190000003909268>
+3. postcss的工作流程：我们写的css -》css parser(抽稀语法树AST) -》plugin -》stringify -> css
+4. postcss定义了一个平台或者说是工作流，每一种plugin对应自己的css语法。向sass、less这些可以作为postcss的某种plugin，所以说postcss更像是一个平台，而不是一个预编译器，但它完成预编译器完成的工作。
+
+####函数式编程离我们有多远?
+1. <https://www.h5jun.com/post/functional-how-far.html>
+2. 函数式编程，我们可以做到哪些？
+    
+    1. 设计高阶函数，如批量操作、对函数添加wrapper（before、after）
+    2. 函数的频度调用：throttle，debounce
+    3. 实现链式调用等
+    4. 实现防御性编程。关键在于定义一个`ERROR_IF_MISSING`，定义的这个新的属性（全局变量）当做默认值复制给需要验证参数的函数，那么该参数的属性和`ERROR_IF_MISSING`保持一致。
+
+
+            Object.defineProperty(window, "ERROR_IF_MISSING", {
+              get: function(){
+                throw new TypeError("missing parameter")
+              },
+              writeable: false
+            });
+            var add = wrap(add, (x = ERROR_IF_MISSING, y = ERROR_IF_MISSING)=>[x, y]);
+
+
+####IP Anonymization in Analytics
+1. <https://support.google.com/analytics/answer/2763052?hl=en>
+2. 这里介绍了在GA(google analytics)一个在统计的时候，匿名IP的功能。
+3. 在web端请求GA统计请求的时候，加上参数`&aip=1`可以是该请求来源的IP匿名，具体实现是：google在将统计请求写入日志之前，在内存还有一层处理层，内存处理时判断如果有参数`&aip=1`，会替换请求来源IP的后8bit为0，即`12.214.31.144->12.214.31.0`
+
+####Hacking through images
+1. <http://marcoramilli.blogspot.sg/2013/10/hacking-through-images.html>
+2. <https://blog.sucuri.net/2014/02/new-iframe-injections-leverage-png-image-metadata.html>
+3. 将恶意代码注入到图片里，可以有两种实现：1. 直接将代码插入到图片里，不管图片的展示，在页面解析图片；2 将恶意代码追加到图片字节的后面，以script的方式加载图片，后面的js代码会执行，还不会影响到图片的展示，如第一篇文章对bmp图片的hacking。
+
+####CSST
+1. <https://github.com/zswang/csst>
+2. 利用css3 content属性跨域。
+
+###2016-05-16
+####12个JavaScript技巧
+1. <http://www.w3cplus.com/javascript/12-extremely-useful-hacks-for-javascript.html?f=tt>
+2. 合并数组：可以使用arr1.push.apply(arr1, arr2)来替换concat，更高效；
+3. 将NodeList转换成数组:Array.from 或者 `[].slice.call(elements)`
+4. 其余的都用过。
+
+###2015-05-23
+####Alexa Ranking - A Web Site Monetization Strategy?
+1. http://www.avangate.com/avangate-resources/article/alexa-ranking.htm
+2. The algorithm according to which Alexa traffic ranking is calculated, is simple. It is based on the amount of traffic recorded from users that have the Alexa toolbar installed over a period of three months.
+
+####JSON Patch and JSON Merge Patch
+1. <http://erosb.github.io/post/json-patch-vs-merge-patch/>
+2. 一个对于JSON数据存储修改json记录操作的技术。json patch（打补丁）。
+
+####Change And Its Detection In JavaScript Frameworks
+1. <http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html>
+2. js framework最核心的就是监测数据的变化；
+3. 在一开始`Ember.js`的js中，只能通过`fo.set('x', v)`来改变对象，触发数据变化。
+4. 到后来angular1中，用的是脏数据监测，angular对于每一个需要进行数据绑定的data创建一个watcher，当任何一个数据有可能发生变化事，遍历所有watchers监测到变化的数据。（dirty data）
+5. 在React中，当数据变化时，React不做监测，当一个Component发生变化时，React直接渲染整个Component，利用新旧virtural dom比较，更新最小差异。
+6. Immutable data是在react现有的基础上，Immutable的Virtual dom不在渲染，可以重复利用。可以在频繁操作下更高效。

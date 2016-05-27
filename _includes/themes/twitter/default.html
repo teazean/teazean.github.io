@@ -126,6 +126,10 @@
           }
         });
       });
+
+      $('.content.card img').on('click', function(e) {
+        window.open(this.src, '_blank');
+      });
     </script>
   {% for s in page.scripts %}
       <script src="/js/{{s}}.js"></script>
