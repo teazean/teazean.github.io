@@ -73,7 +73,7 @@ X?、X*、X+、X{m，n}
 
 ####关于移动浏览器下的ele.style      
 1. ele.style只能获取标签上的style属性的值。
-2. 在部分移动浏览器下，style.transform等一些属性是无法设置，也无法获取的。可以通过cssText设置，获取。
+2. 在部分浏览器下，style.transform等一些属性是无法设置，也无法获取的。可以通过cssText设置，获取。
 3. style.cssText是值标签上style的值，设置新的cssText会使之前的标签style上的属性失效(完全覆盖)。
 
 ####z-index与stacking context      
@@ -252,8 +252,17 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 
 ####http get post
 1. <http://stackoverflow.com/questions/14551194/how-are-parameters-sent-in-an-http-post-request>
-2. http头信息首行一般是`POST /path/script.cgi HTTP/1.0`，方法，url，协议版本。如果方法是get，则会把数据紧跟url；而如果方法是post，数据在请求body里面，在请求头信息之后。
+1. <http://blog.csdn.net/gideal_wang/article/details/4316691>
+2. http头信息首行一般是`POST /path/script.cgi HTTP/1.0`(方法，url，协议版本。如果方法是get)，如果方法是get，则会把数据紧跟url；而如果方法是post，数据在请求body里面，在请求头信息之后。
 3. POST数据大小上限在协议中没有限制，tomcat默认是2M；GET方法、URL的长度在协议中也没有限制大小，但浏览器有限制URL的大小：最小的是ie（2083B--2k+53），因此URL最好不超过这么长。
+4. 对于get、post而言，都是http协议，http协议的格式是：对于get请求，会把参数放到request-lint/url上；对于post请求，会把参数放到request-body中。在浏览器的表现上get的url会在地址栏展现，post不在地址栏展现（但发送的收据都是http协议的数据，从http的安全角度都是一样的）。
+    
+        <request line>(method url http版本)
+        <header>(headers)
+        <blank line>
+        <request body>(content)
+
+5. 使用get请求容易造成`Cross-site request forgery`攻击.        
 
 ####移动开发那些坑之——safari mobile click事件的冒泡bug
 1. <http://www.tuicool.com/articles/jI3eQzr>
@@ -358,3 +367,56 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
     cool."
 
 这种写法完全可以，但`\`仅仅是书写的多行的切割符，最终生成的是没有`\n`换行符的。
+
+####css是case-insensitive；特别有意思的是div.style.webKitTransform 和 div.style.WebkitTransform是等效的。
+
+####如下，child是absolute布局，脱离了normal-flow，因此parent的overflow是对child是无效的。normal-flow的元素要么是block布局，要么是inline布局，而overflow是block-container的属性。再说：absolute的元素的展示应该相对于他的offset-parent。
+    
+        <body>
+            <style>
+                .parent{
+                    width: 100px;
+                    height: 100px;
+                    overflow: hidden;
+                    background: red;
+                }
+                .child{
+                    position: absolute;
+                    width: 50px;
+                    height: 50px;
+                    background: black;
+                    right: 50px;
+                }
+            </style>
+            <div class="parent">
+                <div class="child"></div>
+            </div>
+        </body>
+
+####javascript函数
+1. <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions#Block-level_functions>
+2. 都是用strict模式，non-strict下实现迥异。
+2. ES5的严格模式规定，函数只能在顶层作用域和函数内声明，其他情况（比如if代码块、循环代码块）的声明都会报错。因为在ES5中，存在函数提升，无论在不在if块内，函数都会声明。
+
+        // ES5
+        'use strict';
+        if (true) {
+          function f() {} // 报错
+        }
+
+3. 而在es6中，因为引入了块级作用域。es6规定，块中申明的函数本身的作用域，在其所在的块级作用域之内，在下例中，快作用域中的函数是不会影响块作用域的外部。在es6模式下，只有快作用域是可以被执行的时候，快作用域里面的函数才能被定义。
+        
+        // ES6
+        if (true) {
+          function f() {} 
+        }
+        f(); //error
+
+4. 在es6中，只有全局声明的var、function才会绑定到全局的属性上。而let、const声明的变量全都不绑在全局属性上。从ES6开始，全局变量将逐步与全局对象的属性脱钩。 
+
+####在mac、linux下/var/log/*.log有各种日志，如system.log[系统各种应用调用的日志]、weekly.log[系统定时清理的日志]
+
+####String.prototype.split
+If separator is a regular expression that contains capturing parentheses, then each time separator is matched, the results (including any undefined results) of the capturing parentheses are spliced into the output array. However, not all browsers support this capability.
+
+> 当separator是一个正在表达式的时候，如果正则表达式中有一个子串，那么每一次匹配separator，子串的值也会插入到output-array中。但不一定所有的浏览器都支持这个特性。
