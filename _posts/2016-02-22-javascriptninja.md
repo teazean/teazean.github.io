@@ -38,4 +38,11 @@ tags: javascript css
 ###css揭秘
 1. currentColor属性自动获取当前字体颜色的值。
 2. 完美计算出来的设计有时候在视觉上并不一定就是完美的。如完美垂直居中的东西在视觉上会靠下；再如相同宽高的正方形、圆形，看起来圆形会小一些（这也是为什么字体设计中，圆形字体如0会比正方形自己稍微放大一些。）
-3. 在css的一些简写属性如background，书写时可能会有一些歧义的值，可以见`/`作为分隔符。如`background: url(br.png) no-repeat top right / 2em 2em`.
+3. 在css的一些简写属性如background，书写时可能会有一些歧义的值，可以见`/`作为分隔符。如`background: url(br.png) no-repeat top right / 2em 2em`
+4. 能用em或其他相对单位的尽量使用，相对单位。
+5. background默认是border+padding+content三个的背景颜色，可以使用`background-clip`来更改background的范围。
+6. box-shadow的第四个参数：`<spread-radius>`定义了shadow的expand/shrink，可以用来实现多重实线边框。(box-shadow不占用实际布局，结合padding或者margin来使用。)。
+7. outline定义了元素的轮廓，默认在border外，但有outline-offset属性可以调整outline的位置。（<http://output.jsbin.com/hajeso/12>轻易的实现了一个手机的屏幕）
+8. `background-position: right 20px top 20px;`可以定义某个方位的偏移量。
+9. `background-origin`可以定义background-position的相对box，默认是padding-box，还有border-box、content-box;
+10. 可以使用calc(100% - 3rem)来获取计算后的大小。

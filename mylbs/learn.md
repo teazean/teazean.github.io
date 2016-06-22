@@ -420,3 +420,20 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 If separator is a regular expression that contains capturing parentheses, then each time separator is matched, the results (including any undefined results) of the capturing parentheses are spliced into the output array. However, not all browsers support this capability.
 
 > 当separator是一个正在表达式的时候，如果正则表达式中有一个子串，那么每一次匹配separator，子串的值也会插入到output-array中。但不一定所有的浏览器都支持这个特性。
+
+####127.0.0.1 localhost ::1 0.0.0.0
+1. ::1是ipv6的hoopback地址。（有时候会遇到localhost:8080->err,但127.0.0.1:8080成功，就是因为`::1 localhost`的原因）
+2. 电脑除了以太网接口、无线网接口，还有回路(hoopback)网络接口。127.0.0.0/8表示的就是hoopback接口的所有地址。
+3. localhost便是对hoopback地址的重命名。（在window上localhost、127.0.0.1都是tcp/ip连接; 在unix上localhost走unix-socket,127.0.0.1走tcp/ip连接）
+4. 0.0.0.0是特本机的所有ip地址。（127.0.0.0/8, 局域网ip，外网ip）
+5. localhost/127.0.0.1定义的接口只有本机才能访问（不能通过局域网ip进行访问）。而0.0.0.0定义的接口其他主机也能访问（能通过局域网ip进行访问）。一般开发使用localhost/127.0.0.1，发布使用0.0.0.0
+
+####document.write
+1. 如果在document被打开的情况下，<script>/* ... */ document.write('aaa')</script>只会返回`aaa`这串文本，比如在正常的document.body插入内联的`script>document.write`。
+2. 如果是document已经被关闭的情况下，执行document.write会自动调用document.open，document.open会清空document。这种情况下还要调用document.close。
+3. api：document.open、document.close、document.write。
+
+####关于DOMContentLoaded
+1. DOMContentLoaded是一个可冒泡的事件，`document.addEventListener("DOMContentLoaded")`会先于`window.addEventListener("DOMContentLoaded")`触发.
+2. jquery.ready是一个`document.DOMContentLoaded`的回调函数
+3. DOMContentLoaded事件是指initial HTML Document被loaded和parsed，不关心stylesheets、images、subframes的loading。更重要的是script动态插入一个script标签对DOMContentLoaded事件并无影响。DOMContentLoaded事件只关系最开始的HTML文档。

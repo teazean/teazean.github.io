@@ -28,6 +28,8 @@ requirejs嵌套比较深，这篇文章主要讲述主干的流程。
 
 > name与ModuleName的区别。requirejs中name是指的是define(name,deps)中明确确定的name，而ModuleName是指当js文件的文件模块名，当引入的js`没有define模块`或者`define(deps)匿名模块`，requirejs会默认name=moduleName。ModuleName只和文件名相关，如果引入`js/jquery-1.11.3.js`和`js/22/jquery-1.11.3.js`两个文件，最终只会有一个`jquery-1.11.3.js`的js文件被加载，且该模块的`name=moduleName=jquery-1.11.3`。(只和文件名有关，文件名！文件名！文件名！)
 
+> 在所有的amd的实现中，包括requirejs，都支持package的配置，即一个package里面的文件相对url的使用，将相对url转化成实际可被require的路径地址。在requirejs中，每一个Mudule被依赖的话，在创建该ModuleMap的时候，会传入依赖该Module的ParentModuleMap，以方便做相对路径转化。
+
 ###2. 数据结构
 
 >这里讨论的所有数据结构均是requirejs封装在自己内部的，比如：require全局变量是指require模块内部的全局变量
@@ -266,7 +268,9 @@ require.js执行过程中调用了两次：
 
 ####配置
 
-requirejs的配置项有很多，这里介绍几种常用的。细节可以看：<http://requirejs.org/docs/api.html#config>
+requirejs的配置项有很多，这里介绍几种常用的。细节可以看：<http://requirejs.org/docs/api.html#config>和<https://segmentfault.com/a/1190000002401665>,<https://github.com/amdjs/amdjs-api/wiki/Common-Config>
+
+注意：paths的配置可以执向一个文件也可以是一个路径的简写
 
     require.config({
         //设置查找一个模块的基础路径，默认是data-main指定的。

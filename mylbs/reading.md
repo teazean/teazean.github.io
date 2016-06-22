@@ -476,8 +476,26 @@ styles: mylbs
 4. 到后来angular1中，用的是脏数据监测，angular对于每一个需要进行数据绑定的data创建一个watcher，当任何一个数据有可能发生变化事，遍历所有watchers监测到变化的数据。（dirty data）
 5. 在React中，当数据变化时，React不做监测，当一个Component发生变化时，React直接渲染整个Component，利用新旧virtural dom比较，更新最小差异。
 6. Immutable data是在react现有的基础上，Immutable的Virtual dom不在渲染，可以重复利用。可以在频繁操作下更高效。
-####
+
+####数组的完全随机排列
 1. <https://www.h5jun.com/post/array-shuffle.html>
 2. <https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle>
 3. javascript本身的sort内部采用的并不是完全随机方法。
 4. 完全随机算法见Wiki里面的Fisher_Yates_shuffle。
+
+###2015-06-13
+####You Don't Need JavaScript for That!
+1. <https://robots.thoughtbot.com/you-don-t-need-javascript-for-that>
+2. 使用纯css实现：tooltip、dropdown menu、toggle
+
+####Where The Web Is Going In 2016
+1. <http://developer.telerik.com/featured/web-going-2016/>
+2. ES2015 Modules
+3. ES2016 includes 和 **
+4. Fetch Api 和 Cancelable Promise
+5. Sevice Worker 
+6. Http2.0
+
+####Progressive Web App
+1. <http://yanshuo.io/assets/player/?deck=5753088f79bc440063aa84f0>
+2. 介绍Progressive Web App，web app的一种
