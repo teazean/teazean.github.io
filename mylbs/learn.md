@@ -65,7 +65,31 @@ X?、X*、X+、X{m，n}
 3. 当浏览器第二次访问该文件的时候，会先检查expires、cache-control，如果这两个属性标志的缓存没有过期，则直接使用缓存，不去请求（CDN服务器一般设置该属性1年甚至10年）；如果文件缓存已经失效，然后会去相继匹配etag、lasted-modified，并且去重新请求服务器，查看文件在这一段时间内有没有发生更新，若服务器返回304，表示没有更新，继续使用缓存，同时更新缓存的时间戳，如果服务器返回200，则用新的文件替换缓存。
 4. Cache-Control是http1.1的实现，Pragma、Expires是http1.0的实现。如果设置Cache-Control:no-cache，要同事设置Pragma:no-cache，兼容http1.0；Cache-Control:max-age=*会覆盖Expires。
 5. 对没有特殊设置缓存的服务器而言，一般会返回last-modified、etag属性。 
-<img src="/collections/httpcache.png" alt="">       
+<img src="/collections/httpcache.png" alt="">
+6. 关于浏览器刷新对缓存的控制：刷新页面会使浏览器进入协商缓存，f5/cmd+r会是header带上`cache-control:max-age=0`和`if-modified-since`，而cmd+shift+r会使浏览器带上`cache-control:no-cache`和`pragma:no-cache`。
+
+
+        // http://stackoverflow.com/questions/385367/what-requests-do-browsers-f5-and-ctrl-f5-refreshes-generate
+        // http://weizhifeng.net/difference-between-f5-and-ctrl-f5.html
+        F5 and CTRL-F5
+        ┌────────────┬─────────────────────────────────────────────────────────────┐
+        │  UPDATED   │                 Firefox 3.x 4.x                             │
+        │2011-04-24  │  ┌──────────────────────────────────────────────────────────┤
+        │            │  │              MSIE 7 8                                    │
+        │            │  │  ┌───────────────────────────────────────────────────────┤
+        │            │  │  │           MSIE 9                                      │
+        │            │  │  │  ┌────────────────────────────────────────────────────┤
+        │            │  │  │  │        Chrome 10                                   │
+        │            │  │  │  │  ┌─────────────────────────────────────────────────┤
+        │            │  │  │  │  │     Opera 11                                    │
+        │            │  │  │  │  │  ┌──────────────────────────────────────────────┤
+        │            │  │  │  │  │  │ I = "If─Modified─Since"                      │
+        ├────────────┼──┼──┼──┼──┼──┤ P = "Pragma: No─cache"                       │
+        │          F5│IM│IM│I │IM│I │ C = "Cache─Control: no─cache"                │
+        │     CTRL─F5│CP│C │C │CP│- │ M = "Cache─Control: max─age=0"               │
+        │  Click Icon│IM│I │I │IM│I │ Click Icon= "a mouse click on refresh icon"  │
+        └────────────┴──┴──┴──┴──┴──┴──-───────────────────────────────────────────┘     
+    
 
 
 ####querySelectorAll性能    
@@ -437,3 +461,23 @@ If separator is a regular expression that contains capturing parentheses, then e
 1. DOMContentLoaded是一个可冒泡的事件，`document.addEventListener("DOMContentLoaded")`会先于`window.addEventListener("DOMContentLoaded")`触发.
 2. jquery.ready是一个`document.DOMContentLoaded`的回调函数
 3. DOMContentLoaded事件是指initial HTML Document被loaded和parsed，不关心stylesheets、images、subframes的loading。更重要的是script动态插入一个script标签对DOMContentLoaded事件并无影响。DOMContentLoaded事件只关系最开始的HTML文档。
+
+####chrome develop tools
+1. 在debugger模式下，通过修改js如`var a = 1`和`var b = {a:1}`修改a是不成功的，但可以修改b.a。
+2. 临时修改的js文件要保证没有执行过才会生效。
+
+###关于伪元素与伪类，伪元素如after，可以使用`::`或者`:`，而伪类只能使用一个`:`
+
+###对于script的加载事件
+1. 在chrome、firefox中，onload事件是指加载完成并执行；并且有document.currentScript表示当前正在被处理的script。
+2. 但在ie8以下并不支持onload，有onreadystatechange事件
+
+        此时 readyState 的值  可能为 以下几个 :
+
+        “uninitialized” – 原始状态 
+        “loading” – 下载数据中..
+        “loaded” – 下载完成
+        “interactive” – 还未执行完毕.
+        “complete” – 脚本执行完毕.
+
+3. 在onload事件中有event参数可以获取当前script的信息。并且在浏览器中同时只能处理一个script。requrejs就是利用这个特性关联name与script脚本的。

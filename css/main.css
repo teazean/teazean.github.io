@@ -15,6 +15,10 @@ html,body{
 }
 code,pre{
     font-size: 14px;
+    white-space: pre;
+}
+ol.linenums code {
+    white-space: pre;
 }
 h4{
 	padding-right: 10px;
