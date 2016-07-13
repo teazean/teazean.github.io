@@ -110,4 +110,4 @@ google关于定义sourcemap v3的docs <https://docs.google.com/document/d/1U1RGA
 
 ####结论：
 1. webpack产生的source-map基本上都是自包含的source-map
-1. webpack要求loader提供sourcemap，webpack的source-map与loader的source-map关系还不是很明确，（最终肯定是结合产生的sourcemap）；可能需要进一步阅读webpack的源码查找。
+1. webpack要求loader提供sourcemap，webpack的source-map与loader的source-map关系还不是很明确，（最终肯定是结合产生的sourcemap）；在webpack里面可能有很多种策略，关于如何使用loader的sourcemap，需要进一步阅读webpack的源码查找。
