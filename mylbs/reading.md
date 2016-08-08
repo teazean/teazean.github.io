@@ -499,3 +499,18 @@ styles: mylbs
 ####Progressive Web App
 1. <http://yanshuo.io/assets/player/?deck=5753088f79bc440063aa84f0>
 2. 介绍Progressive Web App，web app的一种
+
+####图片压缩的正确姿势
+1. <https://zhuanlan.zhihu.com/p/21543787>
+2. vd（vector draw）> webp > png > jpg
+
+###选择一个 HTTP 状态码不再是一件难事
+1. <http://www.zcfy.cc/article/choosing-an-http-status-code-stop-making-it-hard-8211-racksburg-904.html>
+2. 详细介绍了http在什么状态下返回什么状态码
+
+###About rel=noopener What problems does it solve?
+1. <https://mathiasbynens.github.io/rel-noopener/#hax>
+2. 当在一个新窗口打开网页是，无论是a[target='_blank']还是window.open的，新窗口都会有一个window.opener属性指向打开该窗口的window对象
+3. 有一点特别注意，window.opener是有same origin的限制，但window.opener.location是跨域的，可以通过修改location属性达到攻击的目的。
+
+        window.opener.location = 'index.html#crack';

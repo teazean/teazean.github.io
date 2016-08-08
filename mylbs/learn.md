@@ -481,3 +481,7 @@ If separator is a regular expression that contains capturing parentheses, then e
         “complete” – 脚本执行完毕.
 
 3. 在onload事件中有event参数可以获取当前script的信息。并且在浏览器中同时只能处理一个script。requrejs就是利用这个特性关联name与script脚本的。
+
+###String.prototype.replace(sub|reg, replacer)
+1. 注意在replacer中，`\`表示转义，`$`表示引用，有特殊的含义。
+2. `param.html.replace(/\\/g, '\\\\').replace(/\${/g, '\\$${').replace(/\n/g, '\\n')`

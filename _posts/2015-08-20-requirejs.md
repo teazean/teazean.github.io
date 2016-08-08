@@ -30,6 +30,8 @@ requirejs嵌套比较深，这篇文章主要讲述主干的流程。
 
 > 在所有的amd的实现中，包括requirejs，都支持package的配置，即一个package里面的文件相对url的使用，将相对url转化成实际可被require的路径地址。在requirejs中，每一个Mudule被依赖的话，在创建该ModuleMap的时候，会传入依赖该Module的ParentModuleMap，以方便做相对路径转化。
 
+>在标准的amd规范中没有定义factory的执行时机，在requirejs中factory在module的所有依赖被加载完成之后立刻执行factory，将生成的对象赋值给module.exports，以后就复用这个对象。而esl中factory是延后执行的，esl被依赖的时候，factory才会执行生成对象，并被以后的复用。
+
 ###2. 数据结构
 
 >这里讨论的所有数据结构均是requirejs封装在自己内部的，比如：require全局变量是指require模块内部的全局变量
@@ -89,7 +91,7 @@ requirejs嵌套比较深，这篇文章主要讲述主干的流程。
         3. 如果defined队列不存在，并且registry队列也不存在，在registry中新建depModule，并且直接调用enable()方法。
 
             >- deps Module,这里的deps有两种来源：`define(name,deps,callback)`和`require(deps,callback)`。如果没有特殊配置paths，默认的deps均是相对于baseUrl需找js文件。这里将为每一个dependency创建一个`name=dependecy`的Module,如`deps=['../jquery-1.12.1']`,将创建一个`name="jquery-1.12.1"`的Module。变量ModuleName=deps[i]; 
-            >- 第三种模式创建的deps Module，因为deps[i].js这个文件还没加载，无法得知它的依赖，以及callback，所以第一次尝试调用enable()->check()，在check()中，监测到`inited = undefined`, 执行fetch()加载js文件,文件加载成功之后，在completeLoad()中，就可以知晓该Module的deps和callback，调用init()(设置`inited = true`)->check()。
+            >- 第三种模式创建的deps Module，因为deps[i].js这个文件还没加载，无法得知它的依赖，以及callback，所以第一次尝试调用enable()->check()，在check()中，监测到`inited = undefined`, 执行fetch()加载js文件,文件加载成功之后，在completeLoad()中，就可以知晓该Module的deps和callback，调用init()(设置`inited = true`)->check()。在在最终check()方法里面，会将Module的factory执行，产出最终的结果放到mod.exports里面。
 
 * Module主要方法与变量
     

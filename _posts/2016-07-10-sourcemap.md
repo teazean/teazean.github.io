@@ -78,7 +78,7 @@ google关于定义sourcemap v3的docs <https://docs.google.com/document/d/1U1RGA
 在webpack sourcemap里面有很多种配置，具体可以看[文档](https://webpack.github.io/docs/configuration.html#devtool)。这里介绍一下用过的几种：
 
 1. eval：loader转译之后代码都在eval里面执行，在eval后面添加sourceURL命名eval，并且调试对应的代码（在浏览器展示中）都是loader编译之后的代码。
-2. source-map:loader转译之后代码都在__webpack_require__闭包里面执行，非eval，在最后添加sourceMapURL；在浏览器展示中对应的是源文件（里面的mapping应该是webpack和loader的结合）。demo中使用的是webpack server，没在本地库见到生成的commons.js和commons.js.map，应该都在webpack server代理的内存里。(通过webpack命令跑出来的是有commons.js和commons.js.map)。
+2. source-map:loader转译之后代码都在__webpack_require__闭包里面执行，非eval，在最后添加sourceMapURL=path；在浏览器展示中对应的是源文件（里面的mapping应该是webpack和loader的结合）。demo中使用的是webpack server，没在本地库见到生成的commons.js和commons.js.map，应该都在webpack server代理的内存里。(通过webpack命令跑出来的是有commons.js和commons.js.map)。
 	> commons.js.map是一个完全自包含的source-map文件，在sources与sourcesContent里定义了所有源文件的内容，感觉源文件与loader编译后（在浏览器执行的代码）并不是很严格的一一映射。（比如babel转码添加的pollyfill的代码在源文件中并没有映射）
 
 		{
@@ -106,8 +106,9 @@ google关于定义sourcemap v3的docs <https://docs.google.com/document/d/1U1RGA
 
 	> 可以从*.js.map（定义了sources、sourceConent）中完美解析出一个app.vue源文件。包括source-map内容告诉浏览器源文件的自定义地址。。
 
-
+4. inline-source-map：loader转译之后代码都在__webpack_require__闭包里面执行，非eval，在最后添加sourceMapURL=dataURL。（建议使用）
 
 ####结论：
 1. webpack产生的source-map基本上都是自包含的source-map
 1. webpack要求loader提供sourcemap，webpack的source-map与loader的source-map关系还不是很明确，（最终肯定是结合产生的sourcemap）；在webpack里面可能有很多种策略，关于如何使用loader的sourcemap，需要进一步阅读webpack的源码查找。
+3. webpack sourcemap在eval模式下页面加载过程中设置的短点是无效的；建议使用inline-sourcemap的模式，可以在一开始加载就有效。
