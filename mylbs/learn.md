@@ -379,7 +379,7 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 ####ssl + https
 1. https就是在tcp/ip和http加了一层ssl层（数据加密）；从过程上来说，多了一步客户端、服务端双方认证的握手阶段，以及数据的加密、解密阶段。
 2. 其中涉及了一个CA证书，有发布CA资格的机构对申请者的信息校验，验证通过后，将申请者信息与对齐发布的公钥的信息绑定一起，并用私钥签名，生成证书，将证书发给申请者。
-3. ssl的双方属于`对称加密`，在握手阶段交换双方信息、加密算法等，以后的传输数据使用相同的加密/解密算法。
+3. https在握手阶段是属于非对称加密，数据传输阶段数据对称加密，在握手阶段交换双方信息、加密算法等，以后的传输数据使用相同的加密/解密算法。
 4. 对https的7个误解之处：<http://www.ruanyifeng.com/blog/2011/02/seven_myths_about_https.html>
 
 ####div、label等元素标签，如果没有内容即`<div></div><label></div>`设置`width`属性将会失效。至少需要插入一个Non-breaking space(不换行)。
@@ -485,3 +485,10 @@ If separator is a regular expression that contains capturing parentheses, then e
 ###String.prototype.replace(sub|reg, replacer)
 1. 注意在replacer中，`\`表示转义，`$`表示引用，有特殊的含义。
 2. `param.html.replace(/\\/g, '\\\\').replace(/\${/g, '\\$${').replace(/\n/g, '\\n')`
+
+###html5新增了picture标签，可以设置许多source options，浏览器根据支持类型、屏幕大小等方式来判断加载哪个source。类似的也有一个css:image-set和img:srcset的属性
+
+        ​<picture>
+            <source srcset="mdn-logo.svg" type="image/svg+xml">
+            <img src="mdn-logo.png" alt="MDN">
+        </picture>
