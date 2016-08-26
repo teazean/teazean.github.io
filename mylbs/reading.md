@@ -346,7 +346,7 @@ styles: mylbs
 2. 主要介绍前端一些类似server端接口的api，有cache api、serviceWorker、fetch api。
 3. cache api：浏览器关于request/response相关的缓存管理工具。
 4. fetch api：类似于XMLHttpRequest，但能更好的支持promise
-5. serviceWorker：前端的请求拦截器，能在前段对请求做一些封装 
+5. serviceWorker：前端的请求拦截器，能在前段对请求做一些封装
 
 ####从输入 URL 到页面加载完成的过程中都发生了什么事情
 1. <http://fex.baidu.com/blog/2014/05/what-happen/#comments>
@@ -423,7 +423,7 @@ styles: mylbs
 ####函数式编程离我们有多远?
 1. <https://www.h5jun.com/post/functional-how-far.html>
 2. 函数式编程，我们可以做到哪些？
-    
+
     1. 设计高阶函数，如批量操作、对函数添加wrapper（before、after）
     2. 函数的频度调用：throttle，debounce
     3. 实现链式调用等
@@ -493,7 +493,7 @@ styles: mylbs
 2. ES2015 Modules
 3. ES2016 includes 和 **
 4. Fetch Api 和 Cancelable Promise
-5. Sevice Worker 
+5. Sevice Worker
 6. Http2.0
 
 ####Progressive Web App
@@ -514,3 +514,7 @@ styles: mylbs
 3. 有一点特别注意，window.opener是有same origin的限制，但window.opener.location是跨域的，可以通过修改location属性达到攻击的目的。
 
         window.opener.location = 'index.html#crack';
+
+####用 JavaScript 实现单步调试
+1. <http://www.zcfy.cc/article/363>
+2. js实现js的单步调试器

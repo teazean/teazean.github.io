@@ -60,11 +60,11 @@ X?、X*、X+、X{m，n}
 使用addEventListener和（element.onclick onload）等添加事件，两种方式之间是相互独立的。彼此之间并不会发生覆盖事件。但是在引入其他模块的情况下，尽量不要使用window.onload，防止覆盖其他模块的事件。
 
 ####浏览器缓存的一些说明    
-1. <http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html> 
+1. <http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html>
 2. 当浏览器第一次访问一个文件的时候，服务端会返回一些头信息。有expires、cache-control、last-modified、etag等，用于做缓存的一些配置。etag是文件唯一标识符，last-modified文件修改时间，expires、cache-control是设置文件的缓存时长。(etag在多服务器上的同步并不好用，因此又有了last-modified)
 3. 当浏览器第二次访问该文件的时候，会先检查expires、cache-control，如果这两个属性标志的缓存没有过期，则直接使用缓存，不去请求（CDN服务器一般设置该属性1年甚至10年）；如果文件缓存已经失效，然后会去相继匹配etag、lasted-modified，并且去重新请求服务器，查看文件在这一段时间内有没有发生更新，若服务器返回304，表示没有更新，继续使用缓存，同时更新缓存的时间戳，如果服务器返回200，则用新的文件替换缓存。
 4. Cache-Control是http1.1的实现，Pragma、Expires是http1.0的实现。如果设置Cache-Control:no-cache，要同事设置Pragma:no-cache，兼容http1.0；Cache-Control:max-age=*会覆盖Expires。
-5. 对没有特殊设置缓存的服务器而言，一般会返回last-modified、etag属性。 
+5. 对没有特殊设置缓存的服务器而言，一般会返回last-modified、etag属性。
 <img src="/collections/httpcache.png" alt="">
 6. 关于浏览器刷新对缓存的控制：刷新页面会使浏览器进入协商缓存，f5/cmd+r会是header带上`cache-control:max-age=0`和`if-modified-since`，而cmd+shift+r会使浏览器带上`cache-control:no-cache`和`pragma:no-cache`。
 
@@ -89,7 +89,7 @@ X?、X*、X+、X{m，n}
         │     CTRL─F5│CP│C │C │CP│- │ M = "Cache─Control: max─age=0"               │
         │  Click Icon│IM│I │I │IM│I │ Click Icon= "a mouse click on refresh icon"  │
         └────────────┴──┴──┴──┴──┴──┴──-───────────────────────────────────────────┘     
-    
+
 
 
 ####querySelectorAll性能    
@@ -103,7 +103,7 @@ X?、X*、X+、X{m，n}
 ####z-index与stacking context      
 1. z-index只对position为非static有效
 2. z-index只决定该box在当前stacking context中的位置.
-3. stacking context对内：Within a stacking context, child elements are stacked according to the same rules previously explained. Importantly, the z-index values of its child stacking contexts only have meaning in this parent. 
+3. stacking context对内：Within a stacking context, child elements are stacked according to the same rules previously explained. Importantly, the z-index values of its child stacking contexts only have meaning in this parent.
 4. stacking context对外：Stacking contexts are treated atomically as a single unit in the parent stacking context.
 5. <https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context>，创建stacking context的元素见上链接，主要的有transform ,opactity , position && z-index.
 
@@ -134,7 +134,7 @@ X?、X*、X+、X{m，n}
 
 ####js继承  
 js继承链上，可以临时创建一个过度函数，避免构造函数需要参数而无法提供。这种方法继承只继承原型脸上的方法。
-        
+
     Function.prototype.methodSingleton = function () {
         if (this._msingleton) {
             return this._msingleton;
@@ -211,7 +211,7 @@ eg:scss语法:
         }
     }
 
-####input[type=color] 
+####input[type=color]
 js调起调色板，关键在于该input不能为hidden，可以使用绝对布局飞出页面，使用`js trigger click`
 
 ####html style、currentStyle、getComputedStyle
@@ -280,7 +280,7 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 2. http头信息首行一般是`POST /path/script.cgi HTTP/1.0`(方法，url，协议版本。如果方法是get)，如果方法是get，则会把数据紧跟url；而如果方法是post，数据在请求body里面，在请求头信息之后。
 3. POST数据大小上限在协议中没有限制，tomcat默认是2M；GET方法、URL的长度在协议中也没有限制大小，但浏览器有限制URL的大小：最小的是ie（2083B--2k+53），因此URL最好不超过这么长。
 4. 对于get、post而言，都是http协议，http协议的格式是：对于get请求，会把参数放到request-lint/url上；对于post请求，会把参数放到request-body中。在浏览器的表现上get的url会在地址栏展现，post不在地址栏展现（但发送的收据都是http协议的数据，从http的安全角度都是一样的）。
-    
+
         <request line>(method url http版本)
         <header>(headers)
         <blank line>
@@ -296,7 +296,7 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 1. 正常来说img、背景图片无论怎样都是要加载的，与`display:none`无关，但目前浏览器越来越聪明，如果判断出某张图片不需要加载，那么就放弃加载该图片；
 2. 经测试：img元素无论是否`隐藏(display:none、visiable:hidden等)`均加载图片；
 3. 经测试：关于背景图片：`隐藏（display:none）元素`的背景图片会加载，但被`隐藏元素`包裹的元素的背景图片不会加载。
-    
+
     <div class="loading" id="loading" style="display: none;background:url(test/2.png)"> <!--背景图片加载-->
         <div class="loading-p" style="background:url(test/1.png)">  <!--背景图片不加载-->
             <img src="images/loading.gif"/> <!--图片加载-->
@@ -347,7 +347,7 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 2. 如果不是核心模块或者不是以"/"、"./"等的模块名开始的，node按照下面的过程加载模块：
 3. 在当前目录查找node_module目录，如果找到查找node_module中的莫个模块，如果找到，加载模块，没有下一步；
 4. 在当前目录的上一级目录查找node_module目录，如果找到，查找项目模块，如果找到，加载模块，否则继续往上一次目录查找node_module目录，直到/根目录下；
-        
+
         require("bar");
         /home/ry/projects/node_modules/bar.js
         /home/ry/node_modules/bar.js
@@ -385,7 +385,7 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 ####div、label等元素标签，如果没有内容即`<div></div><label></div>`设置`width`属性将会失效。至少需要插入一个Non-breaking space(不换行)。
 
 ####js字符串多行的写法，除了模板字符串，也可以：
-    
+
     var foo = "Bob\
     is\
     cool."
@@ -395,7 +395,7 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 ####css是case-insensitive；特别有意思的是div.style.webKitTransform 和 div.style.WebkitTransform是等效的。
 
 ####如下，child是absolute布局，脱离了normal-flow，因此parent的overflow是对child是无效的。normal-flow的元素要么是block布局，要么是inline布局，而overflow是block-container的属性。再说：absolute的元素的展示应该相对于他的offset-parent。
-    
+
         <body>
             <style>
                 .parent{
@@ -429,16 +429,16 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
         }
 
 3. 而在es6中，因为引入了块级作用域。es6规定，块中申明的函数本身的作用域，在其所在的块级作用域之内，在下例中，快作用域中的函数是不会影响块作用域的外部。在es6模式下，只有快作用域是可以被执行的时候，快作用域里面的函数才能被定义。
-        
+
         // ES6
         if (true) {
-          function f() {} 
+          function f() {}
         }
         f(); //error
 
-4. 在es6中，只有全局声明的var、function才会绑定到全局的属性上。而let、const声明的变量全都不绑在全局属性上。从ES6开始，全局变量将逐步与全局对象的属性脱钩。 
+4. 在es6中，只有全局声明的var、function才会绑定到全局的属性上。而let、const声明的变量全都不绑在全局属性上。从ES6开始，全局变量将逐步与全局对象的属性脱钩。
 
-####在mac、linux下/var/log/*.log有各种日志，如system.log[系统各种应用调用的日志]、weekly.log[系统定时清理的日志]
+####在mac、linux下`/var/log/*.log`有各种日志，如system.log[系统各种应用调用的日志]、weekly.log[系统定时清理的日志]
 
 ####String.prototype.split
 If separator is a regular expression that contains capturing parentheses, then each time separator is matched, the results (including any undefined results) of the capturing parentheses are spliced into the output array. However, not all browsers support this capability.
@@ -453,7 +453,7 @@ If separator is a regular expression that contains capturing parentheses, then e
 5. localhost/127.0.0.1定义的接口只有本机才能访问（不能通过局域网ip进行访问）。而0.0.0.0定义的接口其他主机也能访问（能通过局域网ip进行访问）。一般开发使用localhost/127.0.0.1，发布使用0.0.0.0
 
 ####document.write
-1. 如果在document被打开的情况下，<script>/* ... */ document.write('aaa')</script>只会返回`aaa`这串文本，比如在正常的document.body插入内联的`script>document.write`。
+1. 如果在document被打开的情况下，`<script>/* ... */ document.write('aaa')</script>`只会返回`aaa`这串文本，比如在正常的document.body插入内联的`script>document.write`。
 2. 如果是document已经被关闭的情况下，执行document.write会自动调用document.open，document.open会清空document。这种情况下还要调用document.close。
 3. api：document.open、document.close、document.write。
 
@@ -466,15 +466,15 @@ If separator is a regular expression that contains capturing parentheses, then e
 1. 在debugger模式下，通过修改js如`var a = 1`和`var b = {a:1}`修改a是不成功的，但可以修改b.a。
 2. 临时修改的js文件要保证没有执行过才会生效。
 
-###关于伪元素与伪类，伪元素如after，可以使用`::`或者`:`，而伪类只能使用一个`:`
+####关于伪元素与伪类，伪元素如after，可以使用`::`或者`:`，而伪类只能使用一个`:`
 
-###对于script的加载事件
+####对于script的加载事件
 1. 在chrome、firefox中，onload事件是指加载完成并执行；并且有document.currentScript表示当前正在被处理的script。
 2. 但在ie8以下并不支持onload，有onreadystatechange事件
 
         此时 readyState 的值  可能为 以下几个 :
 
-        “uninitialized” – 原始状态 
+        “uninitialized” – 原始状态
         “loading” – 下载数据中..
         “loaded” – 下载完成
         “interactive” – 还未执行完毕.
@@ -482,13 +482,43 @@ If separator is a regular expression that contains capturing parentheses, then e
 
 3. 在onload事件中有event参数可以获取当前script的信息。并且在浏览器中同时只能处理一个script。requrejs就是利用这个特性关联name与script脚本的。
 
-###String.prototype.replace(sub|reg, replacer)
+####String.prototype.replace(sub|reg, replacer)
 1. 注意在replacer中，`\`表示转义，`$`表示引用，有特殊的含义。
 2. `param.html.replace(/\\/g, '\\\\').replace(/\${/g, '\\$${').replace(/\n/g, '\\n')`
 
-###html5新增了picture标签，可以设置许多source options，浏览器根据支持类型、屏幕大小等方式来判断加载哪个source。类似的也有一个css:image-set和img:srcset的属性
+####html5新增了picture标签，可以设置许多source options，浏览器根据支持类型、屏幕大小等方式来判断加载哪个source。类似的也有一个css:image-set和img:srcset的属性
 
         ​<picture>
             <source srcset="mdn-logo.svg" type="image/svg+xml">
             <img src="mdn-logo.png" alt="MDN">
         </picture>
+
+####关于forever与pm2
+1. forever是使用spawn另起一个node进程
+2. pm2正常情况下也会使用spawn另起一个node进程，但当pm2找不到传入的app参数时，会执行一次shelljs.which，查找真正的脚本所在地，如pm2 start "sinopia"
+3. 有意思的是很多shell脚本其实使用node写的，如
+
+        #!/usr/bin/env node
+        require('../lib/cli')
+
+####http auth
+1. 使用HTTP AUTH需要在server端配置http auth信息（一般是webserver启动的时候从配置文件里面读取相关信息）。我用中文简述一下http auth的过程：
+2. 客户端发送http请求
+3. 服务器发现配置了http auth，于是检查request里面有没有"Authorization"的http header
+4. 如果有，则判断Authorization里面的内容是否在用户列表里面，Authorization header的典型数据为"Authorization: Basic jdhaHY0="，其中Basic表示基础认证， jdhaHY0=是base64编码的"user:passwd"字符串。
+5. 如果没有，或者用户密码不对，则返回http code 401页面给客户端
+6. 标准的http浏览器在收到401页面之后，应该弹出一个对话框让用户输入帐号密码；并在用户点确认的时候再次发出请求，这次请求里面将带上Authorization header
+
+####可编程逻辑器件
+1. 简单地说，可编程逻辑器件是在硬件结构的基础上直接进行运算，优点在于运算速度快，比如加减法都有逻辑门电路直接运算
+2. 单片机采用的是寄存器或ram存储变量 然后对他们在ram中进行数据处理，速度没有PLC快 对于一些高速算法 或者运算量较大 用PLC或者FPGA的优势明显
+3. 比如说运行在FPGA上的sql查询可以提升10倍
+
+####关于编码
+1. `&#000；`这种是html的编码
+2. `\000`: 这种是八进制转码，常见于utf-8
+3. `%E8%AE%B8`这种是`许`的三字节编码，可以转成`\u8bb8`这边unicode编码(utf-8采用可变长字节编码，以三字节编码为例，固定格式1110xxxx 10xxxxxx 10xxxxxx，可以转成三字节码，同时也可以对其中的变化部分xxx进行编码，四个一组成为`\u8bb8`这种16进制的编码)；
+4. iso-8859-1这种事Latin字符集，包括了所有西方欧洲语言不可缺少的附加字符；gb2312这种是标准中文字符集；utf-8是unicode的一种编程字符编码，可以解决多种语言文本的显示问题。
+5. 关于git下中文输出八进制的转码`\xxx`，git默认配置`core.quotepath`为true，会对中文文件名、中文路径转义成`\xxx\xxx`这种编码。可以通过设置下面来更改。
+
+        git config --global core.quotepath false
