@@ -522,3 +522,11 @@ If separator is a regular expression that contains capturing parentheses, then e
 5. 关于git下中文输出八进制的转码`\xxx`，git默认配置`core.quotepath`为true，会对中文文件名、中文路径转义成`\xxx\xxx`这种编码。可以通过设置下面来更改。
 
         git config --global core.quotepath false
+
+
+####再来说一下js的原型链，在chrome devtools中的展示问题
+1. 当创建一个函数的时候，例如`function A() {}`，这里A对象下面就会多出一个`prototype`属性，其中有`prototype.constructor`指向A；这个`A.__proto__`就不说了，是Function.prototype；
+2. 当`let a = new A()`时，在构造函数里(this就是最终返回的a对象)，就会赋值`this.__proto__ = A.prototype`;如果深层继承，那么A.prototype其实赋值的是另外一个对象（既`new XX()或者new Object()`）,这是嵌套的原理;
+3. 关于chrome devtools展示原型链的时候，`a.__proto__`一般指向的是`a.__proto__`这个属性的类别，a是A的实例，但更深次来说`a.__proto__`的类别是`A.prototype`的类别（既`new XX()或者new Object()`中的XX或者Object）；
+4. 但目前多了一个属性Sysmbol.toStringTag，chrome devtools会优先读取`a.__proto__[Symbol.toStringTag]`，如果存在，则在`a.__proto__`展示`a.__proto__[Symbol.toStringTag]`的值；
+5. 在firefox devtools中展示`a.__proto__`的类别是从`a.__proto__.toString()`中读取的，比如`document.body.__proto__.toString()`返回的是`[object HTMLBodyElementPrototype]`，展示的是`HTMLBodyElementPrototype`;而按照正常的类别展示，其实应该展示更深一层的父级`HTMLElement`，为了直观，所有firefox重写的toString，从toString中读取，但不清楚toString是哪个toString，因为测试修改`Object.prototype.toString`也没生效，难道内部缓存起来了？
