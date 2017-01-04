@@ -518,3 +518,21 @@ styles: mylbs
 ####用 JavaScript 实现单步调试
 1. <http://www.zcfy.cc/article/363>
 2. js实现js的单步调试器
+
+
+####傅里叶分析之掐死教程
+1. <https://zhuanlan.zhihu.com/p/19763358>
+
+####从浏览器打开qq客户端
+1. <http://geeklu.com/2011/01/start-application-from-url-talk-about-wangwang/>
+2. 在window上需要往注册表注册，mac上只要在Contents/Info.plist写入即可。
+
+###2016-12
+
+####page cache
+1. <https://webkit.org/blog/427/webkit-page-cache-i-the-basics/>
+2. <https://webkit.org/blog/516/webkit-page-cache-ii-the-unload-event/>
+3. 这是两篇比较老的文章讲webkit浏览器Page Cache
+4. load/unload事件只触发一次，页面第一次加载的时候会触发load事件，页面销毁的时候会触发unload事件。当页面监听了unload事件，那么页面就不可能进入Page Cache，打开新链接的时候，会销毁该页面，浏览器回退时，会重新加载该页面，触发load事件。
+5. 从Page Cache中恢复页面，不会触发load事件
+6. pageshow/pagehide定义了pageshow(页面加载、从Page Cache)、pagehide(恢复页面销毁、进入Page Cache)的事件。可以从事件的属性persisted，来判断是否从Page里出来(pageshow)的，或者进入Page Cache(pagehide)

@@ -456,6 +456,7 @@ If separator is a regular expression that contains capturing parentheses, then e
 1. 如果在document被打开的情况下，`<script>/* ... */ document.write('aaa')</script>`只会返回`aaa`这串文本，比如在正常的document.body插入内联的`script>document.write`。
 2. 如果是document已经被关闭的情况下，执行document.write会自动调用document.open，document.open会清空document。这种情况下还要调用document.close。
 3. api：document.open、document.close、document.write。
+4. document.write会阻塞浏览器的加载，等document.write执行完之后，浏览器先解析document.write写入到document.stream里面的东西，然后再继续解析剩余的document。最后才是window.onload事件。
 
 ####关于DOMContentLoaded
 1. DOMContentLoaded是一个可冒泡的事件，`document.addEventListener("DOMContentLoaded")`会先于`window.addEventListener("DOMContentLoaded")`触发.
@@ -516,12 +517,28 @@ If separator is a regular expression that contains capturing parentheses, then e
 
 ####关于编码
 1. `&#000；`这种是html的编码
-2. `\000`: 这种是八进制转码，常见于utf-8
-3. `%E8%AE%B8`这种是`许`的三字节编码，可以转成`\u8bb8`这边unicode编码(utf-8采用可变长字节编码，以三字节编码为例，固定格式1110xxxx 10xxxxxx 10xxxxxx，可以转成三字节码，同时也可以对其中的变化部分xxx进行编码，四个一组成为`\u8bb8`这种16进制的编码)；
-4. iso-8859-1这种事Latin字符集，包括了所有西方欧洲语言不可缺少的附加字符；gb2312这种是标准中文字符集；utf-8是unicode的一种编程字符编码，可以解决多种语言文本的显示问题。
-5. 关于git下中文输出八进制的转码`\xxx`，git默认配置`core.quotepath`为true，会对中文文件名、中文路径转义成`\xxx\xxx`这种编码。可以通过设置下面来更改。
+2. `\000`: 这种是八进制转码，常见于utf-8，任何小于256均可以使用他的8进制表示，如
+
+    > To use the same example, the copyright symbol ('©') has character code 169, which gives 251 in octal notation, so you could write it as `\251`.
+
+3. `0xff`和`\xff`都可以表示16进制，但第一种是一个数字(number)，而第二种是一个字符(char/string)。
+4. `%E8%AE%B8`这种是`许`的三字节编码，可以转成`\u8bb8`这边unicode编码(utf-8采用可变长字节编码，以三字节编码为例，固定格式1110xxxx 10xxxxxx 10xxxxxx，可以转成三字节码，同时也可以对其中的变化部分xxx进行编码，四个一组成为`\u8bb8`这种16进制的编码)；
+
+            Unicode符号范围 | UTF-8编码方式
+            (十六进制) | （二进制）
+            —————————————————————–
+            0000 0000-0000 007F | 0xxxxxxx
+            0000 0080-0000 07FF | 110xxxxx 10xxxxxx
+            0000 0800-0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx
+            0001 0000-0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+            // 前面是unicode编码`\uFFFF`, 后面代表需要在网络上如何传输
+
+5. iso-8859-1这种事Latin字符集，包括了所有西方欧洲语言不可缺少的附加字符；gb2312这种是标准中文字符集；utf-8是unicode的一种编程字符编码，可以解决多种语言文本的显示问题。
+6. 关于git下中文输出八进制的转码`\xxx`，git默认配置`core.quotepath`为true，会对中文文件名、中文路径转义成`\xxx\xxx`这种编码。可以通过设置下面来更改。
 
         git config --global core.quotepath false
+
+7. <https://mathiasbynens.be/notes/javascript-escapes>
 
 
 ####再来说一下js的原型链，在chrome devtools中的展示问题
@@ -530,3 +547,52 @@ If separator is a regular expression that contains capturing parentheses, then e
 3. 关于chrome devtools展示原型链的时候，`a.__proto__`一般指向的是`a.__proto__`这个属性的类别，a是A的实例，但更深次来说`a.__proto__`的类别是`A.prototype`的类别（既`new XX()或者new Object()`中的XX或者Object）；
 4. 但目前多了一个属性Sysmbol.toStringTag，chrome devtools会优先读取`a.__proto__[Symbol.toStringTag]`，如果存在，则在`a.__proto__`展示`a.__proto__[Symbol.toStringTag]`的值；
 5. 在firefox devtools中展示`a.__proto__`的类别是从`a.__proto__.toString()`中读取的，比如`document.body.__proto__.toString()`返回的是`[object HTMLBodyElementPrototype]`，展示的是`HTMLBodyElementPrototype`;而按照正常的类别展示，其实应该展示更深一层的父级`HTMLElement`，为了直观，所有firefox重写的toString，从toString中读取，但不清楚toString是哪个toString，因为测试修改`Object.prototype.toString`也没生效，难道内部缓存起来了？
+
+
+####关于git的钩子
+1. 由于钩子本身不跟随克隆的项目副本分发，所以你必须通过其他途径把这些钩子分发到用户的 .git/hooks 目录并设为可执行文件。
+
+####关于margin collapse，只有一下三种情况才会产生margin collapse
+1. <https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing>
+1. 相邻的兄弟元素，Adjacent sliblings. The margins of adjacent siblings are collapsed.
+2. 父元素和第一个和最后一个子元素, parent and first/last child，有下面两种情况，这些合并反应到parent上。
+
+    > 注意这种情况只会在parent元素没有padding、border、inline-content、伪元素、clear属性来隔离它的margin的情况下，parent的margin-top与第一个子元素的margin-top合并.
+    >
+    > 当parent没有padding、border、inline-content、伪元素、clear属性、height、min-height、max-height这些属性来隔离它的margin的情况下，parent的margin-bottom会与最后一个子元素的margin-bottom合并
+
+3. 空blocks，empty blocks如果一个匀速没有border、padding、content、伪元素、height、min-height来隔离它的margin，则该元素的margin-top、margin-bottom会产生合并。
+
+####关于margin为负
+1. margin为负值并不影响盒模型本身，
+2. top、left为负值，影响的是包含该元素之后的布局从何处开始。
+3. bottom、right为负值，影响的是该元素之后的布局从何处开始。
+
+
+####backgroud-position: percent percent;
+1. percent 定义的是图片的对应的百分比的位置与元素区域对应百分比的位置对齐。
+
+####request method
+1. 除了GET、POST，还有HEAD, OPTIONS
+2. HEAD用于只请求response headers，比如获取content-length等等。用于做后面的决定
+3. OPTIONS用于请求目标资源的communication options的信息，被用于cors的preflight，当一下两种情况才会出现preflight,(以下两种都是跨域的情况下)
+
+    # content-type非application/x-www-form-urlencoded, multipart/form-data, or text/plain的post请求，比如application/xml。
+    # 在请求中由自定义的请求头，比如X-PINGOTHER..
+
+####setAttribute、getAttribute
+1. setAttribute:  So any markup (such as syntax to be recognized as an entity reference) is treated as literal text, and needs to be appropriately escaped by the implementation when it is written out.
+2. getAttribute:  Calling getAttribute with that nodeName could then return any of those attributes. The result depends on the implementation.
+
+####Privacy and the :visited selector
+1. <https://developer.mozilla.org/en-US/docs/Web/CSS/Privacy_and_the_:visited_selector>
+2. 首先通过getComputedStyle是获取不了:visited的样式的，只能获取没被访问过的样式，为了用户的隐私
+3. 再次通过:visited选择符，只能更改*color一类的样式，包括color、background-color、border-color、outline-color等，防止改其他的属性引起dom的变化，攻击者依然可以解析出用户的历史纪录隐私。
+4. 最后：更改颜色，只能改颜色值，不能改透明度。
+
+
+####javacript对象转原始值
+1. <https://www.ecma-international.org/ecma-262/7.0/index.html#sec-toprimitive>
+2. 如果转成string，则方法组是`[toString, valueOf]`;如果转成number,则方法组是`[valueOf, toString]`
+3. 按照方法组先后执行，如果任意一个返回了原始值（非对象），则返回这个原始值。
+4. 如果两个方法都没返回原始值，或者不存在，则抛错。
