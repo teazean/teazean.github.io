@@ -596,3 +596,27 @@ If separator is a regular expression that contains capturing parentheses, then e
 2. 如果转成string，则方法组是`[toString, valueOf]`;如果转成number,则方法组是`[valueOf, toString]`
 3. 按照方法组先后执行，如果任意一个返回了原始值（非对象），则返回这个原始值。
 4. 如果两个方法都没返回原始值，或者不存在，则抛错。
+
+####dns解析
+1. 解析分为两种![recurion](../collections/dns/recursion.png)和![iteration][../collections/dns/iteration.png]两种，但这都是local dns server干的事，和发起请求的机器无关。
+2. 以我厂的内网解析为例，首先我厂的机器配置默认dns server都是10.10.10.10内网的dns server，所以内网的域名都能解析出来。
+3. 但如果把默认dns server改成233.5.5.5，这要分为两种：
+
+    > 1. 像family.baidu.com，233.5.5.5像根域com dns服务器请求的时候，根域dns server返回百度域baidu.com域的dns server地址，233.5.5.5再去请求family.baidu.com的ip地址时，百度域的dns server返回了ip地址，解析正确noerror.
+    > 2. 像cp01.xx.baidu.com这样的开发机地址，233.5.5.5同上再往百度域dns server请求ip地址的时候，百度域dns server拒绝了返回ip地址，导致解析失败，dns解析status是nxdomain(应该存在的名称不存在)。
+
+4. 使用dig、nslookup查看dns解析的时候，cname代表别名，A代表主机，soa代表一次查询所有信息的记录，ns代表名称服务器。
+
+
+####postcss 与 webpack关于对文件输入处理的区别
+1. webpack是将file当成content读入，依次由loader进行处理。
+2. postcss除了plugins(loaders)外，还有另外一个最开始读取内容时候的parse，最开始只parse一遍，默认是parse标准的css，要是写一个postcss的plugin，有可能是对parse之后的css-ast的处理，也有可能仅仅提供的是一个parse的功能，比如`postcss-less-origin`插件。
+
+####当`inline box`包含`block-level box`时：
+
+1. <https://www.w3.org/TR/CSS22/visuren.html#anonymous-block-level>
+
+    > When an inline box contains an in-flow block-level box, the inline box (and its inline ancestors within the same line box) is broken around the block-level box (and any block-level siblings that are consecutive or separated only by collapsible whitespace and/or out-of-flow elements), splitting the inline box into two boxes (even if either side is empty), one on each side of the block-level box(es). The line boxes before the break and after the break are enclosed in anonymous block boxes, and the block-level box becomes a sibling of those anonymous boxes. When such an inline box is affected by relative positioning, any resulting translation also affects the block-level box contained in the inline box.
+
+2. `inline box`会被拆分成2个`line box`，分别在`block-level box`的前面和后面。
+3. 但是奇怪的是，该inline元素的clientHeight & clientWidth都是0， 但可以通过getBoundingClientRect()来获取在视图的位置与高度、宽度。
