@@ -7,12 +7,12 @@ styles: mylbs
 
 ##学习笔记
 
-####js监听css animaiton、transition结束事件    
+####js监听css animaiton、transition结束事件
 可以监听animationend、transitionend事件。但在移动端下测试，需要增加webkit前缀.
 
 ####当请求是一个文件夹时http://127.0.0.1:8080/zt,这种请求方式会请求两次，发生重定向
 
-####BFC:block formatting context          
+####BFC:block formatting context
 1. 内部的Box会在垂直方向，一个接一个地放置。
 2. Box垂直方向的距离由margin决定。属于同一个BFC的两个相邻Box的margin会发生重叠
 3. 每个元素的margin box的左边， 与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。
@@ -20,7 +20,7 @@ styles: mylbs
 5. BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。(其他几条都在体现这个)
 6. 计算BFC的高度时，浮动元素也参与计算
 
-####Everything in UNIX is a file.     
+####Everything in UNIX is a file.
 1. 网络连接，如socket等
 2. 输入输入，如设备
 3. 管道
@@ -28,8 +28,8 @@ styles: mylbs
 5. 实质文件
 6. 、、、
 
-####正则表达式三种匹配模式   
-X?、X*、X+、X{m，n}     
+####正则表达式三种匹配模式
+X?、X*、X+、X{m，n}
 
 1. 最大匹配（贪婪型，占有型）
 2. 最小匹配
@@ -37,29 +37,29 @@ X?、X*、X+、X{m，n}
 4. X？、X*、X+、X{n}、X{n，}、X{n，m}这些为最大匹配
 5. X？？、X*？、X+？、X{n}？、X{n，}？、X{n，m}？这些为最小匹配，多加一个？号
 
-####Viewport  
-<https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/UsingtheViewport/UsingtheViewport.html>     
+####Viewport
+<https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/UsingtheViewport/UsingtheViewport.html>
 
 1. viewport是移动浏览器的页面的可视区域，如果不设置viewport，移动浏览器会默认以宽度980px加载页面，然后缩放适应屏幕。
 2. 可以设置viewport的width为固定像素，但一般设置为device-width（特殊值）。
 
-####document.DOMContentLoaded vs window.onload     
+####document.DOMContentLoaded vs window.onload
 1. DOMContentLoaded实在dom树构建完成后就执行。
 2. 而onload要等到页面所有的dom树、样式表、脚本、图片、flash等都加在完成才执行。
 
-####visibility:hidden vs display:none     
+####visibility:hidden vs display:none
 1. visibility:hidden 占据空间位置；display:none不占据空间位置，显示时可能会发生repaint
 2. visibility:hidden情况下，animation在隐藏状态下就已经触发，而display:none是不会触发animaation的，除非display:block;
 
-####webkitAnimationEnd、webkitTransitionEnd    
+####webkitAnimationEnd、webkitTransitionEnd
 在移动端下，动画、过渡效果结束要监测webkitAnimationEnd、webkitTransitionEnd事件，监测animationEnd、transitionEnd是无效的。
 
 ####script标签动态添加，哪一个先加载完先执行哪一个
 
-####addEventListener 与 element.on*    
+####addEventListener 与 element.on*
 使用addEventListener和（element.onclick onload）等添加事件，两种方式之间是相互独立的。彼此之间并不会发生覆盖事件。但是在引入其他模块的情况下，尽量不要使用window.onload，防止覆盖其他模块的事件。
 
-####浏览器缓存的一些说明    
+####浏览器缓存的一些说明
 1. <http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html>
 2. 当浏览器第一次访问一个文件的时候，服务端会返回一些头信息。有expires、cache-control、last-modified、etag等，用于做缓存的一些配置。etag是文件唯一标识符，last-modified文件修改时间，expires、cache-control是设置文件的缓存时长。(etag在多服务器上的同步并不好用，因此又有了last-modified)
 3. 当浏览器第二次访问该文件的时候，会先检查expires、cache-control，如果这两个属性标志的缓存没有过期，则直接使用缓存，不去请求（CDN服务器一般设置该属性1年甚至10年）；如果文件缓存已经失效，然后会去相继匹配etag、lasted-modified，并且去重新请求服务器，查看文件在这一段时间内有没有发生更新，若服务器返回304，表示没有更新，继续使用缓存，同时更新缓存的时间戳，如果服务器返回200，则用新的文件替换缓存。
@@ -88,39 +88,39 @@ X?、X*、X+、X{m，n}
         │          F5│IM│IM│I │IM│I │ C = "Cache─Control: no─cache"                │
         │     CTRL─F5│CP│C │C │CP│- │ M = "Cache─Control: max─age=0"               │
         │  Click Icon│IM│I │I │IM│I │ Click Icon= "a mouse click on refresh icon"  │
-        └────────────┴──┴──┴──┴──┴──┴──-───────────────────────────────────────────┘     
+        └────────────┴──┴──┴──┴──┴──┴──-───────────────────────────────────────────┘
 
 
 
-####querySelectorAll性能    
+####querySelectorAll性能
 通常来说querySelector的性能优能，但在通过Class名选择元素的这一项是不如getElementByClassName的。
 
-####关于移动浏览器下的ele.style      
+####关于移动浏览器下的ele.style
 1. ele.style只能获取标签上的style属性的值。
 2. 在部分浏览器下，style.transform等一些属性是无法设置，也无法获取的。可以通过cssText设置，获取。
 3. style.cssText是值标签上style的值，设置新的cssText会使之前的标签style上的属性失效(完全覆盖)。
 
-####z-index与stacking context      
+####z-index与stacking context
 1. z-index只对position为非static有效
 2. z-index只决定该box在当前stacking context中的位置.
 3. stacking context对内：Within a stacking context, child elements are stacked according to the same rules previously explained. Importantly, the z-index values of its child stacking contexts only have meaning in this parent.
 4. stacking context对外：Stacking contexts are treated atomically as a single unit in the parent stacking context.
 5. <https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context>，创建stacking context的元素见上链接，主要的有transform ,opactity , position && z-index.
 
-####CSS Image Values and Replaced Content Module Level 3  
-<http://www.w3.org/TR/css3-images/>     
+####CSS Image Values and Replaced Content Module Level 3
+<http://www.w3.org/TR/css3-images/>
 文章中定义了css3关于image、object类型的定义以及sizing、position，统一称为object
 
 1. object sizing算法：明确的width、height > 保持高宽比 > contain约束 > 标签默认大小。(contain约束包括:object-fit、background-size)
 2. 适用于object sizing的属性：`background-image`、`list-style-image`、`border-image`、`cursor`、`content`。
 3. object-fit(fill、cover、contain)、object-position是定义object类型的计算布局尺寸、定位的属性。
 
-####HTTP keep-alive   
+####HTTP keep-alive
 1. 普通模式(非keep-alive)的http请求，在请求结束后会断开连接。而keep-alive是持久连接，使客户端(如浏览器)到服务器的连接持续有效，当出现对服务器的后续请求时，keep-alive功能避免了建立或者重新建立连接。
 2. http1.0中默认关闭keep-alive。http1.1默认打开keep-alive
 3. keep-alive是客户端与服务器的交互方式，需要双方的支持。
 
-####服务器缓存ehcache、memcached、redis     
+####服务器缓存ehcache、memcached、redis
 1. 缓存就是在内存中临时存在一些高访问的数据，以提高查询效率。对于单服务器模式而言，缓存比较简略，以下均为集群模式下的缓存说明。分布式集群下一般都有独立的缓存服务器集群统一提供缓存服务。（当然也是可以在分布式集群中各个应用服务器提供自己的缓存。）
 2. memcached在内存中以key-value形式存储，memcached本身不支持分布式，需要程序客户端（应用服务器）通过像一致性哈希这样的分布式算法来实现memcached的分布式存储（这种情况下缓存服务器添加、删除的代价是很高的）。
 3. redis是在memcached写出来，本身支持多种数据结构和数据持久化，并且redis本身也支持集群分布式存储，redis集群各个服务器之间通过异步复制来保证数据一致性，但无法保证强一致性。
@@ -128,11 +128,11 @@ X?、X*、X+、X{m，n}
     + 缓存与应用服务器一起：支持的通过RMI、JGroups(组播、广播)或JMS（消息队列）进行的异步或同步的缓存复制
     + 独立的缓存服务器：ehcache server
 
-####http、websocket、socket      
+####http、websocket、socket
 1. socket严格来说并不是一个协议，而是对传输层TCP协议的封装，是一个facade。基本上现在的编程语言所支持的socket都是遵循`Berkeley sockets`这套API。
 2. http、websocket是应用层协议，websocket就是应对于http的不足、web上的实时通信的需求产生的新协议，目前编程语言也在添加支持，java7已添加支持。
 
-####js继承  
+####js继承
 js继承链上，可以临时创建一个过度函数，避免构造函数需要参数而无法提供。这种方法继承只继承原型脸上的方法。
 
     Function.prototype.methodSingleton = function () {
@@ -197,7 +197,7 @@ js继承链上，可以临时创建一个过度函数，避免构造函数需要
   所有的伪元素必须在一系列选择器的最后。
 3. :after、:before这些是伪元素；:hover、:visited等这些是伪类，也是selector的一种。
 4. 因此合并使用:hover :after的时候，可以先定义div:after通用样式，然后在定义div:hover:after，div:hover下的特定样式。
-5. 这样也说明伪元素只是纯粹的内容元素，并不能和正常元素一样有hover等效果。  
+5. 这样也说明伪元素只是纯粹的内容元素，并不能和正常元素一样有hover等效果。
 
 eg:scss语法:
 
@@ -286,7 +286,7 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
         <blank line>
         <request body>(content)
 
-5. 使用get请求容易造成`Cross-site request forgery`攻击.        
+5. 使用get请求容易造成`Cross-site request forgery`攻击.
 
 ####移动开发那些坑之——safari mobile click事件的冒泡bug
 1. <http://www.tuicool.com/articles/jI3eQzr>
@@ -324,7 +324,7 @@ js调起调色板，关键在于该input不能为hidden，可以使用绝对布�
 
         特点：
             使用这种方式，每次数据传送不会关闭连接，连接只会在通信出现错误时，或者是连接重建时关闭（一些防火墙常被设置为丢弃过长的连接，服务器端可以设置一个超时事件，超时后通知客户端重新建立连接，并关闭原来的连接）。
-        可用载体：    
+        可用载体：
             1. xmlhttprequest
             2. Flash xhr
             3. iframe
@@ -620,3 +620,14 @@ If separator is a regular expression that contains capturing parentheses, then e
 
 2. `inline box`会被拆分成2个`line box`，分别在`block-level box`的前面和后面。
 3. 但是奇怪的是，该inline元素的clientHeight & clientWidth都是0， 但可以通过getBoundingClientRect()来获取在视图的位置与高度、宽度。
+
+### port map & dmz
+1. 首先说一下dmz，是指将对路由器所有端口访问的数据都转发到对应主机上。
+2. 严格来说dmz代表demilitarized zone，隔离区，是不予许访问内网的，因为所有端口开放，是不安全的，一般家庭路由器是阉割版的，没有这个限制，只做数据转发。
+3. prot map是指将路由器上的端口映射到内网主机的某一个端口，分为两种：1. 动态端口映射，通常内网主机访问外网的时候，路由器在将数据包发往外网的时候，会将该数据包替换为该路由器的ip和port，并建立一个动态端口映射指向内网主机的ip和port，等待通讯结果返回并结束，删除该动态端口映射；2. 静态端口映射，可以设置将路由器的某一个端口固定映射到内网的某一个端口。
+4. 当遇到冲突时，优先级：动态端口映射 > 静态端口映射 > DMZ
+
+### 关于optimizejs对js的执行效率优化
+1. v8对所有js函数，会都以一遍pre-parse,检查里面的语法错误。
+2. v8对js函数执行时，做一遍full-parse
+3. 但对于IIFE函数，效率就有点底下，要避免对IIFE函数执行pre-parse，因此v8会检查`(function`的结构，如果是这样就判断是IIFE，不进行pre-parse。但这种结构覆盖不了全部的情况，比如`function()()`，因此optimizejs会把遍历所有的IIFE函数，转成`(function`所需要的这种格式，进行优化。

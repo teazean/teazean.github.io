@@ -30,3 +30,7 @@ styles: mylbs
 [惊群]()
 
 [webComponents、createShadowRoot、shadow dom](http://www.ituring.com.cn/article/179915)
+
+CRLF: crlf[\r\n], win[crlf],linux[lf],mac[cr]
+CR: carriage return ..为啥呢，因为一开始打字机，有个键位通知打字机要把纸张回退回去，carriage是车辆、车厢、装载装置的意思。
+LF: line feed, 一行盛满了。。要换行了
