@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>css variables</title>
+    <style>
+    .demo { }
+    .test {
+        --width: 200px;
+        --backgroundColor: red;
+        width: 200px;
+        height: var(--width);
+        line-height: var(--width);
+        text-align: center;
+        background-color: var(--backgroundColor);
+    }
+    .test:hover,
+    .test:focus {
+        --backgroundColor: green;
+    }
+    </style>
+</head>
+<body>
+    <div class="demo">
+        <div class="test">hover me!</div>
+    </div>
+</body>
+</html>
