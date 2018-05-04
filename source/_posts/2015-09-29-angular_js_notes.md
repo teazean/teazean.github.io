@@ -16,6 +16,7 @@ keywords: angularjs, angular, 使用笔记, mvvc
 
 <img src="/images/angular/icode.png">
 
+<!-- more -->
 
 notes:
 

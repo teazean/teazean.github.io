@@ -11,13 +11,13 @@ keywords: mvvm, react
 
 不同于angular的脏监测，react采用虚拟dom来实现视图刷新。Virtual DOM的核心是差异监测（diff）。
 
-<!-- more -->
-
 #### Why is React's concept of Virtual DOM said to be more performant than dirty model checking?
 1. <http://stackoverflow.com/questions/21109361/why-is-reacts-concept-of-virtual-dom-said-to-be-more-performant-than-dirty-mode>
 2. React解决两个问题：`When do I re-render? `和`How do I re-render efficiently? `
 3. `When do I re-render? `：Answer: When I observe that the data is dirty.
 4. `How do I re-render efficiently? `：Answer: Using a virtual DOM to generate a real DOM patch
+
+<!-- more -->
 
 #### React高效的原因：
 1. 进行diff之后，批处理所有dom读写操作。

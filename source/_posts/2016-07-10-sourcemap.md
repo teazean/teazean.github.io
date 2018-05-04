@@ -10,7 +10,6 @@ category: sourcemap webpack
 3. `//# sourceMappingURL`和`//# sourceUrl`
 4. sourcemap in webpack
 
-<!-- more -->
 ### before
 webkit-sourcemap初步介绍：<http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-sourceurl>，介绍了sourcemap的基本实现，包括sourcemap的格式、编码以及sourceMapURL、sourceURL、和profiles里面的displayName（最新版chrome好像已经不支持了。）
 
@@ -19,6 +18,7 @@ google关于定义sourcemap v3的docs <https://docs.google.com/document/d/1U1RGA
 正常来说通过sourceMapURL指定的sources中的路径从服务器找源文件。如果无法定位就是用sourcesContent对应的内容。如果是从sourcesContent获取的源码内容，那么这个source-map文件就是一个完全自包含的source-map（包含映射关系，包含源文件内容）。
 
 完全自包含的source-map文件常用dataUrl的形式，这样浏览器就能从编译之后的js文件（末行是source-map的dataUrl）中完全解析出源文件，并不依赖其他文件。
+<!-- more -->
 
 ### 1. vlq与base64 vlq：variable length quantity
 1. <https://en.wikipedia.org/wiki/Variable-length_quantity>

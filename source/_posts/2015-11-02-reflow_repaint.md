@@ -13,8 +13,6 @@ keywords: reflow, repaint, render tree, cssom
 4. 聪明的浏览器
 5. 访问某些属性也会引起回流
 
-<!-- more -->
-
 ### 1. 相关文章：
 1. 一篇很好的文章：<http://www.css88.com/archives/4996>
 2. Google Develops上一篇layout、paint的文章：<https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction>
@@ -27,6 +25,8 @@ keywords: reflow, repaint, render tree, cssom
 2. 第二步：合并dom、cssom，构建Render tree（呈现树），Render tree中只包含dom中可见元素，非可见元素包含`display:none`，`header`，`template`等。render tree中的每一个节点都是一个box model。Render Tree包含dom树上每一个可见的节点以及每一个节点的css样式。
 3. 第三步：layout：当render tree构建完成，浏览器会计算每一个render tree节点的大小和布局（定位）。
 4. 第四步：paint: 最后一步，将layout之后最终的render tree渲染到屏幕上。
+
+<!-- more -->
 
 ### 3. 浏览器维护Render Tree：回流(reflow、relayout)与重绘(repaint)
 + repaint：render tree的一些元素需要更新属性时，这些属性是外观、风格，并不会影响布局，如color，被称为重绘。

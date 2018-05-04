@@ -159,8 +159,12 @@
       {% if display_toc and toc(page.content).length > 1 %}
       <!--noindex-->
         <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
+          {% if page.toc_expand === undefined %}
+            {% set expand_toc = theme.toc.expand %}
+          {% else %}
+            {% set expand_toc = page.toc_expand %}
+          {% endif %}
+          <div class="post-toc {% if expand_toc %}expand{% endif %}">
             {% if page.toc_number === undefined %}
               {% set toc = toc(page.content, { "class": "nav", list_number: theme.toc.number }) %}
             {% else %}

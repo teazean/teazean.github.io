@@ -10,8 +10,6 @@ keywords: underscore, underscore学习笔记, underscore template
 
 这里主要记录一些underscore.js-1.8.3源码阅读的时候，感觉比较好的地方。
 
-<!-- more -->
-
 ### 1. restArgs
 
 代码：
@@ -51,6 +49,8 @@ keywords: underscore, underscore学习笔记, underscore template
 
 分析：
 >利用func.length获取函数的形参数量，由此判断arguments的后面的哪几位是被设为不定参数。
+
+<!-- more -->
 
 ### 2. baseCreate
 

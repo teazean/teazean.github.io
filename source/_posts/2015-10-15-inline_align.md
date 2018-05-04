@@ -15,8 +15,6 @@ keywords: inline, vertical-align, 垂直居中
 5. IFC
 6. 使用IFC实现垂直居中
 
-<!-- more -->
-
 ### 一个`display:inline-block`上下无法对齐的原因
 1. 对于相邻inline-block元素之间有3px间距的问题，可以通过父标签`font-size:0`来解决。
 2. 下面说一个inline-block元素之间上下无法对齐的问题
@@ -37,6 +35,8 @@ keywords: inline, vertical-align, 垂直居中
 2. 或者为每一个框框设置overflow为`非visiable`如hidden。
 
 <img src="/images/inline-block/inline-block-solved.jpg">
+
+<!-- more -->
 
 ### 关于vertical-align：
 <http://www.w3.org/TR/CSS21/visudet.html#propdef-vertical-align>
