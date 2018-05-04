@@ -1,7 +1,8 @@
 ---
 layout: post
 title: javascript解密
-category: javascript
+category: web
+tags: javascript
 ---
 
 ## javascript 揭秘

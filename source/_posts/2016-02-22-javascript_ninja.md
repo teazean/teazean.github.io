@@ -1,7 +1,7 @@
 ---
 layout: post
 title: javascript、css阅读摘要
-category: javascript css
+category: web
 tags: javascript css
 ---
 

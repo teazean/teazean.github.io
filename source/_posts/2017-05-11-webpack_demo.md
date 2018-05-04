@@ -1,7 +1,8 @@
 ---
 layout: post
 title: 记录一次webpack以html为入口打包h5的实践
-category: webpack
+category: web
+tags: webpack
 ---
 
 ### 1. 背景

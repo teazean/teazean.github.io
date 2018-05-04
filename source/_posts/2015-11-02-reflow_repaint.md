@@ -1,9 +1,8 @@
 ---
 layout: post
 title: reflow、repaint深入理解
-category: fe
+category: web
 tags: reflow repaint
-keywords: reflow, repaint, render tree, cssom
 ---
 
 ## 深入理解reflow、repaint

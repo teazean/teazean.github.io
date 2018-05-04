@@ -1,9 +1,8 @@
 ---
 layout: post
-title: Web安全-《白帽子web安全阅读笔记》
-category: web secure
+title: Web 安全-《白帽子web安全阅读笔记》
+category: web
 tags: web secure
-keywords: web, secure
 ---
 
 ## 白帽子讲Web安全

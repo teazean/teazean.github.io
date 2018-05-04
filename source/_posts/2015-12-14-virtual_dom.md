@@ -1,9 +1,8 @@
 ---
 layout: post
 title: React虚拟dom
-category: fe
+category: web
 tags: mvvm react
-keywords: mvvm, react
 ---
 
 ## MVVM-React虚拟DOM

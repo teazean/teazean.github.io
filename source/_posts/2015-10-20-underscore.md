@@ -1,9 +1,8 @@
 ---
 layout: post
 title: underscore学习笔记
-category: fe
+category: web
 tags: underscore
-keywords: underscore, underscore学习笔记, underscore template
 ---
 
 ## underscore学习笔记

@@ -1,7 +1,8 @@
 ---
 layout: post
 title: 密码学与数学
-category: encrypt
+category: study
+tags: encrypt
 ---
 
 ## 目录：密码学与数学

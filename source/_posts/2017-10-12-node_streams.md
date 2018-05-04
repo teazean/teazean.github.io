@@ -1,9 +1,8 @@
 ---
 layout: post
 title: node streams探索
-category: node stream
+category: node
 tags: node stream
-keywords: node stream
 ---
 
 # 继承结构
@@ -26,7 +25,7 @@ Readable其实是有两种模式：`flowing` 和 `paused`
 - flowing: 数据自动从数据源读取，当数据准备好之后，自动的通过`EventEmitter`接口像外抛出去。
 - paused: stream.read必须显示调用才能吐出数据
 
-一开始是`paused`模式，可以通过一些方法触发两个模式的切换。
+一开始是 `paused` 模式，可以通过一些方法触发两个模式的切换。
 
 1. `paused`切换到`flowing`:
 

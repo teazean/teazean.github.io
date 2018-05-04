@@ -1,9 +1,8 @@
 ---
 layout: post
 title: 进程与线程
-category: process thread
+category: node
 tags: process thread
-keywords:  process thread
 ---
 
 ## 1. 进程与线程的本质区别：

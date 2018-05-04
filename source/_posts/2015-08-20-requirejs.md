@@ -1,9 +1,8 @@
 ---
 layout: post
 title: requirejs 源码与架构分析
-category: fe
-tags: requirejs requireJS
-keywords: requirejs源码, 架构, 分析
+category: web
+tags: requirejs amd
 ---
 
 ## requirejs 源码与架构分析

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Ubuntu下配置Hadop(伪分布式）(2)-建立Hbase数据库与MapReduce生成倒排文件
-category: hbase
+category: study
 tags: hadoop mapreduce hbase
 ---
 ## 任务

@@ -1,9 +1,8 @@
 ---
 layout: post
 title: angularjs使用笔记
-category: fe
+category: web
 tags: angularjs mvvc
-keywords: angularjs, angular, 使用笔记, mvvc
 ---
 
 ## angularjs使用笔记
