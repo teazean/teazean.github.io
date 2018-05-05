@@ -1,8 +1,12 @@
 ---
 layout: post
 title: 关于 block、inline 终极解密
-category: web
-tags: inline block inline-block
+categories:
+    - web
+tags:
+    - inline
+    - block
+    - inline-block
 ---
 
 ## 关于block、inline终极解密

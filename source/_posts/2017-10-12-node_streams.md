@@ -1,8 +1,11 @@
 ---
 layout: post
 title: node streams探索
-category: node
-tags: node stream
+categories:
+    - node
+tags:
+    - node
+    - stream
 ---
 
 # 继承结构

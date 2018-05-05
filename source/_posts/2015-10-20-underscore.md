@@ -1,8 +1,10 @@
 ---
 layout: post
 title: underscore学习笔记
-category: web
-tags: underscore
+categories:
+    - web
+tags:
+    - underscore
 ---
 
 ## underscore学习笔记

@@ -1,8 +1,11 @@
 ---
 layout: post
 title: angularjs使用笔记
-category: web
-tags: angularjs mvvc
+categories:
+    - web
+tags:
+    - angularjs
+    - mvvc
 ---
 
 ## angularjs使用笔记

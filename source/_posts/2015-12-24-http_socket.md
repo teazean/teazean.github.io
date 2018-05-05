@@ -1,8 +1,13 @@
 ---
 layout: post
 title: http、socket、tcp再议
-category: web
-tags: http socket tcp server
+categories:
+    - web
+tags:
+    - http
+    - socket
+    - tcp
+    - server
 ---
 
 ## http、socket、tcp再议

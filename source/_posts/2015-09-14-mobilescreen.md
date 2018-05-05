@@ -1,8 +1,10 @@
 ---
 layout: post
 title: 移动浏览器屏幕适配小结
-category: web
-tags: meta
+categories:
+    - web
+tags:
+    - meta
 ---
 
 ## 移动浏览器屏幕适配小结

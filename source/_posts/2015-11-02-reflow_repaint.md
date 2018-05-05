@@ -1,8 +1,11 @@
 ---
 layout: post
 title: reflow、repaint深入理解
-category: web
-tags: reflow repaint
+categories:
+    - web
+tags:
+    - reflow
+    - repaint
 ---
 
 ## 深入理解reflow、repaint

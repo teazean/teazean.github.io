@@ -1,7 +1,8 @@
 ---
 layout: post
 title: java解密
-category: web
+categories:
+    - web
 ---
 
 ## 本篇内容

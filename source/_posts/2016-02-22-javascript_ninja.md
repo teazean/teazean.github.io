@@ -1,8 +1,11 @@
 ---
 layout: post
 title: javascript、css阅读摘要
-category: web
-tags: javascript css
+categories:
+    - web
+tags:
+    - javascript
+    - css
 ---
 
 ### javascript忍者秘籍

@@ -1,8 +1,10 @@
 ---
 layout: post
 title: sourcemap与webpack-sourcemap的实现
-category: web
-tags: sourcemap
+categories:
+    - web
+tags:
+    - sourcemap
 ---
 
 ## sourcemap与webpack-sourcemap的实现

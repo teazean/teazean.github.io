@@ -1,8 +1,10 @@
 ---
 layout: post
 title: var let const的区别
-category: web
-tags: javascript
+categories:
+    - web
+tags:
+    - javascript
 ---
 ## 概述
 最近因知乎的某个问题，再次想探索一下 JS 中关于 let/const var 在规范中的区别。

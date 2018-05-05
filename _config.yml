@@ -4,12 +4,12 @@
 
 # Site
 title: Teazean's Hive
-subtitle:
-description:
-keywords:
+subtitle: 千里之行始于足下
+description: teazean
+keywords: teazean
 author: Teazean
-language:
-timezone:
+language: zh-CN
+timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'

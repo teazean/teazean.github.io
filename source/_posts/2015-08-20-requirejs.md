@@ -1,8 +1,11 @@
 ---
 layout: post
 title: requirejs 源码与架构分析
-category: web
-tags: requirejs amd
+categories:
+    - web
+tags:
+    - requirejs
+    - amd
 ---
 
 ## requirejs 源码与架构分析

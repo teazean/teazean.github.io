@@ -1,8 +1,10 @@
 ---
 layout: post
 title: 监测Developer Tool是否打开
-category: web
-tags: chrome
+categories:
+    - web
+tags:
+    - chrome
 ---
 
 ### 监测Developer Tool是否打开
