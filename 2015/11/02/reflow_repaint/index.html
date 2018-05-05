@@ -103,7 +103,7 @@
 
 
   <meta name="description" content="深入理解reflow、repaint 相关文章 浏览器渲染页面的过程 浏览器维护Render Tree：回流(reflow、relayout)与重绘(repaint) 聪明的浏览器 访问某些属性也会引起回流  1. 相关文章： 一篇很好的文章：http://www.css88.com/archives/4996 Google Develops上一篇layout、paint的文章：https://d">
-<meta name="keywords" content="reflow repaint">
+<meta name="keywords" content="reflow,repaint">
 <meta property="og:type" content="article">
 <meta property="og:title" content="reflow、repaint深入理解">
 <meta property="og:url" content="http://teazean.com/2015/11/02/reflow_repaint/index.html">
@@ -111,7 +111,7 @@
 <meta property="og:description" content="深入理解reflow、repaint 相关文章 浏览器渲染页面的过程 浏览器维护Render Tree：回流(reflow、relayout)与重绘(repaint) 聪明的浏览器 访问某些属性也会引起回流  1. 相关文章： 一篇很好的文章：http://www.css88.com/archives/4996 Google Develops上一篇layout、paint的文章：https://d">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://teazean.com/images/reflowrepaint/render-tree-construction.png">
-<meta property="og:updated_time" content="2018-05-05T04:31:28.829Z">
+<meta property="og:updated_time" content="2018-05-05T16:24:16.199Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="reflow、repaint深入理解">
 <meta name="twitter:description" content="深入理解reflow、repaint 相关文章 浏览器渲染页面的过程 浏览器维护Render Tree：回流(reflow、relayout)与重绘(repaint) 聪明的浏览器 访问某些属性也会引起回流  1. 相关文章： 一篇很好的文章：http://www.css88.com/archives/4996 Google Develops上一篇layout、paint的文章：https://d">
@@ -205,7 +205,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">千里之行始于足下</p>
       
   </div>
 
@@ -237,9 +237,9 @@
         
         
           
-          <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
         
         
@@ -253,9 +253,9 @@
         
         
           
-          <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
 
       
@@ -365,7 +365,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+                <time title="修改时间：2018-05-06 00:24:16" itemprop="dateModified" datetime="2018-05-06T00:24:16+08:00">2018-05-06</time>
               
             
           </span>
@@ -490,12 +490,28 @@ document.body.appendChild(document.createTextNode(&apos;abc!&apos;));// 添加no
     
 
     
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Teazean</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://teazean.com/2015/11/02/reflow_repaint/" title="reflow、repaint深入理解">http://teazean.com/2015/11/02/reflow_repaint/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
 
     <footer class="post-footer">
       
         <div class="post-tags">
           
-            <a href="/tags/reflow-repaint/" rel="tag"># reflow repaint</a>
+            <a href="/tags/reflow/" rel="tag"># reflow</a>
+          
+            <a href="/tags/repaint/" rel="tag"># repaint</a>
           
         </div>
       
@@ -594,7 +610,7 @@ document.body.appendChild(document.createTextNode(&apos;abc!&apos;));// 添加no
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Teazean</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">teazean</p>
           </div>
 
           
@@ -710,7 +726,101 @@ document.body.appendChild(document.createTextNode(&apos;abc!&apos;));// 添加no
                     
                       
                     
-                    <span class="site-state-item-count">37</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">61</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -767,7 +877,7 @@ document.body.appendChild(document.createTextNode(&apos;abc!&apos;));// 添加no
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解reflow、repaint"><span class="nav-text">深入理解reflow、repaint</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-相关文章："><span class="nav-text">1. 相关文章：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-浏览器渲染页面的过程"><span class="nav-text">2. 浏览器渲染页面的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-浏览器维护Render-Tree：回流-reflow、relayout-与重绘-repaint"><span class="nav-text">3. 浏览器维护Render Tree：回流(reflow、relayout)与重绘(repaint)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-聪明的浏览器"><span class="nav-text">4. 聪明的浏览器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-访问某些属性也会引起回流"><span class="nav-text">5. 访问某些属性也会引起回流</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Element"><span class="nav-text">Element</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Frame-Image"><span class="nav-text">Frame, Image</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Range"><span class="nav-text">Range</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVGLocatable"><span class="nav-text">SVGLocatable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVGTextContent"><span class="nav-text">SVGTextContent</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVGUse"><span class="nav-text">SVGUse</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#window"><span class="nav-text">window</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解reflow、repaint"><span class="nav-number">1.</span> <span class="nav-text">深入理解reflow、repaint</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-相关文章："><span class="nav-number">1.1.</span> <span class="nav-text">1. 相关文章：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-浏览器渲染页面的过程"><span class="nav-number">1.2.</span> <span class="nav-text">2. 浏览器渲染页面的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-浏览器维护Render-Tree：回流-reflow、relayout-与重绘-repaint"><span class="nav-number">1.3.</span> <span class="nav-text">3. 浏览器维护Render Tree：回流(reflow、relayout)与重绘(repaint)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-聪明的浏览器"><span class="nav-number">1.4.</span> <span class="nav-text">4. 聪明的浏览器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-访问某些属性也会引起回流"><span class="nav-number">1.5.</span> <span class="nav-text">5. 访问某些属性也会引起回流</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Element"><span class="nav-number">1.5.0.1.</span> <span class="nav-text">Element</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Frame-Image"><span class="nav-number">1.5.1.</span> <span class="nav-text">Frame, Image</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Range"><span class="nav-number">1.5.2.</span> <span class="nav-text">Range</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVGLocatable"><span class="nav-number">1.5.3.</span> <span class="nav-text">SVGLocatable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVGTextContent"><span class="nav-number">1.5.4.</span> <span class="nav-text">SVGTextContent</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVGUse"><span class="nav-number">1.5.5.</span> <span class="nav-text">SVGUse</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#window"><span class="nav-number">1.5.6.</span> <span class="nav-text">window</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

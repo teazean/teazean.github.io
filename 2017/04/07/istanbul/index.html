@@ -110,7 +110,7 @@
 <meta property="og:site_name" content="Teazean&#39;s Hive">
 <meta property="og:description" content="目录 介绍 instrument cover node vs browser  1. 介绍istanbul是javascript检查代码覆盖率的技术，大概看了一下实现，实现的原理是通过ast分析，向所有的代码路径插入一段用于统计的语句，并且把统计结果防止在window/global变量cover, 在所有测试跑完再读取这些统计结果。 github地址见: [https://github.com/g">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-05T04:31:28.837Z">
+<meta property="og:updated_time" content="2018-05-05T16:28:02.717Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="istanbul 代码覆盖率工具研究">
 <meta name="twitter:description" content="目录 介绍 instrument cover node vs browser  1. 介绍istanbul是javascript检查代码覆盖率的技术，大概看了一下实现，实现的原理是通过ast分析，向所有的代码路径插入一段用于统计的语句，并且把统计结果防止在window/global变量cover, 在所有测试跑完再读取这些统计结果。 github地址见: [https://github.com/g">
@@ -203,7 +203,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">千里之行始于足下</p>
       
   </div>
 
@@ -235,9 +235,9 @@
         
         
           
-          <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
         
         
@@ -251,9 +251,9 @@
         
         
           
-          <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
 
       
@@ -363,7 +363,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+                <time title="修改时间：2018-05-06 00:28:02" itemprop="dateModified" datetime="2018-05-06T00:28:02+08:00">2018-05-06</time>
               
             
           </span>
@@ -465,6 +465,20 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Teazean</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://teazean.com/2017/04/07/istanbul/" title="istanbul 代码覆盖率工具研究">http://teazean.com/2017/04/07/istanbul/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -570,7 +584,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Teazean</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">teazean</p>
           </div>
 
           
@@ -686,7 +700,101 @@
                     
                       
                     
-                    <span class="site-state-item-count">37</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">61</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -743,7 +851,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录"><span class="nav-text">目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-介绍"><span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-instrument"><span class="nav-text">2. instrument</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-cover"><span class="nav-text">3. cover</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node-vs-browser"><span class="nav-text">node vs browser</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-介绍"><span class="nav-number">1.1.</span> <span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-instrument"><span class="nav-number">1.2.</span> <span class="nav-text">2. instrument</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-cover"><span class="nav-number">1.3.</span> <span class="nav-text">3. cover</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node-vs-browser"><span class="nav-number">1.4.</span> <span class="nav-text">node vs browser</span></a></li></ol></li></ol></div>
             
 
           </div>

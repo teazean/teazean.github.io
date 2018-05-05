@@ -103,7 +103,7 @@
 
 
   <meta name="description" content="任务 按照如下方式写入2万条文献记录(hbase)： 在网上找一个2000个英文单词的词典。 将词典中每个单词在文献标题中总出现50次，每个单词在同一个文献标题中只出现一次，文献标题的长度在2-10 个单词之间。 每条文献的作者由词典中随机选择，2-3个单词组成。 指定50种会议或期刊名称，每条文献从中随机选择一种。 年份在1900-2014之间随机选择一个。   采用MapReduce对HBas">
-<meta name="keywords" content="hadoop mapreduce hbase">
+<meta name="keywords" content="hadoop,hbase,mapreduce">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ubuntu下配置Hadop(伪分布式）(2)-建立Hbase数据库与MapReduce生成倒排文件">
 <meta property="og:url" content="http://teazean.com/2014/03/01/inverted_inex/index.html">
@@ -111,7 +111,7 @@
 <meta property="og:description" content="任务 按照如下方式写入2万条文献记录(hbase)： 在网上找一个2000个英文单词的词典。 将词典中每个单词在文献标题中总出现50次，每个单词在同一个文献标题中只出现一次，文献标题的长度在2-10 个单词之间。 每条文献的作者由词典中随机选择，2-3个单词组成。 指定50种会议或期刊名称，每条文献从中随机选择一种。 年份在1900-2014之间随机选择一个。   采用MapReduce对HBas">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://teazean.com/images/hadoop/hbase.png">
-<meta property="og:updated_time" content="2018-05-05T04:31:28.826Z">
+<meta property="og:updated_time" content="2018-05-05T16:21:49.570Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ubuntu下配置Hadop(伪分布式）(2)-建立Hbase数据库与MapReduce生成倒排文件">
 <meta name="twitter:description" content="任务 按照如下方式写入2万条文献记录(hbase)： 在网上找一个2000个英文单词的词典。 将词典中每个单词在文献标题中总出现50次，每个单词在同一个文献标题中只出现一次，文献标题的长度在2-10 个单词之间。 每条文献的作者由词典中随机选择，2-3个单词组成。 指定50种会议或期刊名称，每条文献从中随机选择一种。 年份在1900-2014之间随机选择一个。   采用MapReduce对HBas">
@@ -205,7 +205,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">千里之行始于足下</p>
       
   </div>
 
@@ -237,9 +237,9 @@
         
         
           
-          <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
         
         
@@ -253,9 +253,9 @@
         
         
           
-          <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
 
       
@@ -365,7 +365,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+                <time title="修改时间：2018-05-06 00:21:49" itemprop="dateModified" datetime="2018-05-06T00:21:49+08:00">2018-05-06</time>
               
             
           </span>
@@ -469,12 +469,30 @@
     
 
     
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Teazean</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://teazean.com/2014/03/01/inverted_inex/" title="Ubuntu下配置Hadop(伪分布式）(2)-建立Hbase数据库与MapReduce生成倒排文件">http://teazean.com/2014/03/01/inverted_inex/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
 
     <footer class="post-footer">
       
         <div class="post-tags">
           
-            <a href="/tags/hadoop-mapreduce-hbase/" rel="tag"># hadoop mapreduce hbase</a>
+            <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          
+            <a href="/tags/hbase/" rel="tag"># hbase</a>
+          
+            <a href="/tags/mapreduce/" rel="tag"># mapreduce</a>
           
         </div>
       
@@ -573,7 +591,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">Teazean</p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">teazean</p>
           </div>
 
           
@@ -689,7 +707,101 @@
                     
                       
                     
-                    <span class="site-state-item-count">37</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">61</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -746,7 +858,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#任务"><span class="nav-text">任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立HBase数据库"><span class="nav-text">建立HBase数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce建立倒排索引文件"><span class="nav-text">MapReduce建立倒排索引文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MapReduce研究"><span class="nav-text">MapReduce研究</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#任务"><span class="nav-number">1.</span> <span class="nav-text">任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立HBase数据库"><span class="nav-number">2.</span> <span class="nav-text">建立HBase数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce建立倒排索引文件"><span class="nav-number">3.</span> <span class="nav-text">MapReduce建立倒排索引文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MapReduce研究"><span class="nav-number">3.1.</span> <span class="nav-text">MapReduce研究</span></a></li></ol></li></ol></div>
             
 
           </div>
