@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录：fe工具包杂记 phantomjs mac安装mysql5.7 karma jasmine webpack编译工具  1. phantomjsphantomjs作用：我们可以phantomjs做什么： 1. 无页面测试：在不需要实际页面的情况下，在phantomjs中跑测试脚本； 2. 页面自动化：可以使用phantomjs加载页面，甚至可以引入其他js库，对dom进行操作，记录。 3. 网">
+<meta name="keywords" content="phantomjs karma jasmine webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fe工具包">
+<meta property="og:url" content="http://teazean.com/2016/06/15/tools/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="目录：fe工具包杂记 phantomjs mac安装mysql5.7 karma jasmine webpack编译工具  1. phantomjsphantomjs作用：我们可以phantomjs做什么： 1. 无页面测试：在不需要实际页面的情况下，在phantomjs中跑测试脚本； 2. 页面自动化：可以使用phantomjs加载页面，甚至可以引入其他js库，对dom进行操作，记录。 3. 网">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.834Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="fe工具包">
+<meta name="twitter:description" content="目录：fe工具包杂记 phantomjs mac安装mysql5.7 karma jasmine webpack编译工具  1. phantomjsphantomjs作用：我们可以phantomjs做什么： 1. 无页面测试：在不需要实际页面的情况下，在phantomjs中跑测试脚本； 2. 页面自动化：可以使用phantomjs加载页面，甚至可以引入其他js库，对dom进行操作，记录。 3. 网">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2016/06/15/tools/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>fe工具包 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2016/06/15/tools/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">fe工具包
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-15 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-15T00:00:00+08:00">2016-06-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/06/15/tools/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/06/15/tools/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="目录：fe工具包杂记"><a href="#目录：fe工具包杂记" class="headerlink" title="目录：fe工具包杂记"></a>目录：fe工具包杂记</h2><ol>
+<li>phantomjs</li>
+<li>mac安装mysql5.7</li>
+<li>karma</li>
+<li>jasmine</li>
+<li>webpack编译工具</li>
+</ol>
+<h3 id="1-phantomjs"><a href="#1-phantomjs" class="headerlink" title="1. phantomjs"></a>1. phantomjs</h3><h4 id="phantomjs作用："><a href="#phantomjs作用：" class="headerlink" title="phantomjs作用："></a>phantomjs作用：</h4><p>我们可以phantomjs做什么：</p>
+<pre><code>1. 无页面测试：在不需要实际页面的情况下，在phantomjs中跑测试脚本；
+2. 页面自动化：可以使用phantomjs加载页面，甚至可以引入其他js库，对dom进行操作，记录。
+3. 网络监测：phantomjs提供对网络资源加载的监测
+4. 截屏：phantomjs可以对页面进行截屏，可以自定与高度、宽度、区域。（强大！！！）
+</code></pre><p>phantomjs的官网<a href="http://phantomjs.org/quick-start.html" target="_blank" rel="noopener">http://phantomjs.org/quick-start.html</a><br><a id="more"></a></p>
+<h4 id="phantomjs-npm"><a href="#phantomjs-npm" class="headerlink" title="phantomjs npm"></a>phantomjs npm</h4><p>phantomjs本身并不提供node的库，只提供cli命令，执行CommonJs的代码。</p>
+<p>npm下的Medium/phantomjs是对phantomjs的封装，包括自动下载phantomjs的压缩包。调用npm phantomjs的时候也是调用phantomjs cli。</p>
+<h3 id="2-mac安装mysql5-7"><a href="#2-mac安装mysql5-7" class="headerlink" title="2. mac安装mysql5.7"></a>2. mac安装mysql5.7</h3><ol>
+<li>下载mac下的tar包，解压到/usr/local目录下(结果为/usr/local/mysql/bin的目录)</li>
+<li>将/usr/local/mysql/bin加入到PATH目录下.</li>
+<li><p>初始化data目录：<a href="http://dev.mysql.com/doc/refman/5.7/en/data-directory-initialization-mysqld.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.7/en/data-directory-initialization-mysqld.html</a>，这一步会生成一个初始的root密码</p>
+<p> mysqld –initialize –user=mysql –basedir=/usr/local/mysql –datadir=/usr/local/mysql/data</p>
+</li>
+<li><p>修改mysql-data目录的用户权限</p>
+<p> sudo chown -R zhanglei55 /usr/local/mysql</p>
+</li>
+<li><p>修改root密码：<a href="http://dev.mysql.com/doc/refman/5.7/en/resetting-permissions.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.7/en/resetting-permissions.html</a></p>
+<p> //第一步关闭mysql server<br> mysql.server stop<br> //第二步建一个启动脚本(/Users/zhanglei55/init.mysql)<br> ALTER USER ‘root‘@’localhost’ IDENTIFIED BY ‘MyNewPass’;<br> //第三步启动mysql server<br> mysqld_safe –init-file=/Users/zhanglei55/init.mysql &amp;<br> //启动完成后删除init.mysql文件</p>
+</li>
+<li><p>完成</p>
+</li>
+</ol>
+<h3 id="3-karma"><a href="#3-karma" class="headerlink" title="3. karma"></a>3. karma</h3><p>karma只是提供了一个可以在真实浏览器跑测试的环境，具体还要结合注入qunit、jasmine等测试框架</p>
+<h3 id="4-jasmine"><a href="#4-jasmine" class="headerlink" title="4. jasmine"></a>4. jasmine</h3><h4 id="jasmine-clock的实现"><a href="#jasmine-clock的实现" class="headerlink" title="jasmine clock的实现"></a>jasmine clock的实现</h4><p>jasmine clock其实就是重写了全局的setTimeout、setInterval，当设置setTimeout(fn, delay1)，会将fn-delay1加入任务队列，当调用tick(time)的时候，此时会去执行所有delay小于time的fn任务。只是模拟了一下时间。</p>
+<h3 id="5-webpack编译工具"><a href="#5-webpack编译工具" class="headerlink" title="5. webpack编译工具"></a>5. webpack编译工具</h3><ol>
+<li>先贴一张webpack hook的流程图片链接<a href="http://www.teazean.com/images/webpack/webpack.svg" target="_blank" rel="noopener">http://www.teazean.com/images/webpack/webpack.svg</a>;</li>
+<li>webpack就是一堆过程hook的框架。</li>
+<li><p>webpack里面有module、chunk、entrypoints、assert、record这些数据对象；以及Compilation等编译对象</p>
+<ul>
+<li>module：一个module代表一个文件，每个module都有一个chunks属性，表示该module隶属于哪些chunks</li>
+<li><p>chunk：一个chunk代表最终要被打成一个包的js-chunk。他有属性如下：</p>
+<ul>
+<li>chunk.modules:代表该chunk包里有哪些modules</li>
+<li>chunk.entrypoints:代表被哪些entry入口要引入</li>
+<li>chunk.parents[chunks]:代表该chunk依赖哪些chunks</li>
+<li>chunk.chunks:代表该chunk要被哪些chunks使用/引用/依赖</li>
+</ul>
+</li>
+<li><p>entrypoints：代表一个js入口，被实际引入的js入口，在config.entry配置</p>
+</li>
+<li>assert：代表要被最终生成文件的内容，由最终的某些modules和chunks转换而成。</li>
+<li>record：记录信息</li>
+</ul>
+</li>
+<li><p>webpack的简化过程就是：</p>
+<ol>
+<li>apply各种Plugin，注册各种hook的处理函数</li>
+<li><p>然后创建Compilation对象（代表一次编译）</p>
+<ul>
+<li>2.1 编译开始时，使用module.loaders去加载文件生成modules</li>
+<li>2.2 在编译的过程中经历了modules、chunks、optimize等各种hook过程，交由plugin注册的hook函数处理、修改这些数据对象的关系</li>
+<li>2.3 接着将部分modules和chunks生成assets，以及一些optimize的hook等</li>
+</ul>
+</li>
+<li><p>Compilation的使命完成之后，就产出assets文件的内容，接着就把这些assets输出到文件中。</p>
+</li>
+<li>一次build的过程完成了。</li>
+</ol>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/phantomjs-karma-jasmine-webpack/" rel="tag"># phantomjs karma jasmine webpack</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/08/ecomfe/" rel="next" title="ecomfe工具链杂记">
+                <i class="fa fa-chevron-left"></i> ecomfe工具链杂记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/30/javascript_key/" rel="prev" title="java解密">
+                java解密 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录：fe工具包杂记"><span class="nav-text">目录：fe工具包杂记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-phantomjs"><span class="nav-text">1. phantomjs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#phantomjs作用："><span class="nav-text">phantomjs作用：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#phantomjs-npm"><span class="nav-text">phantomjs npm</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-mac安装mysql5-7"><span class="nav-text">2. mac安装mysql5.7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-karma"><span class="nav-text">3. karma</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-jasmine"><span class="nav-text">4. jasmine</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jasmine-clock的实现"><span class="nav-text">jasmine clock的实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-webpack编译工具"><span class="nav-text">5. webpack编译工具</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2016/06/15/tools/';
+        this.page.identifier = '2016/06/15/tools/';
+        this.page.title = 'fe工具包';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

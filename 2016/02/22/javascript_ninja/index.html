@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="javascript忍者秘籍 图形用户界面（GUI）的桌面编程：创建用户界面、进入轮询等待事件触发、调用事件处理程序，浏览器编程没有什么不同，唯一的不同就是，代码不负责事件轮询和事件派发，而是浏览器帮我们处理。 如下代码，可以给内联函数命名，以提升威力。也可以使用arguments.callee属性来访问函数本身，但es5严格模式下禁止使用callee。  var ninja = {     ch">
+<meta name="keywords" content="javascript css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javascript、css阅读摘要">
+<meta property="og:url" content="http://teazean.com/2016/02/22/javascript_ninja/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="javascript忍者秘籍 图形用户界面（GUI）的桌面编程：创建用户界面、进入轮询等待事件触发、调用事件处理程序，浏览器编程没有什么不同，唯一的不同就是，代码不负责事件轮询和事件派发，而是浏览器帮我们处理。 如下代码，可以给内联函数命名，以提升威力。也可以使用arguments.callee属性来访问函数本身，但es5严格模式下禁止使用callee。  var ninja = {     ch">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.832Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javascript、css阅读摘要">
+<meta name="twitter:description" content="javascript忍者秘籍 图形用户界面（GUI）的桌面编程：创建用户界面、进入轮询等待事件触发、调用事件处理程序，浏览器编程没有什么不同，唯一的不同就是，代码不负责事件轮询和事件派发，而是浏览器帮我们处理。 如下代码，可以给内联函数命名，以提升威力。也可以使用arguments.callee属性来访问函数本身，但es5严格模式下禁止使用callee。  var ninja = {     ch">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2016/02/22/javascript_ninja/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>javascript、css阅读摘要 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2016/02/22/javascript_ninja/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">javascript、css阅读摘要
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-02-22 00:00:00" itemprop="dateCreated datePublished" datetime="2016-02-22T00:00:00+08:00">2016-02-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/02/22/javascript_ninja/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/02/22/javascript_ninja/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="javascript忍者秘籍"><a href="#javascript忍者秘籍" class="headerlink" title="javascript忍者秘籍"></a>javascript忍者秘籍</h3><ol>
+<li>图形用户界面（GUI）的桌面编程：创建用户界面、进入轮询等待事件触发、调用事件处理程序，浏览器编程没有什么不同，唯一的不同就是，代码不负责事件轮询和事件派发，而是浏览器帮我们处理。</li>
+<li>如下代码，可以给内联函数命名，以提升威力。也可以使用<code>arguments.callee</code>属性来访问函数本身，但es5严格模式下禁止使用callee。</li>
+</ol>
+<pre><code>var ninja = {
+    chirp: function sigal(n) {
+        return n &gt; 1 ? signal(n-1) + &quot;-chirp&quot; : &quot;chirp&quot;;
+    }
+}
+</code></pre><a id="more"></a>
+<ol start="3">
+<li>在所有语句结束，使用分号是一个很好的做法，尤其是在变量赋值之后。匿名函数也不例外。压缩代码后，分号的妥善放置会为压缩技术提供更大的灵活。</li>
+<li>正则表达式，反向引用：举例来说：/^([dtn])a\1/可以任意一个以”d”、”t”或者”n”开头，且后面跟着一个字符，并且再后面跟着的是和第一个捕获相同字符的字符串。像匹配<code>&lt;strong&gt;whatever&lt;/strong&gt;</code>这样的tag就使用反向引用。</li>
+<li>正则表达式，被动子表达式：反向引用中，被捕获的是<code>(*)</code>中间的，如果想让<code>(*)</code>不被捕获，可以在<code>(?:*)</code>的前面加<code>?:</code>，告诉正则表达式该括号不被捕获，被称为被动子表达式。</li>
+<li>trim方法：Faster JavaScript Trim:<a href="http://blog.stevenlevithan.com/archives/faster-trim-javascript" target="_blank" rel="noopener">http://blog.stevenlevithan.com/archives/faster-trim-javascript</a></li>
+<li>执行线程中的定时器执行(见javascript ninja8.1.2节)：<br> 1.javacript引擎是单线程执行，异步事件必须要排队等待才能执行；<br> 2.如果无法立即执行定时器，该定时器会被推迟到下一个可用的执行时间点上；<br> 3.如果一直被推迟，到最好Interval间隔定时器可能会无延迟执行，并且同一个interval处理程序的多个实例不能同时进行排队（即当一个interver的实例要排队时，如果已经有一个该interval的实例正在排序，则放弃这次的interval实例）。</li>
+<li>eval的执行均是全局环境。</li>
+<li>P9.3：js运行时求值的场景，如：<ol>
+<li>JSON转换</li>
+<li>在名空间内移动定义代码。如动态的引入命名空间的其他变量。</li>
+<li>javascript代码的最小化及混淆操作</li>
+<li>动态代码重写和注入：利用toString()反编译现有的javascript函数，然后就可以提取内容，创建新的函数。</li>
+<li>甚至去创建元语言processingjs、object-j、react</li>
+</ol>
+</li>
+<li>W3C模型是将两者进行中和，在W3C模型中，任何事件发生时，先从顶层开始进行事件捕获，直到事件触发到达了事件源元素。然后，再从事件源往上进行事件冒泡，直到到达document。</li>
+<li>在IE中的DOM元素上绑定的函数如果在某个元素节点上有闭包关联的话，离开页面时会导致内存回收失败。</li>
+<li>可以使用<code>document.evaluate</code>来利用XPATH查询dom元素，并且通过id或者简单的标签查找元素的速度永远比纯DOM快。但XPATH方式查询一般是主要供开发者使用。</li>
+</ol>
+<h3 id="css揭秘"><a href="#css揭秘" class="headerlink" title="css揭秘"></a>css揭秘</h3><ol>
+<li>currentColor属性自动获取当前字体颜色的值。</li>
+<li>完美计算出来的设计有时候在视觉上并不一定就是完美的。如完美垂直居中的东西在视觉上会靠下；再如相同宽高的正方形、圆形，看起来圆形会小一些（这也是为什么字体设计中，圆形字体如0会比正方形自己稍微放大一些。）</li>
+<li>在css的一些简写属性如background，书写时可能会有一些歧义的值，可以见<code>/</code>作为分隔符。如<code>background: url(br.png) no-repeat top right / 2em 2em</code></li>
+<li>能用em或其他相对单位的尽量使用，相对单位。</li>
+<li>background默认是border+padding+content三个的背景颜色，可以使用<code>background-clip</code>来更改background的范围。</li>
+<li>box-shadow的第四个参数：<code>&lt;spread-radius&gt;</code>定义了shadow的expand/shrink，可以用来实现多重实线边框。(box-shadow不占用实际布局，结合padding或者margin来使用。)。</li>
+<li>outline定义了元素的轮廓，默认在border外，但有outline-offset属性可以调整outline的位置。（<a href="http://output.jsbin.com/hajeso/12" target="_blank" rel="noopener">http://output.jsbin.com/hajeso/12</a>轻易的实现了一个手机的屏幕）</li>
+<li><code>background-position: right 20px top 20px;</code>可以定义某个方位的偏移量。</li>
+<li><code>background-origin</code>可以定义background-position的相对box，默认是padding-box，还有border-box、content-box;</li>
+<li>可以使用calc(100% - 3rem)来获取计算后的大小。</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript-css/" rel="tag"># javascript css</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/12/git_learn/" rel="next" title="git学习笔记">
+                <i class="fa fa-chevron-left"></i> git学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/28/html5/" rel="prev" title="html5 api">
+                html5 api <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#javascript忍者秘籍"><span class="nav-text">javascript忍者秘籍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#css揭秘"><span class="nav-text">css揭秘</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2016/02/22/javascript_ninja/';
+        this.page.identifier = '2016/02/22/javascript_ninja/';
+        this.page.title = 'javascript、css阅读摘要';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

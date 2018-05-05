@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="白帽子讲Web安全目录结构：  世界观安全 客户端脚本安全 服务端安全  1. 世界观安全名词 黑客精神：Open、Free、Share，一去不复返！ 黑客 vs 脚本小子：往往造成威胁最大的，非挖掘漏洞的黑客，而是那些使用漏洞的低水平的脚本小子。 白帽子：安全领域专家 黑帽子：利用黑客技术造成破坏的犯罪群体">
+<meta name="keywords" content="web secure">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web 安全-《白帽子web安全阅读笔记》">
+<meta property="og:url" content="http://teazean.com/2016/01/05/web_secure/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="白帽子讲Web安全目录结构：  世界观安全 客户端脚本安全 服务端安全  1. 世界观安全名词 黑客精神：Open、Free、Share，一去不复返！ 黑客 vs 脚本小子：往往造成威胁最大的，非挖掘漏洞的黑客，而是那些使用漏洞的低水平的脚本小子。 白帽子：安全领域专家 黑帽子：利用黑客技术造成破坏的犯罪群体">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.832Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Web 安全-《白帽子web安全阅读笔记》">
+<meta name="twitter:description" content="白帽子讲Web安全目录结构：  世界观安全 客户端脚本安全 服务端安全  1. 世界观安全名词 黑客精神：Open、Free、Share，一去不复返！ 黑客 vs 脚本小子：往往造成威胁最大的，非挖掘漏洞的黑客，而是那些使用漏洞的低水平的脚本小子。 白帽子：安全领域专家 黑帽子：利用黑客技术造成破坏的犯罪群体">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2016/01/05/web_secure/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Web 安全-《白帽子web安全阅读笔记》 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2016/01/05/web_secure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Web 安全-《白帽子web安全阅读笔记》
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-01-05 00:00:00" itemprop="dateCreated datePublished" datetime="2016-01-05T00:00:00+08:00">2016-01-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/01/05/web_secure/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/01/05/web_secure/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="白帽子讲Web安全"><a href="#白帽子讲Web安全" class="headerlink" title="白帽子讲Web安全"></a>白帽子讲Web安全</h2><p>目录结构：</p>
+<ol>
+<li>世界观安全</li>
+<li>客户端脚本安全</li>
+<li>服务端安全</li>
+</ol>
+<h3 id="1-世界观安全"><a href="#1-世界观安全" class="headerlink" title="1. 世界观安全"></a>1. 世界观安全</h3><h4 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h4><ul>
+<li>黑客精神：Open、Free、Share，一去不复返！</li>
+<li>黑客 vs 脚本小子：往往造成威胁最大的，非挖掘漏洞的黑客，而是那些使用漏洞的低水平的脚本小子。</li>
+<li>白帽子：安全领域专家</li>
+<li>黑帽子：利用黑客技术造成破坏的犯罪群体</li>
+</ul>
+<a id="more"></a>
+<h4 id="一句话"><a href="#一句话" class="headerlink" title="一句话"></a>一句话</h4><ul>
+<li><code>如果用户能够分辨什么样的行为是安全的，那么还要安全软件做什么？</code></li>
+<li>微软在产品的安全中做的越来越好，其所推崇的安全开发流程，将安全贯穿于整个软件的生命周期中，经过实践检验，证明者是一条可行的道路。</li>
+<li>安全是一个持续的过程，没有银弹。</li>
+</ul>
+<h4 id="如何实施安全评估"><a href="#如何实施安全评估" class="headerlink" title="如何实施安全评估"></a>如何实施安全评估</h4><ol>
+<li>资产等级划分：比如服务器资源、数据资源等，对其安全性等级划分。</li>
+<li>威胁分析：把所有的威胁找出来，微软的<a href="https://msdn.microsoft.com/zh-cn/library/ff648641.aspx#EQAA" target="_blank" rel="noopener">STRIDE模型</a>。</li>
+<li>风险分析：<code>Risk = Probability * Damage Potential</code>，如何衡量风险：微软的<a href="https://msdn.microsoft.com/zh-cn/library/ff648644.aspx#EEAA" target="_blank" rel="noopener">DREAD模型</a></li>
+<li>设计安全方案：能够有效解决问题、用户体验好、高性能、低耦合、易于扩展和升级。</li>
+</ol>
+<h4 id="白帽子兵法"><a href="#白帽子兵法" class="headerlink" title="白帽子兵法"></a>白帽子兵法</h4><ol>
+<li>Secure By Default：黑名单、白名单；最小权限原则。<blockquote>
+<p>如果更多的使用白名单，那么系统就会变得更安全。</p>
+</blockquote>
+</li>
+<li>Defense in Depth：在各个不同层次、不同方面实施安全方案，避免出现漏洞，相互配合，够成一个整体；在解决根本问题的地方实施针对性的安全方案。</li>
+<li>数据与代码分离：良好的设计也是安全方案的一种，这一原则广泛适用于”注入”问题。</li>
+<li>不可预测原则：能有效对抗基于篡改、伪造的攻击。如id随机等。</li>
+</ol>
+<h4 id="notes："><a href="#notes：" class="headerlink" title="notes："></a>notes：</h4><ol>
+<li>2003年冲击波蠕虫：Window系统RPC漏洞，很短时间内席卷全球，百万台机器被感染。</li>
+<li>PHP0字节截断：c语言的字符串以<code>%00</code>结尾，造成<code>php:include</code>方法执行错误的文件。<a href="http://www.joychou.org/index.php/web/truncated.html" target="_blank" rel="noopener">http://www.joychou.org/index.php/web/truncated.html</a></li>
+<li>缓冲区溢出：指计算机向缓冲区写入数据时超过了缓冲区的限制，多余的数据覆盖了合法数据。导致覆盖的数据被当做代码执行，形成缓冲区溢出攻击.</li>
+<li>内存溢出：out of memory，指向系统申请的内存大于系统能分配的，发生内存溢出，程序无法进行，强行终止。</li>
+<li>内存泄露：指程序申请内存使用后(new)，最后却不释放内存(delete)，就会导致那部分内存无法访问到，系统也无法再分配，形成一次内存泄露；多次发生内存泄露，系统可用内存就会减少，性能降低，最后形成内存溢出。</li>
+</ol>
+<h3 id="2-客户端脚本安全"><a href="#2-客户端脚本安全" class="headerlink" title="2. 客户端脚本安全"></a>2. 客户端脚本安全</h3><h4 id="浏览器安全"><a href="#浏览器安全" class="headerlink" title="浏览器安全"></a>浏览器安全</h4><ul>
+<li>同源策略：浏览器最核心、最基本的安全功能。同源是指：host、子域名、端口、协议。</li>
+<li>向script、img、iframe等src属性以及link的href属性都有跨域的能力；而XMLHttpRequest一般不具有跨域能力，但可以通过服务器设置<code>Access-Control-Allow-Origin</code>这个属性设置哪些<code>源</code>可以访问该接口。</li>
+<li>浏览器扩展和插件极大丰富了浏览器的功能，但安全问题随之而来，扩展和插件的权限都高于页面JavaScript的权限，比如可以进行一些跨域的问题.</li>
+<li>浏览器的多进程架构，将浏览器的各个功能模块分开，各个浏览器实例分开，当一个进程崩溃时，也不会影响到其他的进程。另一方面多进程的实现，也将渲染引擎、浏览器内核引擎分割开，极大提高了浏览器的安全性。</li>
+<li>Sandbox沙箱：让不可信任代码运行在一定的隔离环境中，限制其访问隔离区之外的资源。</li>
+</ul>
+<h4 id="恶意网站拦截"><a href="#恶意网站拦截" class="headerlink" title="恶意网站拦截"></a>恶意网站拦截</h4><ol>
+<li>挂马：在网页中插入一段恶意代码，利用浏览器漏洞执行任意代码的攻击方式。</li>
+<li>恶意网站分类：挂马网站，这些网站包含恶意的脚本如JavaScript、Flash等，利用浏览器的漏洞执行shellcode，在用户电脑中植入木马；钓鱼网站，通过模仿知名网站的相似页面来欺骗用户。</li>
+<li>恶意网站拦截：一般都是浏览器周期性的从服务器获取一份最新的恶意网站黑名单，当访问黑名单之中的页面时，浏览器弹出警告。如<a href="http://www.phishtank.com/" target="_blank" rel="noopener">PhishTank</a>、<a href="https://developers.google.com/safe-browsing/" target="_blank" rel="noopener">Google SafeBrowsingApi</a></li>
+</ol>
+<p>tips：</p>
+<ol>
+<li>ie8 css跨域漏洞：利用ie8解析fontFamily属性的漏洞，可以跨域读取html文档的内容。<a href="http://www.2cto.com/Article/201009/73051.html" target="_blank" rel="noopener">http://www.2cto.com/Article/201009/73051.html</a></li>
+</ol>
+<h4 id="跨站脚本攻击-XSS"><a href="#跨站脚本攻击-XSS" class="headerlink" title="跨站脚本攻击(XSS)"></a>跨站脚本攻击(XSS)</h4><ol>
+<li>类型：反射型XSS：根据用户输入的内容或者一个恶意链接，来发射给浏览器，达到攻击目的；存储型XSS：恶意脚本存储到服务器上，每次访问都能攻击，常见于博客论坛上。</li>
+<li>永远不能信任用户能控制的变量</li>
+<li>XSS的防御：httpOnly(禁止js访问该cookie)；输入检查；输出检查；处理富文本，使用白名单的方式；</li>
+</ol>
+<h4 id="跨站点请求伪造（CSRF）"><a href="#跨站点请求伪造（CSRF）" class="headerlink" title="跨站点请求伪造（CSRF）"></a>跨站点请求伪造（CSRF）</h4><ol>
+<li>CSRF是利用用户身份（cookie）来进行攻击操作的行为；</li>
+<li>防御CSRF：所有的写操作都用post；对refer进行判断；在原来的请求中注入token。</li>
+</ol>
+<h4 id="点击劫持（ClickJacking）"><a href="#点击劫持（ClickJacking）" class="headerlink" title="点击劫持（ClickJacking）"></a>点击劫持（ClickJacking）</h4><ol>
+<li>点击劫持：是一种视觉上的欺骗，攻击者使用一个透明的iframe覆盖在一个网页上，诱使用户进行操作，实际上用户将在不知情的情况下早做了iframe页面。如flash点击劫持、拖拽劫持等。</li>
+<li>防御：frame-busting：利用js location判断是否是iframe嵌套；http头-X-Frame-Options：控制当前页面是否能加载iframe。</li>
+</ol>
+<h3 id="3-服务端安全"><a href="#3-服务端安全" class="headerlink" title="3. 服务端安全"></a>3. 服务端安全</h3><h4 id="注入攻击"><a href="#注入攻击" class="headerlink" title="注入攻击"></a>注入攻击</h4><ol>
+<li>注入攻击的条件：用户能够控制输入；原本要执行的代码，拼接了用户输入的数据。</li>
+<li>代码如注入、命令注入往往都是由一些不安全的函数或方法引起。</li>
+<li>sql注入：预防可以使用预编译语句</li>
+<li>CRLF注入：cr（\r）lf（\n），在http协议中，http头以<code>\r\n</code>作为两个头信息的分隔符，以<code>两次\r\n</code>作为http-headers的结束。</li>
+</ol>
+<h4 id="文件上传漏洞"><a href="#文件上传漏洞" class="headerlink" title="文件上传漏洞"></a>文件上传漏洞</h4><ol>
+<li>文件上传漏洞：文件上传后所在的目录是web容器所覆盖到的路径；用户能从web上访问到这个文件；用户上传的文件漏过了安全检查。</li>
+<li>文件上传漏洞解决方案：文件上传的目录设置为不可执行；白名单判断文件类型；使用随机数改写文件名和文件路径；单独设置文件服务器的域名。</li>
+</ol>
+<h4 id="对密码加密时，增加一个salt，增加密码明文的复杂度。"><a href="#对密码加密时，增加一个salt，增加密码明文的复杂度。" class="headerlink" title="对密码加密时，增加一个salt，增加密码明文的复杂度。"></a>对密码加密时，增加一个<code>salt</code>，增加密码明文的复杂度。</h4><h4 id="notes：-1"><a href="#notes：-1" class="headerlink" title="notes："></a>notes：</h4><ol>
+<li>md5这些算法一般都会对原来的串填充，以达到所需要的长度。</li>
+<li>在密码学里有个基本的原则：密码系统的安全性应该依赖于密钥的复杂性，而不是依赖于算法的保密性。</li>
+<li>将密钥保存在配置文件或者数据库中，而非在代码中硬编码。</li>
+</ol>
+<h4 id="DDOS：分布式拒绝服务"><a href="#DDOS：分布式拒绝服务" class="headerlink" title="DDOS：分布式拒绝服务"></a>DDOS：分布式拒绝服务</h4><ol>
+<li>SYN flood：利用tcp的三次握手的时长，进行网络层DDOS</li>
+<li>应用层DDOS的防御：代码做好性能优化；在网络架构上做好优化，如负载均衡；限制每个IP的请求频率。</li>
+<li><p>ReDOS：一个正则表达式引起的血案，如下的匹配，将会使正则表达式匹配的路径指数级增长，效率极其低下。</p>
+<pre><code>var r = /^(a+)+$/g;
+var text = &quot;aaaaaaaaaaaaaaaX&quot;;
+</code></pre></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web-secure/" rel="tag"># web secure</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/04/node/" rel="next" title="node服务器的研究">
+                <i class="fa fa-chevron-left"></i> node服务器的研究
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/12/git_learn/" rel="prev" title="git学习笔记">
+                git学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#白帽子讲Web安全"><span class="nav-text">白帽子讲Web安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-世界观安全"><span class="nav-text">1. 世界观安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#名词"><span class="nav-text">名词</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一句话"><span class="nav-text">一句话</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何实施安全评估"><span class="nav-text">如何实施安全评估</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#白帽子兵法"><span class="nav-text">白帽子兵法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#notes："><span class="nav-text">notes：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-客户端脚本安全"><span class="nav-text">2. 客户端脚本安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器安全"><span class="nav-text">浏览器安全</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#恶意网站拦截"><span class="nav-text">恶意网站拦截</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨站脚本攻击-XSS"><span class="nav-text">跨站脚本攻击(XSS)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨站点请求伪造（CSRF）"><span class="nav-text">跨站点请求伪造（CSRF）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#点击劫持（ClickJacking）"><span class="nav-text">点击劫持（ClickJacking）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-服务端安全"><span class="nav-text">3. 服务端安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注入攻击"><span class="nav-text">注入攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件上传漏洞"><span class="nav-text">文件上传漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对密码加密时，增加一个salt，增加密码明文的复杂度。"><span class="nav-text">对密码加密时，增加一个salt，增加密码明文的复杂度。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#notes：-1"><span class="nav-text">notes：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DDOS：分布式拒绝服务"><span class="nav-text">DDOS：分布式拒绝服务</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2016/01/05/web_secure/';
+        this.page.identifier = '2016/01/05/web_secure/';
+        this.page.title = 'Web 安全-《白帽子web安全阅读笔记》';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

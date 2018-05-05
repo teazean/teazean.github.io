@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="html4 标签通用属性 accesskey:规定激活元素的快捷键:如a标签:accesskey=&amp;quot;c&amp;quot; dir:规定元素中内容的文本方向，只能为ltr|rtl lang:规定元素的语言，&amp;lt;p lang=&amp;quot;fr&amp;quot;&amp;gt;Ceci est un paragraphe.&amp;lt;/p&amp;gt;，注意lang在某些标签中是无效的如&amp;lt;iframe&amp;gt;、&amp;">
+<meta name="keywords" content="html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="html4学习笔记">
+<meta property="og:url" content="http://teazean.com/2014/02/07/html4/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="html4 标签通用属性 accesskey:规定激活元素的快捷键:如a标签:accesskey=&amp;quot;c&amp;quot; dir:规定元素中内容的文本方向，只能为ltr|rtl lang:规定元素的语言，&amp;lt;p lang=&amp;quot;fr&amp;quot;&amp;gt;Ceci est un paragraphe.&amp;lt;/p&amp;gt;，注意lang在某些标签中是无效的如&amp;lt;iframe&amp;gt;、&amp;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.826Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="html4学习笔记">
+<meta name="twitter:description" content="html4 标签通用属性 accesskey:规定激活元素的快捷键:如a标签:accesskey=&amp;quot;c&amp;quot; dir:规定元素中内容的文本方向，只能为ltr|rtl lang:规定元素的语言，&amp;lt;p lang=&amp;quot;fr&amp;quot;&amp;gt;Ceci est un paragraphe.&amp;lt;/p&amp;gt;，注意lang在某些标签中是无效的如&amp;lt;iframe&amp;gt;、&amp;">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2014/02/07/html4/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>html4学习笔记 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2014/02/07/html4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">html4学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-02-07 00:00:00" itemprop="dateCreated datePublished" datetime="2014-02-07T00:00:00+08:00">2014-02-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2014/02/07/html4/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2014/02/07/html4/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="html4-标签通用属性"><a href="#html4-标签通用属性" class="headerlink" title="html4 标签通用属性"></a>html4 标签通用属性</h2><ul>
+<li><code>accesskey</code>:规定激活元素的快捷键:如a标签:<code>accesskey=&quot;c&quot;</code></li>
+<li><code>dir</code>:规定元素中内容的文本方向，只能为<code>ltr|rtl</code></li>
+<li><code>lang</code>:规定元素的语言，<code>&lt;p lang=&quot;fr&quot;&gt;Ceci est un paragraphe.&lt;/p&gt;</code>，注意lang在某些标签中是无效的如<code>&lt;iframe&gt;</code>、<code>&lt;br&gt;</code></li>
+<li><code>tabIndex</code> <code>class</code> <code>id</code> <code>style</code> <code>title</code></li>
+</ul>
+<a id="more"></a>
+<h2 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h2><h3 id="form属性"><a href="#form属性" class="headerlink" title="form属性"></a>form属性</h3><ul>
+<li><code>target</code>:规定在何处打开action URL，值为：<code>_blank(新建窗口)</code>|<code>_self(自己所在窗口)</code>|<code>_parent(父窗口)</code>|<code>_top(最顶层的窗口)</code>|<code>framename(指定的frame的name)</code></li>
+<li><code>enctype</code>:规定在发送表单数据之前如何对其进行编码。值为：<code>application/x-www-form-urlencoded</code>|<code>multipart/form-data</code>|<code>text/plain</code></li>
+<li><code>action</code> <code>method</code> <code>name</code></li>
+</ul>
+<h3 id="input"><a href="#input" class="headerlink" title="input"></a>input</h3><ul>
+<li>form中的文本标签基本都有<code>value</code> <code>name</code> <code>disabled</code> <code>readonly</code> 属性</li>
+<li><code>alt</code> <code>checked</code> <code>src</code></li>
+<li><code>maxlength</code>:规定文本的最大长度</li>
+<li><code>size</code>:定义输入字段的宽度</li>
+<li><code>type</code>:可以为以下值：<code>button</code>|<code>checkbox</code>|<code>file</code>|<code>hidden</code>|<code>image</code>|<code>password</code>|<code>radio</code>|<code>reset</code>|<code>submit</code>|<code>text</code></li>
+</ul>
+<h3 id="textarea"><a href="#textarea" class="headerlink" title="textarea"></a>textarea</h3><ul>
+<li><code>rows</code> <code>cols</code></li>
+</ul>
+<h3 id="button"><a href="#button" class="headerlink" title="button"></a>button</h3><ul>
+<li><code>type</code>:规定button的type，值为：<code>button</code>|<code>reset</code>|<code>submit</code></li>
+</ul>
+<p>reset可以重置form非隐藏域(type=”hidden”)的值为初始值.如果全都重置，使用<code>style=&quot;display:none;&quot;</code>,对应<code>js form.reset()</code></p>
+<h3 id="label"><a href="#label" class="headerlink" title="label"></a>label</h3><ul>
+<li><code>for</code>:规定该label绑定到哪个表单元素上，为表单元素的id。如果点击了label中的文字，就会触发绑定的表单控件。</li>
+</ul>
+<h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><ul>
+<li><code>multiple</code>:规定可以选择多项。值为:<code>multiple</code>。</li>
+<li><code>size</code>:规定下拉列表中可见选项的数目。</li>
+</ul>
+<h3 id="optgroup"><a href="#optgroup" class="headerlink" title="optgroup"></a>optgroup</h3><ul>
+<li><code>label</code>:定义选项组的描述</li>
+<li><code>diabled</code>:规定禁用该选项组</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;select&gt;</span><br><span class="line">  &lt;optgroup label=&quot;Swedish Cars&quot;&gt;</span><br><span class="line">    &lt;option value =&quot;volvo&quot;&gt;Volvo&lt;/option&gt;</span><br><span class="line">    &lt;option value =&quot;saab&quot;&gt;Saab&lt;/option&gt;</span><br><span class="line">  &lt;/optgroup&gt;</span><br><span class="line"></span><br><span class="line">  &lt;optgroup label=&quot;German Cars&quot;&gt;</span><br><span class="line">    &lt;option value =&quot;mercedes&quot;&gt;Mercedes&lt;/option&gt;</span><br><span class="line">    &lt;option value =&quot;audi&quot;&gt;Audi&lt;/option&gt;</span><br><span class="line">  &lt;/optgroup&gt;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+<p>效果如下：</p>
+<select><br>  <optgroup label="Swedish Cars"><br>    <option value="volvo">Volvo</option><br>    <option value="saab">Saab</option><br>  </optgroup><br><br>  <optgroup label="German Cars"><br>    <option value="mercedes">Mercedes</option><br>    <option value="audi">Audi</option><br>  </optgroup><br></select>
+
+<h2 id="框架集frameset"><a href="#框架集frameset" class="headerlink" title="框架集frameset"></a>框架集frameset</h2><ul>
+<li><code>cols</code>:规定框架集中列的数目与尺寸，<a href="http://www.w3school.com.cn/tags/tag_frameset_prop_cols_rows.asp" target="_blank" rel="noopener">详见</a></li>
+<li><code>rols</code>:规定框架集中行的数目与尺寸，<a href="http://www.w3school.com.cn/tags/tag_frameset_prop_cols_rows.asp" target="_blank" rel="noopener">详见</a></li>
+</ul>
+<p>注意不能让body标签与frame标签同时使用,而iframe必须配合body来使用，<a href="http://blog.csdn.net/lyr1985/article/details/6067026" target="_blank" rel="noopener">详见</a>。若是浏览器不支持frameset，就必须为之定义noframeset标签，并且将noframeset的内容包含在body标签内。</p>
+<pre><code>&lt;html&gt;
+    &lt;frameset cols=&quot;25%,50%,25%&quot;&gt;
+        &lt;frame src=&quot;/example/html/frame_a.html&quot;&gt;
+        &lt;frame src=&quot;/example/html/frame_b.html&quot;&gt;
+        &lt;frame src=&quot;/example/html/frame_c.html&quot;&gt;
+        &lt;noframes&gt;
+        &lt;body&gt;您的浏览器无法处理框架！&lt;/body&gt;
+        &lt;/noframes&gt;
+    &lt;/frameset&gt;
+&lt;/html&gt;
+</code></pre><p>frameset的使用详见<a href="http://www.w3school.com.cn/html/html_frames.asp" target="_blank" rel="noopener">frameset</a></p>
+<h2 id="iframe-内联框架"><a href="#iframe-内联框架" class="headerlink" title="iframe(内联框架)"></a>iframe(内联框架)</h2><p>iframe不属于frameset集合中，不被doctype的strict、transitional禁用。<br>对于有target属性来说的标签，如form、a的target=”framename”对frame、iframe都有效。</p>
+<ul>
+<li><code>src</code> <code>width</code> <code>height</code> <code>name</code></li>
+<li><code>frameborder</code>:是否显示frame周围的边框，值为：0|1</li>
+<li><code>scrolling</code>:<code>yes</code>|<code>no</code>|<code>auto</code> ,规定是否在iframe中显示滚动条</li>
+</ul>
+<h2 id="a超链接"><a href="#a超链接" class="headerlink" title="a超链接"></a>a超链接</h2><ul>
+<li><code>target</code> <code>href</code> <code>hreflang</code></li>
+<li><code>rel</code>:规定当前文件与被链接文档之间的关系。</li>
+<li><code>name</code>:规定锚点的名称。</li>
+</ul>
+<p>定义锚点的两种方式：</p>
+<ol>
+<li>id=”123”</li>
+<li><code>&lt;a name=&quot;123&quot;&gt;&lt;/a&gt;</code><br>使用上为:<code>&lt;a href=&quot;#123&quot;&gt;&lt;/a&gt;</code></li>
+</ol>
+<p>发送邮件:<code>&lt;a href=&quot;mailto:someone@test.com&quot;&gt;&lt;/a&gt;</code></p>
+<h2 id="img"><a href="#img" class="headerlink" title="img"></a>img</h2><ul>
+<li><code>alt</code>:规定当img无法加载时，替代img的文本内容。</li>
+<li><code>src</code> <code>height</code> <code>width</code> <code>longdesc</code></li>
+<li><code>ismap</code>:将图片定义为服务端映射。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;test.html&quot;&gt;</span><br><span class="line">	&lt;img src=&quot;tulip.gif&quot; ismap /&gt;</span><br><span class="line">&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>当点击图片的时候，请求的链接是：test.html?157,94</p>
+<ul>
+<li><code>usemap</code>:将图片定义为客户端图片映射。值为：”#”+map的id或者name</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;planets.jpg&quot; border=&quot;0&quot; usemap=&quot;#planetmap&quot; alt=&quot;Planets&quot; /&gt;</span><br><span class="line">&lt;map name=&quot;planetmap&quot; id=&quot;planetmap&quot;&gt;</span><br><span class="line">  &lt;area shape=&quot;circle&quot; coords=&quot;180,139,14&quot; href =&quot;venus.html&quot; alt=&quot;Venus&quot; /&gt;</span><br><span class="line">  &lt;area shape=&quot;circle&quot; coords=&quot;129,161,10&quot; href =&quot;mercur.html&quot; alt=&quot;Mercury&quot; /&gt;</span><br><span class="line">  &lt;area shape=&quot;rect&quot; coords=&quot;0,0,110,260&quot; href =&quot;sun.html&quot; alt=&quot;Sun&quot; /&gt;</span><br><span class="line">&lt;/map&gt;</span><br></pre></td></tr></table></figure>
+<p>标签map有name与id属性，area只能用在map里面。</p>
+<h3 id="area标签"><a href="#area标签" class="headerlink" title="area标签"></a>area标签</h3><ul>
+<li><code>alt</code> 定义此区域内替换图片的内容</li>
+<li><code>href</code>:定义此区域的目标URL，<code>nohref</code>属性可以从图像映射中排出某个区域。</li>
+<li><code>target</code>:值为<code>_blank</code>|<code>_parent</code>|<code>_self</code>|<code>_top</code></li>
+<li><code>shape</code>:定义区域的形状，值为：<code>default</code>|<code>rect(x1,y1,x2,y2)</code>|<code>circ(x,y,r)</code>|<code>poly(x1,y1,x2,y2,x3,y3...)</code>，根据不同的shape需找<code>coords</code>的值得列表,坐标都是相对与左上角(0,0)的坐标。<a href="http://www.w3school.com.cn/tags/att_area_coords.asp" target="_blank" rel="noopener">详见</a></li>
+</ul>
+<h2 id="table"><a href="#table" class="headerlink" title="table"></a>table</h2><ul>
+<li><code>border</code>:规定表格边框的宽度</li>
+<li><code>frame</code>:规定外侧边框的哪个部分是可见的。值为<code>void(不显示)</code>|<code>above(上部)</code>|<code>below(下部)</code>|<code>hsides(上下)</code>|<code>lhs(左部)</code>|<code>rhs(右部)</code>|<code>vsides(左右)</code>|<code>box(都显示)</code>|<code>border(都显示)</code></li>
+<li><code>rules</code>:规定内侧边框的那个部分是可见的。最好使用css</li>
+<li><code>summary</code>：规定表格的摘要：对浏览器显示无影响</li>
+<li><code>width</code></li>
+<li><code>cellpadding</code>:规定单元边沿与其内容之间的空白，使用css的td、th的padding替代。</li>
+<li><code>cellspacing</code>:规定单元格之间的空白。使用css的border-collapse(separate|collapse|inherit)替代</li>
+</ul>
+<p>注意：在一些浏览器中，表格单元如歌没有内容，浏览器可能无法显示出的这个单元格的边框，这时可以放置一个&nbsp;来替代。</p>
+<h3 id="caption标签"><a href="#caption标签" class="headerlink" title="caption标签"></a>caption标签</h3><p>定义元素表格标题：caption 标签必须紧随 table 标签之后。您只能对每个表格定义一个标题。通常这个标题会被居中于表格之上。</p>
+<pre><code>&lt;table border=&quot;1&quot;&gt;
+  &lt;caption&gt;Monthly savings&lt;/caption&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Month&lt;/th&gt;
+    &lt;th&gt;Savings&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;January&lt;/td&gt;
+    &lt;td&gt;$100&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre><h3 id="thead、tbody、tfoot"><a href="#thead、tbody、tfoot" class="headerlink" title="thead、tbody、tfoot"></a>thead、tbody、tfoot</h3><p>thead定义表格的表头，tbody定于表格的主体内容个，tfoot定义表格的表注。他们呈现的顺序是thead、tbody、tfoot，如果想先呈现thead、tfoot，可以把这两个标签放置在tbody之前。当长的表格被打印时，表格的表头和页脚可被打印在包含表格数据的每张页面上。</p>
+<h3 id="col与colgroup"><a href="#col与colgroup" class="headerlink" title="col与colgroup"></a>col与colgroup</h3><p>为一列或几列定义属性</p>
+<ul>
+<li><code>span</code>:横跨的列数</li>
+<li><p><code>align</code> <code>width</code> <code>valign</code></p>
+  <table border="1" width="100%"><br>    <col width="100"><br>    <col width="50"><br>    <tr><br>      <th>Month</th><br>      <th>Savings</th><br>    </tr><br>    <tr><br>      <td>January</td><br>      <td>$100</td><br>    </tr><br>    <tr><br>      <td>February</td><br>      <td>$80</td><br>    </tr><br>  </table>
+
+</li>
+</ul>
+<h3 id="td与th、tr"><a href="#td与th、tr" class="headerlink" title="td与th、tr"></a>td与th、tr</h3><p>td与th有rowspan、colspan属性可以横跨几行几列</p>
+<h2 id="dl、dt与dd"><a href="#dl、dt与dd" class="headerlink" title="dl、dt与dd"></a>dl、dt与dd</h2><pre><code>&lt;dl&gt;
+   &lt;dt&gt;计算机&lt;/dt&gt;
+   &lt;dd&gt;用来计算的仪器 ... ...&lt;/dd&gt;
+   &lt;dt&gt;显示器&lt;/dt&gt;
+   &lt;dd&gt;以视觉方式显示信息的装置 ... ...&lt;/dd&gt;
+&lt;/dl&gt;
+</code></pre><ul>
+<li>dl-自定义列表</li>
+<li>dt-自定义项目</li>
+<li>dd-自定义的描述</li>
+</ul>
+<h3 id="字符缩写"><a href="#字符缩写" class="headerlink" title="字符缩写"></a>字符缩写</h3><p><a href="http://www.w3school.com.cn/html/html_entities.asp" target="_blank" rel="noopener">详见</a></p>
+<h2 id="head"><a href="#head" class="headerlink" title="head"></a>head</h2><p>head标签中的base标签：为页面上的所有链接规定默认地址或默认目标。</p>
+<pre><code>&lt;head&gt;
+    &lt;base href=&quot;http://www.w3school.com.cn/i/&quot; /&gt;
+    &lt;base target=&quot;_blank&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;img src=&quot;eg_smile.gif&quot; /&gt;
+    &lt;a href=&quot;http://www.w3school.com.cn&quot;&gt;W3School&lt;/a&gt;
+&lt;/body&gt;
+</code></pre><ol>
+<li>默认目标:当我们点击a的时候，会在新窗口打开。</li>
+<li>默认地址，通常情况下，遇到相对URL时，浏览器会从当前文档的URL里提取相应的元素来填写相对URL的空白。但我们可以通过base标签来改变这一点，通过base的href属性，浏览器随后的相对URL不在使用当前文档的URL，而是使用base的href定义的URL，包括：a、img、link、form、area等标签中的相对URL(注意是相对)。</li>
+</ol>
+<h2 id="html的多媒体标签"><a href="#html的多媒体标签" class="headerlink" title="html的多媒体标签"></a>html的多媒体标签</h2><p><code>&lt;embed&gt;</code>、<code>&lt;object&gt;</code>、<code>&lt;audio&gt;(html5)</code>、<code>&lt;video&gt;(html5)</code></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/html/" rel="tag"># html</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/02/25/hbase/" rel="prev" title="Ubuntu下配置Hadop(伪分布式）(1)-hbase安装与配置">
+                Ubuntu下配置Hadop(伪分布式）(1)-hbase安装与配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc ">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#html4-标签通用属性"><span class="nav-text">html4 标签通用属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表单"><span class="nav-text">表单</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#form属性"><span class="nav-text">form属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#input"><span class="nav-text">input</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#textarea"><span class="nav-text">textarea</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#button"><span class="nav-text">button</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#label"><span class="nav-text">label</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select"><span class="nav-text">select</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#optgroup"><span class="nav-text">optgroup</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#框架集frameset"><span class="nav-text">框架集frameset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iframe-内联框架"><span class="nav-text">iframe(内联框架)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a超链接"><span class="nav-text">a超链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#img"><span class="nav-text">img</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#area标签"><span class="nav-text">area标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#table"><span class="nav-text">table</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#caption标签"><span class="nav-text">caption标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thead、tbody、tfoot"><span class="nav-text">thead、tbody、tfoot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#col与colgroup"><span class="nav-text">col与colgroup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#td与th、tr"><span class="nav-text">td与th、tr</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dl、dt与dd"><span class="nav-text">dl、dt与dd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符缩写"><span class="nav-text">字符缩写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#head"><span class="nav-text">head</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#html的多媒体标签"><span class="nav-text">html的多媒体标签</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2014/02/07/html4/';
+        this.page.identifier = '2014/02/07/html4/';
+        this.page.title = 'html4学习笔记';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

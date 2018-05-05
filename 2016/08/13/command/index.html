@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="linux、mac命令 lsof ps 管道| 与 | xargs 讲一下linux下的用户、组、其他 linux的标准输入、标准输出、标准error tr命令  1. lsof展示linux上所有opened files，在linux所有都是文件。lsof /test 默认显示包含test/下的打开的文件 注意：-uzhang 和-u zhang这两种是一样的">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux、mac命令">
+<meta property="og:url" content="http://teazean.com/2016/08/13/command/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="linux、mac命令 lsof ps 管道| 与 | xargs 讲一下linux下的用户、组、其他 linux的标准输入、标准输出、标准error tr命令  1. lsof展示linux上所有opened files，在linux所有都是文件。lsof /test 默认显示包含test/下的打开的文件 注意：-uzhang 和-u zhang这两种是一样的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.836Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux、mac命令">
+<meta name="twitter:description" content="linux、mac命令 lsof ps 管道| 与 | xargs 讲一下linux下的用户、组、其他 linux的标准输入、标准输出、标准error tr命令  1. lsof展示linux上所有opened files，在linux所有都是文件。lsof /test 默认显示包含test/下的打开的文件 注意：-uzhang 和-u zhang这两种是一样的">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2016/08/13/command/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>linux、mac命令 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2016/08/13/command/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux、mac命令
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-08-13 00:00:00" itemprop="dateCreated datePublished" datetime="2016-08-13T00:00:00+08:00">2016-08-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/study/" itemprop="url" rel="index"><span itemprop="name">study</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/08/13/command/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/08/13/command/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="linux、mac命令"><a href="#linux、mac命令" class="headerlink" title="linux、mac命令"></a>linux、mac命令</h2><ol>
+<li>lsof</li>
+<li>ps</li>
+<li>管道| 与 | xargs</li>
+<li>讲一下linux下的用户、组、其他</li>
+<li>linux的标准输入、标准输出、标准error</li>
+<li>tr命令</li>
+</ol>
+<h3 id="1-lsof"><a href="#1-lsof" class="headerlink" title="1. lsof"></a>1. lsof</h3><p>展示linux上所有opened files，在linux所有都是文件。lsof /test 默认显示包含test/下的打开的文件</p>
+<p>注意：<code>-uzhang</code> 和<code>-u zhang</code>这两种是一样的<br><a id="more"></a></p>
+<ol>
+<li>lsof -uzhang：列出所有属于zhang的文件</li>
+<li>lsof -aUuzhang：-a是链接-U和-u两个命令</li>
+<li>lsof -g573：列出说有进程组（pgid）（progress group Id）是573的进程，在Linux中，所有的进程都有一个隶属的进程组</li>
+<li>lsof -i:8080：列出所有地址匹配<code>:8080</code>的文件。-i后面可以是这些<code>[46][protocol][@hostname|hostaddr][:service|port]</code>(注意[46]代表ip version），-i只用于match</li>
+<li>lsof -d &lt;文件描述符FD&gt; 列出占用该文件号的进程，FD有cwd、txt、pd、0（标准输出）、1（标准输入）、2（标准错误）等等</li>
+<li>lsof +d &lt;目录&gt; 列出目录下被打开的文件</li>
+<li>lsof +D &lt;目录&gt; 递归目录下被打开的文件</li>
+<li>lsof -c Google：列出所有以Google为开头打开的进程</li>
+<li>losf -p <pid>: 列出所有pid进程打开的文件</pid></li>
+</ol>
+<h3 id="2-ps"><a href="#2-ps" class="headerlink" title="2. ps"></a>2. ps</h3><p>ps默认列出由终端控制的当前用户的进程，（即终端启动的进程）</p>
+<ol>
+<li>ps u：展示用户信息</li>
+<li>ps a：列出所有用户的终端进程</li>
+<li>ps x：列出当前用户的所有进程，不以终端进程来区分</li>
+</ol>
+<p>a u x这三个可以自由组合</p>
+<h3 id="3-管道-与-xargs"><a href="#3-管道-与-xargs" class="headerlink" title="3. 管道| 与 | xargs"></a>3. 管道| 与 | xargs</h3><ol>
+<li>管道|是指把上一个命令作为下一个命令的标准输入</li>
+<li>|xargs是指将上一个命令作为下一个命令的参数</li>
+<li>这就是标准输入和命令参数的区别；比如对于grep作为命令参数传入的话，会在参数这个文件里查找；若对于grep作为标准输入的话，只会查找上一个命令输入的内容，如文件名列表</li>
+</ol>
+<h3 id="4-讲一下linux下的用户、组、其他"><a href="#4-讲一下linux下的用户、组、其他" class="headerlink" title="4. 讲一下linux下的用户、组、其他"></a>4. 讲一下linux下的用户、组、其他</h3><h4 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h4><pre><code>/etc/group保存了用户组信息
+root:x:0:root,linuxsir
+用户组名称:用户组密码（x表示没密码）:用户组gid:用户组的下的用户（，分隔）以及其他gid=0的用户
+/etc/passwd保存了用户信息
+root:*:0:0:System Administrator:/var/root:/bin/sh
+用户名:密码:用户uid:组gid:主目录:登录shell
+</code></pre><h4 id="mac下使用dscl命令"><a href="#mac下使用dscl命令" class="headerlink" title="mac下使用dscl命令"></a>mac下使用dscl命令</h4><p>常用的包括：</p>
+<pre><code>$ dscl . list /users
+$ dscl . list /groups
+$ dscl . readall /users
+$ dscl . readall /groups
+$ dscl -plist . readall /users
+$ dscl -plist . readall /groups
+</code></pre><h4 id="关于用户、组、其他"><a href="#关于用户、组、其他" class="headerlink" title="关于用户、组、其他"></a>关于用户、组、其他</h4><ul>
+<li>用户：当前用户</li>
+<li>组：当前用户所在的组</li>
+<li>其他：其他用户</li>
+<li>往往一些程序如mysql会创建_mysql用户组和_mysql用户，当进行mysql的操作是，mysql会以_mysql身份进行操作</li>
+</ul>
+<h4 id="chmod命令：修改文件的访问权限"><a href="#chmod命令：修改文件的访问权限" class="headerlink" title="chmod命令：修改文件的访问权限"></a>chmod命令：修改文件的访问权限</h4><p>通用格式：<code>chmod [ugoa][+-=][rwxXst][ugo]</code></p>
+<ul>
+<li>[ugoa]：设置修改文件的哪一部分权限需要修改,u表示用户、g表示组、o表示其他，a表示所有，默认是a；可以选择这里面的1-3个</li>
+<li>[+-=]：表示修改的权限，+表示增加、-表示删除、=表示设置</li>
+<li><p>[rwxXstugo]：表示需要修改的权限类别：r是可读、w可写、x可执行，ugo表示ugo对应的权限</p>
+<blockquote>
+<ul>
+<li>s：<code>The set-user-ID-on-execution and set-group-ID-on-execution bits</code>，对表示当前文件执行的时候，使用授予权限的用户或者组身份执行，一旦结束，退出授予权限的用户或者组身份；</li>
+<li>t：粘性位，表示对于同一个目录，如果设置了粘性位，普通用户只能删除目录下属于自己的文件，即使被赋予了读写权限，也不能随意删除其他用户的文件。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h5 id="采用4位8进制设置文件的模式abcd"><a href="#采用4位8进制设置文件的模式abcd" class="headerlink" title="采用4位8进制设置文件的模式abcd"></a>采用4位8进制设置文件的模式<code>abcd</code></h5><ul>
+<li>a表示【s/t】(4表示set-uid，2表示set-gid，1表示粘性位)</li>
+<li>b表示u的权限</li>
+<li>c表示g的权限</li>
+<li>d表示o的权限</li>
+<li>通常只要bcd三位，可以不设置a位。其中r=4，w=2，x=1，（可以自由相加)</li>
+</ul>
+<p>eg：</p>
+<pre><code>chmod a+x chx
+chmod 4775 chx
+chmod 644 chx
+</code></pre><h4 id="chown：修改文件的拥有者为指定的用户或者组"><a href="#chown：修改文件的拥有者为指定的用户或者组" class="headerlink" title="chown：修改文件的拥有者为指定的用户或者组"></a>chown：修改文件的拥有者为指定的用户或者组</h4><p>通用格式: <code>chown [选项] [owner][:[group]] files</code></p>
+<ul>
+<li>选项：-R：循环处理指定目录以及其目录下的所有文件</li>
+<li>[owner][:[group]]：如果是owner,表示只修改属主属性；如果是owner:group，表示同时修改属主、用户组；如果是owner:，表示修改为owner为属主，owner的用户组为文件的组；如果是:group，表示只修改组；</li>
+</ul>
+<p>eg:</p>
+<pre><code>chown root: test.cfg (按照root的属主，root的用户组设置组属性)
+</code></pre><h3 id="5-linux的标准输入、标准输出、标准error"><a href="#5-linux的标准输入、标准输出、标准error" class="headerlink" title="5. linux的标准输入、标准输出、标准error"></a>5. linux的标准输入、标准输出、标准error</h3><ul>
+<li>标准输入：0</li>
+<li>标准输出：1</li>
+<li><p>标准error：2</p>
+<pre><code>echo &apos;log&apos; &gt; /dev/null 2&gt;&amp;1 // /dev/null特殊的不存在的输出， `&gt;&amp;`表示重定向等同于
+</code></pre></li>
+</ul>
+<h3 id="6-tr命令"><a href="#6-tr命令" class="headerlink" title="6. tr命令"></a>6. tr命令</h3><p>tr [-csd] [‘string1’] [‘string2’] &lt; file</p>
+<p>tr是一个转换字符的命令:</p>
+<pre><code>tr &apos;abc&apos; &apos;cde&apos; &lt; file // 替换file中所有的&apos;abc&apos;为&apos;cde&apos;
+-c: 用字string1中字符集的补集替换此字符集，要求字符集为ASCII。
+-d: 删除
+-s: 删除所有重复的字符序列，只保留第一个字符。（必须是字符)
+</code></pre><h4 id="7-linux文件描述符"><a href="#7-linux文件描述符" class="headerlink" title="7. linux文件描述符"></a>7. linux文件描述符</h4><ol>
+<li>对于linux而言，一个文件描述符只能被使用一次，然后就要重新定义，文件描述符被打开-》被关闭，一次结束。</li>
+<li><blockquote>
+<blockquote>
+<p>和 &gt;这个模式的区别，只在于文件描述符被打开的时候，是否重新定义光标的位置。&gt;会重置光标的位置为开始，&gt;&gt;在文件描述符被打开的时候在尾部定义光标的位置。</p>
+</blockquote>
+</blockquote>
+</li>
+<li>有些命令如cat命令，会执行一次打开、关闭的命令，之后文件描述符就不能用；而echo这些命令会一直打开，并且echo会使光标处于尾部，不会关闭文件描述符。</li>
+<li>当调用自定义文件描述符的时候，需要在上面都加上&amp;，&amp;还可以表示等同于</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/18/javascript_secret/" rel="next" title="javascript解密">
+                <i class="fa fa-chevron-left"></i> javascript解密
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/23/math_encrypt/" rel="prev" title="密码学与数学">
+                密码学与数学 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#linux、mac命令"><span class="nav-text">linux、mac命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-lsof"><span class="nav-text">1. lsof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-ps"><span class="nav-text">2. ps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-管道-与-xargs"><span class="nav-text">3. 管道| 与 | xargs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-讲一下linux下的用户、组、其他"><span class="nav-text">4. 讲一下linux下的用户、组、其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#linux"><span class="nav-text">linux</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mac下使用dscl命令"><span class="nav-text">mac下使用dscl命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于用户、组、其他"><span class="nav-text">关于用户、组、其他</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#chmod命令：修改文件的访问权限"><span class="nav-text">chmod命令：修改文件的访问权限</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#采用4位8进制设置文件的模式abcd"><span class="nav-text">采用4位8进制设置文件的模式abcd</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#chown：修改文件的拥有者为指定的用户或者组"><span class="nav-text">chown：修改文件的拥有者为指定的用户或者组</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-linux的标准输入、标准输出、标准error"><span class="nav-text">5. linux的标准输入、标准输出、标准error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-tr命令"><span class="nav-text">6. tr命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-linux文件描述符"><span class="nav-text">7. linux文件描述符</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2016/08/13/command/';
+        this.page.identifier = '2016/08/13/command/';
+        this.page.title = 'linux、mac命令';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="requirejs 源码与架构分析requirejs是目前前端模块管理应用最广泛的架构，它的思想是前段模块化编程不可缺失的。 通常来说搞懂一个项目的数据结构，基本上就把这个项目的基本逻辑搞清楚了。这里先介绍数据结构，然后再做分析。  综述 数据结构 require.js的关键函数 require.js加载执行与入口函数流程：define、require 使用  1. 综述requirejs总是通过">
+<meta name="keywords" content="requirejs amd">
+<meta property="og:type" content="article">
+<meta property="og:title" content="requirejs 源码与架构分析">
+<meta property="og:url" content="http://teazean.com/2015/08/20/requirejs/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="requirejs 源码与架构分析requirejs是目前前端模块管理应用最广泛的架构，它的思想是前段模块化编程不可缺失的。 通常来说搞懂一个项目的数据结构，基本上就把这个项目的基本逻辑搞清楚了。这里先介绍数据结构，然后再做分析。  综述 数据结构 require.js的关键函数 require.js加载执行与入口函数流程：define、require 使用  1. 综述requirejs总是通过">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://teazean.com/images/requirejs/module.png">
+<meta property="og:image" content="http://teazean.com/images/requirejs/require.png">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.827Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="requirejs 源码与架构分析">
+<meta name="twitter:description" content="requirejs 源码与架构分析requirejs是目前前端模块管理应用最广泛的架构，它的思想是前段模块化编程不可缺失的。 通常来说搞懂一个项目的数据结构，基本上就把这个项目的基本逻辑搞清楚了。这里先介绍数据结构，然后再做分析。  综述 数据结构 require.js的关键函数 require.js加载执行与入口函数流程：define、require 使用  1. 综述requirejs总是通过">
+<meta name="twitter:image" content="http://teazean.com/images/requirejs/module.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2015/08/20/requirejs/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>requirejs 源码与架构分析 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2015/08/20/requirejs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">requirejs 源码与架构分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2015-08-20 00:00:00" itemprop="dateCreated datePublished" datetime="2015-08-20T00:00:00+08:00">2015-08-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/08/20/requirejs/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/08/20/requirejs/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="requirejs-源码与架构分析"><a href="#requirejs-源码与架构分析" class="headerlink" title="requirejs 源码与架构分析"></a>requirejs 源码与架构分析</h2><p>requirejs是目前前端模块管理应用最广泛的架构，它的思想是前段模块化编程不可缺失的。</p>
+<p>通常来说搞懂一个项目的数据结构，基本上就把这个项目的基本逻辑搞清楚了。这里先介绍数据结构，然后再做分析。</p>
+<ol>
+<li>综述</li>
+<li>数据结构</li>
+<li>require.js的关键函数</li>
+<li>require.js加载执行与入口函数流程：define、require</li>
+<li>使用</li>
+</ol>
+<h3 id="1-综述"><a href="#1-综述" class="headerlink" title="1. 综述"></a>1. 综述</h3><p>requirejs总是通过script标签来加载执行js。也就是说：所有的js均在全局模式下执行，对于支持requirejs的模块，变量通过<code>define</code>函数导出。不支持requirejs的模块，总是会输出undefined，但可以通过全局变量来使用，如：jQuery,nativeAppAdapter等，这些也是可以通过requirejs的shim配置来管理。</p>
+<a id="more"></a>
+<p>requirejs嵌套比较深，这篇文章主要讲述主干的流程。</p>
+<blockquote>
+<p>name与ModuleName的区别。requirejs中name是指的是define(name,deps)中明确确定的name，而ModuleName是指当js文件的文件模块名，当引入的js<code>没有define模块</code>或者<code>define(deps)匿名模块</code>，requirejs会默认name=moduleName。ModuleName只和文件名相关，如果引入<code>js/jquery-1.11.3.js</code>和<code>js/22/jquery-1.11.3.js</code>两个文件，最终只会有一个<code>jquery-1.11.3.js</code>的js文件被加载，且该模块的<code>name=moduleName=jquery-1.11.3</code>。(只和文件名有关，文件名！文件名！文件名！)</p>
+</blockquote>
+<blockquote>
+<p>在所有的amd的实现中，包括requirejs，都支持package的配置，即一个package里面的文件相对url的使用，将相对url转化成实际可被require的路径地址。在requirejs中，每一个Mudule被依赖的话，在创建该ModuleMap的时候，会传入依赖该Module的ParentModuleMap，以方便做相对路径转化。</p>
+</blockquote>
+<blockquote>
+<p>在标准的amd规范中没有定义factory的执行时机，在requirejs中factory在module的所有依赖被加载完成之后立刻执行factory，将生成的对象赋值给module.exports，以后就复用这个对象。而esl中factory是延后执行的，esl被依赖的时候，factory才会执行生成对象，并被以后的复用。</p>
+</blockquote>
+<h3 id="2-数据结构"><a href="#2-数据结构" class="headerlink" title="2. 数据结构"></a>2. 数据结构</h3><blockquote>
+<p>这里讨论的所有数据结构均是requirejs封装在自己内部的，比如：require全局变量是指require模块内部的全局变量<br>requirejs数据结构主要分为三种：requirejs全局变量、context上下文、Module模块</p>
+</blockquote>
+<h4 id="requirejs全局变量"><a href="#requirejs全局变量" class="headerlink" title="requirejs全局变量"></a>requirejs全局变量</h4><blockquote>
+<p>requirejs全局变量主要放置一些全局配置、临时数据等。主要有以下三种：</p>
+</blockquote>
+<ul>
+<li>contexts：存放requirejs管理依赖、模块变量真正的地方，即context上下文，默认放至于contexts[“_”]下。</li>
+<li>cfg：require.config({})配置对象传入的配置对象</li>
+<li><p>globalDefQueue：存储模块的临时队列</p>
+<blockquote>
+<p>只有一个地方用到globalDefQueue,那就是在调用define(name, deps, callback)的时候，把[name, deps, callback]push到globalDefQueue中。在script加载完成之后，调用<code>completeload</code>函数，清空globalDefQueue，详情查看<code>completeload</code>函数的介绍。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Module模块"><a href="#Module模块" class="headerlink" title="Module模块"></a>Module模块</h4><p>这里有一些说明：</p>
+<ul>
+<li><p>Module的状态：这些状态并不是互斥的。没种状态只表示一种设置完成。<br><img src="/images/requirejs/module.png"></p>
+<ul>
+<li>inited：表明Module是否已经初始化，设置依赖、回调等。设置inited=true之后是不会在执行fetch()的。</li>
+<li>enabled：enabled状态，这种状态表示Module是被激活状态。</li>
+<li>fetched：标志Module的js是否被加载，在check()函数中检查，如果没有加载，将执行module.fetch()函数。</li>
+<li>defined：Module已经被定义完成，进入defined队列，<code>defined[mod.map.id] = mod.exports</code></li>
+</ul>
+</li>
+<li><p>创建Module的三种途径</p>
+<ul>
+<li><p>匿名Module:执行一次require()，便创建一次匿名Module，<code>enabled: true</code>,在调用mod.init()的时候直接调用enable().</p>
+<blockquote>
+<p>require -&gt; context.require -&gt; context.localRequire(deps, callback, errback)</p>
+</blockquote>
+<p>  context.nextTick(function () {</p>
+<pre><code>//Some defines could have been added since the
+//require call, collect them.
+intakeDefines();
+
+requireMod = getModule(makeModuleMap(null, relMap));//创建匿名Module
+
+//Store if map config should be applied to this require
+//call for dependencies.
+requireMod.skipMap = options.skipMap;
+
+requireMod.init(deps, callback, errback, {
+    enabled: true
+});
+
+checkLoaded();
+</code></pre><p>  });</p>
+</li>
+<li><p>define(name,deps,callback),如果在defined队列中不存在，则从registry取出或者在registry中创建一个新的Module,此时是知道它所有的依赖deps以及callback，可以并且调用init()方法。</p>
+</li>
+<li><p>当一个Module调用enable()方法的时候，它的所有依赖deps也将被enable()，对于该依赖depMod</p>
+<ol>
+<li>若果defined队列中存在depMod，直接获取结果；</li>
+<li>如果defined队列中不存在，但在registry队列存在，这种模式就是通过<code>define(name,deps,callback)</code>,定义出来的，inited = true;</li>
+<li><p>如果defined队列不存在，并且registry队列也不存在，在registry中新建depModule，并且直接调用enable()方法。</p>
+<blockquote>
+<ul>
+<li>deps Module,这里的deps有两种来源：<code>define(name,deps,callback)</code>和<code>require(deps,callback)</code>。如果没有特殊配置paths，默认的deps均是相对于baseUrl需找js文件。这里将为每一个dependency创建一个<code>name=dependecy</code>的Module,如<code>deps=[&#39;../jquery-1.12.1&#39;]</code>,将创建一个<code>name=&quot;jquery-1.12.1&quot;</code>的Module。变量ModuleName=deps[i];</li>
+<li>第三种模式创建的deps Module，因为deps[i].js这个文件还没加载，无法得知它的依赖，以及callback，所以第一次尝试调用enable()-&gt;check()，在check()中，监测到<code>inited = undefined</code>, 执行fetch()加载js文件,文件加载成功之后，在completeLoad()中，就可以知晓该Module的deps和callback，调用init()(设置<code>inited = true</code>)-&gt;check()。在在最终check()方法里面，会将Module的factory执行，产出最终的结果放到mod.exports里面。</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>Module主要方法与变量</p>
+<ul>
+<li>depCount：deps的计数，每当一个deps[i]的defined触发，将结果存入到depExports中，并且depCount–;当depCount==0的时候触发本省的defined事件.</li>
+<li>depExports  = []</li>
+<li>map = {id:’jquery’…}：Module的一些属性，如id等</li>
+<li>init(depMaps, factory, errback, options)：设置Module的依赖，以及回调（factory）</li>
+<li><p>fetch()：创建script标签，加载js，注册completeLoad事件的封装</p>
+<blockquote>
+<p>module.fetch()-&gt;module.load()-&gt;context.load()-&gt;req.load()，req.load()完成创建script标签，并注册<code>onload=context.completeLoad</code>.</p>
+</blockquote>
+</li>
+<li>enable()：当调用enable(),也就意味着我们需要去加载这个模块，包括加载它的依赖。</li>
+<li>check()：检查当前Module的状态，1. 是否加载；2. 检查depCount值，若为0，返回exports，并触发自身的defined事件。</li>
+<li>on(name,cb)：供其他Module监听自己的状态，常用的defined 和error</li>
+<li><p>emit(name,evt)：触发某一个状态，触发observer的callback.</p>
+<blockquote>
+<p>Module之间依赖关系是一种订阅/发布的模式。每一个Module监听它的所以依赖的defined事件以及error事件。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="context上下文"><a href="#context上下文" class="headerlink" title="context上下文"></a>context上下文</h4><p>这里主要介绍一下一些主要数据结构。</p>
+<ul>
+<li>registry = {}：存放的所有是Module对象，当Module对象被enable之后，会加入enalbedRegistry中。如果<code>checkloaded</code>执行成功，并且该Module进入到defined状态，该Module会将exports结果放到defined对象中，同时从registry、enalbedRegistry移除。</li>
+<li><p>enabledRegistry = {}：当一个Module被enable后，会加入enabledRegistry中。</p>
+<blockquote>
+<p><code>checkloaded</code>函数会不断的检查enabledRegistry队列，在上面说到<code>init = undefined</code>的Module均是正在加载中的。如果发生超时之后，init还未被设置为true（在completeLoad()中设置）, 则就可以throw err了。</p>
+</blockquote>
+</li>
+<li><p>defQueue = []：只是起到一个中转globalDefQueue的中转站。</p>
+</li>
+<li>defined = {}：存放所有的Module exports结果的对象，<code>defined[mod.map.id] = mod.exports</code>，这是一种key-vaule的形式。</li>
+<li><p>urlFetched = {}：存放所有已成功获取的url的对象。</p>
+<blockquote>
+<ul>
+<li>在defined队列中只存在两种：<code>name=moduleName</code>的Module和<code>define(name,deps,callback)</code>定义出来的<code>name=name</code>的Module。(moduleName是指deps=[“../jquery-1.12.3”,”zepto”]中deps[i]指定的模块名).</li>
+<li>在registry队列比defined多了一种匿名Module。所有的Module都是从registry移到defined队列中的。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3 id="3-require-js关键函数"><a href="#3-require-js关键函数" class="headerlink" title="3. require.js关键函数"></a>3. require.js关键函数</h3><p>关键函数：completeLoad</p>
+<pre><code>completeLoad: function (moduleName) {
+    /***/
+    takeGlobalQueue();
+
+    while (defQueue.length) {
+        args = defQueue.shift();
+        /***/
+        callGetModule(args);
+    }
+    context.defQueueMap = {};
+
+    mod = getOwn(registry, moduleName);
+
+    if (!found &amp;&amp; !hasProp(defined, moduleName) &amp;&amp; mod &amp;&amp; !mod.inited) {
+        /***/
+        callGetModule([moduleName, (shim.deps || []), shim.exportsFn]);
+    }
+    checkLoaded();
+}
+</code></pre><blockquote>
+<p>completeLoad函数干了两件事：</p>
+</blockquote>
+<blockquote>
+<ol>
+<li>如果当前js文件调用了define(name,deps,callback)，在registry队列中取出或者新建<code>id=name</code>的Module，并调用init(deps,callback);</li>
+<li>如果在当前js文件中没有define(name=moduleName,deps,callback),那就模拟一次define(name=moduleName,deps,callback)。</li>
+</ol>
+</blockquote>
+<p>关键函数：checkLoaded()</p>
+<pre><code>function checkLoaded() {
+    /***/
+    //Figure out the state of all the modules.
+    eachProp(enabledRegistry, function (mod) {
+        var map = mod.map,
+            modId = map.id;
+
+        //Skip things that are not enabled or in error state.
+        if (!mod.enabled) { return;}
+
+        if (!map.isDefine) { reqCalls.push(mod);}
+
+        if (!mod.error) {
+            //If the module should be executed, and it has not
+            //been inited and time is up, remember it.
+            if (!mod.inited &amp;&amp; expired) {
+                if (hasPathFallback(modId)) {
+                    usingPathFallback = true;
+                    stillLoading = true;
+                } else {
+                    noLoads.push(modId);
+                    removeScript(modId);
+                }
+            }
+            /***/
+        }
+    });
+
+    if (expired &amp;&amp; noLoads.length) {
+        //If wait time expired, throw error of unloaded modules.
+        err = makeError(&apos;timeout&apos;, &apos;Load timeout for modules: &apos; + noLoads, null, noLoads);
+        err.contextName = context.contextName;
+        return onError(err);
+    }
+
+    if ((!expired || usingPathFallback) &amp;&amp; stillLoading) {
+        //Something is still waiting to load. Wait for it, but only
+        //if a timeout is not already in effect.
+        if ((isBrowser || isWebWorker) &amp;&amp; !checkLoadedTimeoutId) {
+            checkLoadedTimeoutId = setTimeout(function () {
+                checkLoadedTimeoutId = 0;
+                checkLoaded();
+            }, 50);
+        }
+    }
+}
+</code></pre><blockquote>
+<p>checkLoaded函数不断检查enabledRegistry队列，在上面提到，enabledRegistry队列中，<code>inited=undefined</code>的Module是正在被加载的js模块，如果超时后，依然有<code>inited=undefined</code>的Module，将其加入到noLoads对象中，并且报错throw err；</p>
+</blockquote>
+<h3 id="4-require-js加载执行与入口函数流程：define、require"><a href="#4-require-js加载执行与入口函数流程：define、require" class="headerlink" title="4. require.js加载执行与入口函数流程：define、require"></a>4. require.js加载执行与入口函数流程：define、require</h3><h4 id="require-js加载执行"><a href="#require-js加载执行" class="headerlink" title="require.js加载执行"></a>require.js加载执行</h4><p>require.js执行过程中调用了两次：</p>
+<ol>
+<li>req({}):创建contexts[“_”]执行上下文</li>
+<li>req(cfg):在执行这行代码之前，之前已将data-main指定的入口函数添加到cfg.deps中，会执行一次<code>localRequire(cfg.deps,callback)</code>;具体执行见下面流程图。</li>
+</ol>
+<h3 id="require-js入口函数：require"><a href="#require-js入口函数：require" class="headerlink" title="require.js入口函数：require"></a>require.js入口函数：require</h3><p>先贴一张图：<br><img src="/images/requirejs/require.png"></p>
+<h3 id="require-js入口函数：define"><a href="#require-js入口函数：define" class="headerlink" title="require.js入口函数：define"></a>require.js入口函数：define</h3><p>对于define(name,deps,callback);</p>
+<ol>
+<li>globalDefQueue.push([name,deps,callback]);</li>
+<li>等待js加载完成调用completeLoad()(详情见上);</li>
+</ol>
+<h3 id="5-使用"><a href="#5-使用" class="headerlink" title="5. 使用"></a>5. 使用</h3><h4 id="定义模块"><a href="#定义模块" class="headerlink" title="定义模块"></a>定义模块</h4><blockquote>
+<p>AMD推崇：依赖前置，提前执行依赖。CMD推崇：依赖就近，哪里用到在哪里执行。</p>
+</blockquote>
+<p>定义模块的AMD写法：</p>
+<pre><code>define(&quot;c&quot;, [&quot;a&quot;,&quot;b&quot;], function() {
+    return c;
+});
+</code></pre><blockquote>
+<p>define(name,deps,callback);对应参数为模块名、依赖、exports函数（必须有返回值）。有意思的是当<code>typeof callback === &quot;object&quot;</code>的时候，该模块的输出就直接是该Object。这样是可以解释requirejs jsonp的调用。</p>
+</blockquote>
+<p>定义模块的CMD写法：</p>
+<pre><code>define(function(require, exports, module){
+    var a = require(&apos;a&apos;);
+    //a.dosomething();
+    var b = require(&apos;b&apos;);
+    //b.dosomething();
+    module.exports = {myModule: 1};
+})
+</code></pre><blockquote>
+<p>CMD写法，在<code>define(callback)</code>,如果只有callback，define函数会使用<code>Function.prototype.toString()</code>先遍历一遍<code>callback</code>,获取其中的<code>require()</code>,把依赖push到deps中。实质上还是一种依赖前置。<a href="http://requirejs.org/docs/whyamd.html#sugar" target="_blank" rel="noopener">http://requirejs.org/docs/whyamd.html#sugar</a><br>在define中，如果监测到 <code>isArray(deps)===fasle</code>，且callback为函数，则为deps赋值为[‘require’,’exports’,’module’];name没定义即设置为moduleName</p>
+</blockquote>
+<blockquote>
+<p>如果define(deps,callback)，采用匿名，那么默认会定义为<code>name=moduleName</code>，并且一般这种js都是作为依赖被加载，那么callback会立即执行，返回模块的结果。很多项目中一种使用这种方式，这样可以做到定义和文件名相关的模块的同时callback代码执行。</p>
+</blockquote>
+<h4 id="引入模块"><a href="#引入模块" class="headerlink" title="引入模块"></a>引入模块</h4><pre><code>require([&quot;jquery&quot;], function($) {
+    //do something with $
+});
+</code></pre><h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>requirejs的配置项有很多，这里介绍几种常用的。细节可以看：<a href="http://requirejs.org/docs/api.html#config" target="_blank" rel="noopener">http://requirejs.org/docs/api.html#config</a>和<a href="https://segmentfault.com/a/1190000002401665" target="_blank" rel="noopener">https://segmentfault.com/a/1190000002401665</a>,<a href="https://github.com/amdjs/amdjs-api/wiki/Common-Config" target="_blank" rel="noopener">https://github.com/amdjs/amdjs-api/wiki/Common-Config</a></p>
+<p>注意：paths的配置可以执向一个文件也可以是一个路径的简写</p>
+<pre><code>require.config({
+    //设置查找一个模块的基础路径，默认是data-main指定的。
+    baseUrl: &quot;/another/path&quot;,
+    //设置模块对应路径
+    paths: {
+        &quot;some&quot;: &quot;some/v1.0&quot;
+    },
+    //requirejs对不支持AMD规范的模块的管理配置
+    shim: {
+        &apos;backbone&apos;: {
+            //These script dependencies should be loaded before loading
+            //backbone.js
+            deps: [&apos;underscore&apos;, &apos;jquery&apos;],
+            //Once loaded, use the global &apos;Backbone&apos; as the
+            //module value.
+            exports: &apos;Backbone&apos;
+        },
+        &apos;underscore&apos;: {
+            exports: &apos;_&apos;
+        },
+        &apos;foo&apos;: {
+            deps: [&apos;bar&apos;],
+            exports: &apos;Foo&apos;,
+            init: function (bar) {
+                return this.Foo.noConflict();
+            }
+        }
+    }
+});
+</code></pre><blockquote>
+<p>require.config(cfg) =&gt; require(cfg)，内容的实现就是调用一次require函数。</p>
+</blockquote>
+<h3 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h3><p>requirejs有很多插件，如domready、text、jsonp等，见<a href="https://github.com/jrburke/requirejs/wiki/Plugins" target="_blank" rel="noopener">https://github.com/jrburke/requirejs/wiki/Plugins</a></p>
+<p>下面是text.js插件的使用:</p>
+<pre><code>require([&quot;some/module&quot;, &quot;text!some/module.html&quot;, &quot;text!some/module.css&quot;],
+    function(module, html, css) {
+
+    }
+);
+</code></pre><blockquote>
+<p>对于”text!some/module.html”,requirejs会判断moduleName中否包含”!”,如果包含，”!”之前的就是插件，会去请求text.js插件加载’some/modudle.html’。(在fetch()中有实现；text.js放至于baseUrl下。)</p>
+</blockquote>
+<h3 id="requirejs-jsonp"><a href="#requirejs-jsonp" class="headerlink" title="requirejs jsonp"></a>requirejs jsonp</h3><pre><code>require([&quot;http://map.baidu.com/event/interfaces/pf/info?callback=define&quot;], function(data){
+    console.log(data);
+});
+
+//结果:
+{
+    &quot;errno&quot;: 0,
+    &quot;errmsg&quot;: &quot;Success&quot;,
+    &quot;data&quot;: {}
+}
+</code></pre><blockquote>
+<p>解释：只有当jsonp返回的data是对象的时候，才能有requirejs的调用。<br>这种实现逻辑是:URL返回的结果是define(data),（经过层层逻辑），会创建一个key为URL，exports为data的Module。这样该URL模块的输出为data，作为参数传入到require(deps,callback)中。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/requirejs-amd/" rel="tag"># requirejs amd</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/17/devtool_detect/" rel="next" title="监测Developer Tool是否打开">
+                <i class="fa fa-chevron-left"></i> 监测Developer Tool是否打开
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/09/async_loading_text/" rel="prev" title="html异步加载文本以及onload、onerror的触发">
+                html异步加载文本以及onload、onerror的触发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#requirejs-源码与架构分析"><span class="nav-text">requirejs 源码与架构分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-综述"><span class="nav-text">1. 综述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据结构"><span class="nav-text">2. 数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#requirejs全局变量"><span class="nav-text">requirejs全局变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Module模块"><span class="nav-text">Module模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#context上下文"><span class="nav-text">context上下文</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-require-js关键函数"><span class="nav-text">3. require.js关键函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-require-js加载执行与入口函数流程：define、require"><span class="nav-text">4. require.js加载执行与入口函数流程：define、require</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#require-js加载执行"><span class="nav-text">require.js加载执行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#require-js入口函数：require"><span class="nav-text">require.js入口函数：require</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#require-js入口函数：define"><span class="nav-text">require.js入口函数：define</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-使用"><span class="nav-text">5. 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义模块"><span class="nav-text">定义模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#引入模块"><span class="nav-text">引入模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插件"><span class="nav-text">插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#requirejs-jsonp"><span class="nav-text">requirejs jsonp</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2015/08/20/requirejs/';
+        this.page.identifier = '2015/08/20/requirejs/';
+        this.page.title = 'requirejs 源码与架构分析';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

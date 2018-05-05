@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="仿Android Toast的html的实现在Android上比较好用的就有一个Toast提示框，今天我们用js在html中模仿这种提示框 目前有两种版本的实现：jQuery版本与纯js版本">
+<meta name="keywords" content="toast html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Html模仿Android Toast">
+<meta property="og:url" content="http://teazean.com/2014/06/20/toast/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="仿Android Toast的html的实现在Android上比较好用的就有一个Toast提示框，今天我们用js在html中模仿这种提示框 目前有两种版本的实现：jQuery版本与纯js版本">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.826Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Html模仿Android Toast">
+<meta name="twitter:description" content="仿Android Toast的html的实现在Android上比较好用的就有一个Toast提示框，今天我们用js在html中模仿这种提示框 目前有两种版本的实现：jQuery版本与纯js版本">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2014/06/20/toast/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Html模仿Android Toast | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2014/06/20/toast/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Html模仿Android Toast
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-06-20 00:00:00" itemprop="dateCreated datePublished" datetime="2014-06-20T00:00:00+08:00">2014-06-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2014/06/20/toast/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2014/06/20/toast/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="仿Android-Toast的html的实现"><a href="#仿Android-Toast的html的实现" class="headerlink" title="仿Android Toast的html的实现"></a>仿Android Toast的html的实现</h2><p>在Android上比较好用的就有一个Toast提示框，今天我们用js在html中模仿这种提示框</p>
+<p>目前有两种版本的实现：jQuery版本与纯js版本</p>
+<a id="more"></a>
+<h3 id="jQuery版本"><a href="#jQuery版本" class="headerlink" title="jQuery版本"></a>jQuery版本</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Toast = <span class="function"><span class="keyword">function</span> (<span class="params">config</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.context = config.context == <span class="literal">null</span> ? $(<span class="string">'body'</span>) : config.context;<span class="comment">//上下文</span></span><br><span class="line">    <span class="keyword">this</span>.message = config.message;<span class="comment">//显示内容</span></span><br><span class="line">    <span class="keyword">this</span>.time = config.time == <span class="literal">null</span> ? <span class="number">3000</span> : config.time;<span class="comment">//持续时间</span></span><br><span class="line">    <span class="keyword">if</span> (!config.left) config.left = <span class="string">'45%'</span>;<span class="comment">//原来默认left:"50%"</span></span><br><span class="line">    <span class="keyword">if</span> (!config.top) config.top = <span class="string">'40%'</span>;<span class="comment">//top:"61.8%"</span></span><br><span class="line">    <span class="keyword">this</span>.left = config.left;<span class="comment">//距容器左边的距离</span></span><br><span class="line">    <span class="keyword">this</span>.top = config.top;<span class="comment">//距容器上方的距离</span></span><br><span class="line">    <span class="keyword">this</span>.init();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> msgEntity;</span><br><span class="line">Toast.prototype = &#123;</span><br><span class="line">    <span class="comment">//初始化显示的位置内容等</span></span><br><span class="line">    init: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        $(<span class="string">"#toastMessage"</span>).remove();</span><br><span class="line">        <span class="comment">//设置消息体</span></span><br><span class="line">        <span class="keyword">var</span> msgDIV = <span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line">        msgDIV.push(<span class="string">'&lt;div id="toastMessage"&gt;'</span>);</span><br><span class="line">        msgDIV.push(<span class="string">'&lt;span&gt;'</span> + <span class="keyword">this</span>.message + <span class="string">'&lt;/span&gt;'</span>);</span><br><span class="line">        msgDIV.push(<span class="string">'&lt;/div&gt;'</span>);</span><br><span class="line">        msgEntity = $(msgDIV.join(<span class="string">''</span>)).appendTo(<span class="keyword">this</span>.context);</span><br><span class="line">        <span class="comment">//设置消息样式</span></span><br><span class="line">        <span class="keyword">var</span> left = <span class="keyword">this</span>.left == <span class="literal">null</span> ? <span class="keyword">this</span>.context.width() / <span class="number">2</span> - msgEntity.find(<span class="string">'span'</span>).width() / <span class="number">2</span> : <span class="keyword">this</span>.left;</span><br><span class="line">        <span class="keyword">var</span> top = <span class="keyword">this</span>.top == <span class="literal">null</span> ? <span class="string">'20px'</span> : <span class="keyword">this</span>.top;</span><br><span class="line">        msgEntity.css(&#123;<span class="attr">position</span>: <span class="string">'fixed'</span>, <span class="attr">top</span>: top, <span class="string">'z-index'</span>: <span class="string">'2000'</span>, <span class="attr">left</span>: left, <span class="string">'background-color'</span>: <span class="string">'black'</span>, <span class="attr">color</span>: <span class="string">'white'</span>, <span class="string">'font-size'</span>: <span class="string">'18px'</span>, <span class="attr">padding</span>: <span class="string">'10px'</span>, <span class="attr">margin</span>: <span class="string">'10px'</span>&#125;);</span><br><span class="line">        msgEntity.hide();</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">//显示动画</span></span><br><span class="line">    show: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        msgEntity.fadeIn(<span class="keyword">this</span>.time / <span class="number">2</span>);</span><br><span class="line">        msgEntity.fadeOut(<span class="keyword">this</span>.time / <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="js版本"><a href="#js版本" class="headerlink" title="js版本"></a>js版本</h3><p>此版本是我在写chrome插件的时候根据自己的需求改写的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Toast = <span class="function"><span class="keyword">function</span> (<span class="params">config</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.context = config.context == <span class="literal">null</span> ? <span class="built_in">document</span>.body : config.context;<span class="comment">//上下文</span></span><br><span class="line">    <span class="keyword">this</span>.message = config.message;<span class="comment">//显示内容</span></span><br><span class="line">    <span class="keyword">this</span>.time = config.time == <span class="literal">null</span> ? <span class="number">20000</span> : config.time;<span class="comment">//持续时间</span></span><br><span class="line">    <span class="keyword">if</span> (!config.left) config.left = <span class="string">'63%'</span>;<span class="comment">//原来默认left:"50%"</span></span><br><span class="line">    <span class="keyword">if</span> (!config.top) config.top = <span class="string">'10%'</span>;<span class="comment">//top:"61.8%"</span></span><br><span class="line">    <span class="keyword">this</span>.left = config.left;<span class="comment">//距容器左边的距离</span></span><br><span class="line">    <span class="keyword">this</span>.top = config.top;<span class="comment">//距容器上方的距离</span></span><br><span class="line">    <span class="keyword">this</span>.init();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Toast.prototype = &#123;</span><br><span class="line">    <span class="comment">//初始化显示的位置内容等</span></span><br><span class="line">    init: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> old=<span class="built_in">document</span>.getElementById(<span class="string">'toastMessage'</span>);</span><br><span class="line">        <span class="keyword">if</span>(old)&#123;</span><br><span class="line">            old.parentNode.removeChild(old);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//设置消息体</span></span><br><span class="line">        <span class="keyword">var</span> msgDIV=<span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">        msgDIV.id=<span class="string">"toastMessage"</span>;</span><br><span class="line">        msgDIV.innerHTML=<span class="string">'&lt;span&gt;'</span> + <span class="keyword">this</span>.message + <span class="string">'&lt;/span&gt;'</span>;</span><br><span class="line">        <span class="keyword">this</span>.context.appendChild(msgDIV);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置消息样式</span></span><br><span class="line">        <span class="keyword">var</span> left = <span class="keyword">this</span>.left == <span class="string">""</span> ? <span class="built_in">parseInt</span>(<span class="keyword">this</span>.context.style.width) / <span class="number">2</span> - <span class="built_in">parseInt</span>(msgDIV.getElementsByTagName(<span class="string">'span'</span>)[<span class="number">0</span>].style.width)/ <span class="number">2</span> : <span class="keyword">this</span>.left;</span><br><span class="line">        <span class="keyword">var</span> top = <span class="keyword">this</span>.top == <span class="string">""</span> ? <span class="string">'20px'</span> : <span class="keyword">this</span>.top;</span><br><span class="line">        msgDIV.style.position=<span class="string">"fixed"</span>;</span><br><span class="line">        msgDIV.style.top=top;</span><br><span class="line">        msgDIV.style.zIndex=<span class="string">"6000"</span>;</span><br><span class="line">        msgDIV.style.left=left;</span><br><span class="line">        msgDIV.style.backgroundColor=<span class="string">"black"</span>;</span><br><span class="line">        msgDIV.style.color=<span class="string">"white"</span>;</span><br><span class="line">        msgDIV.style.fontSize=<span class="string">"18px"</span>;</span><br><span class="line">        msgDIV.style.padding=<span class="string">"10px"</span>;</span><br><span class="line">        msgDIV.style.margin=<span class="string">"10px"</span>;</span><br><span class="line">        msgDIV.style.display=<span class="string">"none"</span>;</span><br><span class="line">        msgDIV.style.opacity=<span class="string">"0.85"</span>;</span><br><span class="line">        msgDIV.style.borderRadius=<span class="string">"10px"</span>;</span><br><span class="line">        msgDIV.style.maxWidth=<span class="string">"32%"</span>;</span><br><span class="line">        msgDIV.style.whiteSpace=<span class="string">"pre-wrap"</span>;</span><br><span class="line">        msgDIV.style.wordWrap=<span class="string">"break-word"</span>;</span><br><span class="line">        msgDIV.style.wordBreak=<span class="string">"keep-all"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> spans=msgDIV.getElementsByTagName(<span class="string">'span'</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;spans.length;i++)&#123;</span><br><span class="line">        	spans[i].style.padding=<span class="string">'0'</span>;</span><br><span class="line">        	spans[i].style.margin=<span class="string">'0'</span>;</span><br><span class="line">        	spans[i].style.color=<span class="string">"white"</span>;</span><br><span class="line">        	spans[i].style.backgroundColor=<span class="string">"black"</span>;</span><br><span class="line">        	spans[i].style.fontSize=<span class="string">"18px"</span>;</span><br><span class="line">        	spans[i].style.fontFamily=<span class="string">"Consolas,微软雅黑"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        msgDIV.getElementsByTagName(<span class="string">'span'</span>)[<span class="number">0</span>].style.padding=<span class="string">"0"</span>;</span><br><span class="line">        msgDIV.getElementsByTagName(<span class="string">'span'</span>)[<span class="number">0</span>].style.margin=<span class="string">"0"</span>;</span><br><span class="line">        <span class="keyword">var</span> ps=msgDIV.getElementsByTagName(<span class="string">'p'</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;ps.length;i++)&#123;</span><br><span class="line">        	ps[i].style.padding=<span class="string">'0'</span>;</span><br><span class="line">        	ps[i].style.margin=<span class="string">'0'</span>;</span><br><span class="line">        	ps[i].style.color=<span class="string">"white"</span>;</span><br><span class="line">        	ps[i].style.backgroundColor=<span class="string">"black"</span>;</span><br><span class="line">        	ps[i].style.fontSize=<span class="string">"18px"</span>;</span><br><span class="line">        	ps[i].style.fontFamily=<span class="string">"Consolas,微软雅黑"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        msgDIV.onclick=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        	 msgDIV.style.display=<span class="string">"none"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">//显示动画</span></span><br><span class="line">    show: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> msgDIV=<span class="built_in">document</span>.getElementById(<span class="string">'toastMessage'</span>);</span><br><span class="line">        msgDIV.style.display=<span class="string">"block"</span>;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            msgDIV.style.display=<span class="string">"none"</span>;</span><br><span class="line">        &#125;,<span class="keyword">this</span>.time);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>值得注意：无论哪一种实现都需要用户根据自己的系统进行修改！</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/toast-html/" rel="tag"># toast html</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/06/20/chrome_extension_dev/" rel="next" title="Chrome Extension Development-LastingMemory">
+                <i class="fa fa-chevron-left"></i> Chrome Extension Development-LastingMemory
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/31/fonticon/" rel="prev" title="fonticon快速制作">
+                fonticon快速制作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#仿Android-Toast的html的实现"><span class="nav-text">仿Android Toast的html的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jQuery版本"><span class="nav-text">jQuery版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#js版本"><span class="nav-text">js版本</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2014/06/20/toast/';
+        this.page.identifier = '2014/06/20/toast/';
+        this.page.title = 'Html模仿Android Toast';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

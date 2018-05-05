@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录： WebWorker ServiceWorker fetch api cache api webSocket  1. WebWorker https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API http://www.html5rocks.com/zh/tutorials/workers/basics/ Web Work">
+<meta name="keywords" content="html5">
+<meta property="og:type" content="article">
+<meta property="og:title" content="html5 api">
+<meta property="og:url" content="http://teazean.com/2016/03/28/html5/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="目录： WebWorker ServiceWorker fetch api cache api webSocket  1. WebWorker https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API http://www.html5rocks.com/zh/tutorials/workers/basics/ Web Work">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.833Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="html5 api">
+<meta name="twitter:description" content="目录： WebWorker ServiceWorker fetch api cache api webSocket  1. WebWorker https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API http://www.html5rocks.com/zh/tutorials/workers/basics/ Web Work">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2016/03/28/html5/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>html5 api | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2016/03/28/html5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">html5 api
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-03-28 00:00:00" itemprop="dateCreated datePublished" datetime="2016-03-28T00:00:00+08:00">2016-03-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/03/28/html5/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/03/28/html5/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="目录："><a href="#目录：" class="headerlink" title="目录："></a>目录：</h2><ol>
+<li>WebWorker</li>
+<li>ServiceWorker</li>
+<li>fetch api</li>
+<li>cache api</li>
+<li>webSocket</li>
+</ol>
+<h3 id="1-WebWorker"><a href="#1-WebWorker" class="headerlink" title="1. WebWorker"></a>1. WebWorker</h3><ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API</a></li>
+<li><a href="http://www.html5rocks.com/zh/tutorials/workers/basics/" target="_blank" rel="noopener">http://www.html5rocks.com/zh/tutorials/workers/basics/</a></li>
+<li><p>Web Workers are a mechanism by which a script operation can be made to run in a background thread separate from the main execution thread of a web application. The advantage of this is that laborious processing can be performed in a separate thread, allowing the main (usually the UI) thread to run without being blocked/slowed down.</p>
+<blockquote>
+<p>Web Workers是一个可以独立于一个webapp主进程的后台线程。Web Workers独立线程允许ui主线程不卡顿。</p>
+<a id="more"></a></blockquote>
+</li>
+<li>Web Worker分为专用worker（DedicatedWorker）、共享worker（SharedWorker）、ServiceWorker、AudioWorkers、ChromeWorkers。DedicatedWorker和页面相关，每个页面启动自己的worker；SharedWorker和domain相关联；ServiceWorker和domain+path相关；ChromeWorkers是用来开发浏览器扩展的。</li>
+<li>Web Worker的全局作用域是self，不同于window，操作不了dom操作，访问不了window上的属性和方法；但可以通过self访问一些cache、indexDB、*Storage、webSockets等。</li>
+<li><p>Web Worker与ui主进程通过postmessage进行通信。</p>
+<p> DedicatedWorkers Demo：</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;webworker&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        if(window.Worker) {
+            var worker = new Worker(&quot;worker.js&quot;);
+            worker.addEventListener(&quot;message&quot;, function(e) {
+
+            });
+
+            worker.postMessage({type: &quot;url&quot;, url: location.href});
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p> //worker.js</p>
+<pre><code>var timestamp = new Date().getTime();
+self.addEventListener(&apos;message&apos;, function(e) {
+    console.log(timestamp);
+      self.postMessage(e.data);
+}, false);
+</code></pre></li>
+</ol>
+<h3 id="2-ServiceWorkers"><a href="#2-ServiceWorkers" class="headerlink" title="2. ServiceWorkers"></a>2. ServiceWorkers</h3><ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API</a></li>
+<li><a href="http://www.html5rocks.com/en/tutorials/service-worker/introduction/" target="_blank" rel="noopener">http://www.html5rocks.com/en/tutorials/service-worker/introduction/</a></li>
+<li><p>ServiceWorkers essentially act as proxy servers that sit between web applications, and the browser and network (when available). They are intended to (amongst other things) enable the creation of effective offline experiences, intercepting network requests and taking appropriate action based on whether the network is available and updated assets reside on the server.</p>
+<blockquote>
+<p>ServiceWorkers作用相当于在多个webApps与浏览器、服务器之间做一层代理；它允许离线应用的实现、拦截请求并基于是否有网络做一些操作（从缓存里读取数据或者从服务端重新拉去）。</p>
+</blockquote>
+</li>
+<li>ServiceWorker作为一个worker是不能直接操作dom的，但是可以通过message api与主ui进程交互。</li>
+<li>ServiceWorker是为了解决AppCache的一些局限，比如多页应用等。（目前在使用AppCache的地方，会提示建议使用ServiceWorker）</li>
+<li><p>A service worker has a lifecycle which is completely separate from your web page.</p>
+<blockquote>
+<p>一个Service Worker的生命周期是完全独立于页面的。只和<code>origin+path</code>相关，可以服务于多个页面。</p>
+</blockquote>
+<p> demo-html:</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;service worker&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;test&quot;&gt;serviceworker&lt;/div&gt;
+    &lt;script&gt;
+        if(navigator.serviceWorker) {
+            var a = navigator.serviceWorker.register(&quot;service.js&quot;).then(function(registration) {
+                console.log(&quot;register success&quot;);
+            }).catch(function(err) {
+                console.log(err);
+            });
+
+            setTimeout(function() {
+                fetch(&quot;data.json&quot;).then(function(data) {
+                    console.log(data);
+                });
+            }, 2000);
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p> demo-js:</p>
+<pre><code>var cache,
+    cacheList = [
+        &quot;data.json&quot;
+    ];
+self.addEventListener(&quot;install&quot;, function(evt) {
+    caches.open(&quot;service&quot;).then(function(cache) {
+        cache.addAll(cacheList);
+    });
+});
+self.addEventListener(&quot;fetch&quot;, function(evt) {
+    var res = caches.match(evt.request).then(function(response) {
+        if (response) {
+            console.log(&quot;cached hitted;&quot;);
+            return response;
+        }
+
+        return fetch(evt.request);
+    });
+    evt.respondWith(res);
+});
+</code></pre></li>
+</ol>
+<h3 id="3-fetch-api"><a href="#3-fetch-api" class="headerlink" title="3. fetch api"></a>3. fetch api</h3><ol>
+<li><a href="http://www.w3ctech.com/topic/854?&amp;from=androidqq" target="_blank" rel="noopener">http://www.w3ctech.com/topic/854?&amp;from=androidqq</a></li>
+<li>XMLHttpRequest对象把所有的操作、状态融合到一个对象里，不符合职责分离的原则；并且基于事件的操作与目前的Promise模式不太搭；</li>
+<li>fetch api正式基于这样的优化设计出来的。fetch api完美的支持Promise；并且fetch api可以与ServiceWorker结合改善离线体验、保持可扩展性。</li>
+<li>fetch api定了3个对象类Headers、Request、Response对应请求头、请求、请求结果三个对象；以及一个方法接口fetch来调用执行fetch请求。</li>
+<li><p>fetch api的使用只能是https或者localhost</p>
+<p> demo，XMLHttpRequest和fetch对于网络资源请求可以实现同样的效果，只是形式不一样，并且fetch可以与ServiceWorkers结合：</p>
+<pre><code>var xhr = new XMLHttpRequest();
+xhr.open(&quot;get&quot;, &quot;data.json&quot;, true);
+xhr.onreadystatechange = function() {
+    if(xhr.readyState == 4) {
+        console.log(&quot;xhr:&quot;);
+        console.log(xhr.responseText);
+    }
+}
+xhr.send(null);
+
+fetch(&quot;data.json&quot;).then(function(res) {
+    console.log(&quot;fetch:&quot;);
+    console.log(res);
+});
+
+//复杂的fetch
+var headers = new Headers({
+    method: &quot;get&quot;
+});
+var request = new Request(&quot;data.json&quot;, headers);
+fetch(request).then(function(res) {
+    console.log(&quot;fetch2:&quot;);
+    console.log(res);
+});
+</code></pre></li>
+</ol>
+<h3 id="4-cache-api"><a href="#4-cache-api" class="headerlink" title="4. cache api"></a>4. cache api</h3><ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/API/Cache</a></li>
+<li>cache api的使用只能是https或者localhost</li>
+<li>cache api是和origin相关的。</li>
+<li><p>The Cache interface provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle.</p>
+<blockquote>
+<p>Cache Api是Request/Response直接映射关系的缓存的机制；可以作为ServiceWorker生存周期的一部分。</p>
+</blockquote>
+</li>
+<li><p>Cache Api的接口：add、addAll、put、match、keys.</p>
+<p> demo:</p>
+<pre><code>caches.open(&quot;demo&quot;).then(function(cache) {
+    console.log(cache);
+    cache.add(&quot;data.json&quot;).then(function() {
+        cache.match(&quot;data.json&quot;).then(function(response) {
+            console.log(response);
+        });
+    });
+});
+</code></pre></li>
+</ol>
+<h3 id="5-WebSocket"><a href="#5-WebSocket" class="headerlink" title="5. WebSocket"></a>5. WebSocket</h3><ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers</a></li>
+<li><a href="https://tools.ietf.org/html/rfc6455" target="_blank" rel="noopener">https://tools.ietf.org/html/rfc6455</a></li>
+<li><p>The protocol consists of an opening handshake<br>followed by basic message framing, layered over TCP.  The goal of<br>this technology is to provide a mechanism for browser-based<br>applications that need two-way communication with servers that does<br>not rely on opening multiple HTTP connections (e.g., using<br>XMLHttpRequest or &lt;iframe&gt;s and long polling).</p>
+<pre><code>&gt;这个协议基于TCP组成，先是通过一个开放的handshake，随后才是基本的数据序列。这个技术的目标是提供一个基于浏览器的应用与服务端的双向通信，这项技术并不依赖于多个HTTP连接，使用其他技术如XMLHttpRequest或者iframes或者长轮询；
+</code></pre></li>
+<li><p>The WebSocket Protocol is an independent TCP-based protocol.  Its<br>only relationship to HTTP is that its handshake is interpreted by<br>HTTP servers as an Upgrade request.</p>
+<pre><code>&gt;WebSocket协议是一个完全独立的基于TCP的协议，它与Http的关系仅仅是它的handshake是通过Http来发送协议升级请求的。
+</code></pre></li>
+<li>目前WebSocket协议handshake实现利用现有的Http基础来实现的，但并不表示未来WebSocket将局限于Http。</li>
+<li>创建WebSocket连接，将分为2步：第一步，基于Http的handshake，handshake即是处理WebSocket基于http的连接的建立（通过http头信息，升级http协议到websocket，并建立连接）；第二个，基于tcp正常的数据传输。</li>
+<li><p>WebSocket和Http协议一样都是应用层协议，而socket只是操作tcp、udp的接口协议。</p>
+<p> demo-server:</p>
+<pre><code>var WebSocketServer = require(&apos;ws&apos;).Server,
+    server = new WebSocketServer({port: 8126});
+
+server.on(&apos;connection&apos;, function connection(ws) {
+    console.log(&quot;connected&quot;);
+    ws.on(&apos;message&apos;, function incoming(message) {
+        console.log(&apos;received: %s;&apos;, message);
+        ws.send(&quot;something&quot;);
+    });
+});
+</code></pre><p> demo-browser:</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;web socket
+    &lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script&gt;
+        var connection = new WebSocket(&quot;ws://127.0.0.1:8126&quot;);
+        connection.onopen = function(evt) {
+            console.log(&quot;open&quot;);
+            connection.send(&quot;test&quot;);
+        }
+        connection.onmessage = function(evt) {
+            console.log(&quot;message&quot;);
+        }
+        connection.onclose = function(evt) {
+            console.log(&quot;close&quot;);
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/html5/" rel="tag"># html5</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/22/javascript_ninja/" rel="next" title="javascript、css阅读摘要">
+                <i class="fa fa-chevron-left"></i> javascript、css阅读摘要
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/27/vue/" rel="prev" title="vue 源码阅读">
+                vue 源码阅读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录："><span class="nav-text">目录：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-WebWorker"><span class="nav-text">1. WebWorker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-ServiceWorkers"><span class="nav-text">2. ServiceWorkers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-fetch-api"><span class="nav-text">3. fetch api</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-cache-api"><span class="nav-text">4. cache api</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-WebSocket"><span class="nav-text">5. WebSocket</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2016/03/28/html5/';
+        this.page.identifier = '2016/03/28/html5/';
+        this.page.title = 'html5 api';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

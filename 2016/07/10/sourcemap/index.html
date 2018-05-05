@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="sourcemap与webpack-sourcemap的实现 vlq和Base64 vlq sourcemap //# sourceMappingURL和//# sourceUrl sourcemap in webpack  beforewebkit-sourcemap初步介绍：http://www.html5rocks.com/en/tutorials/developertools/source">
+<meta name="keywords" content="sourcemap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sourcemap与webpack-sourcemap的实现">
+<meta property="og:url" content="http://teazean.com/2016/07/10/sourcemap/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="sourcemap与webpack-sourcemap的实现 vlq和Base64 vlq sourcemap //# sourceMappingURL和//# sourceUrl sourcemap in webpack  beforewebkit-sourcemap初步介绍：http://www.html5rocks.com/en/tutorials/developertools/source">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.835Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sourcemap与webpack-sourcemap的实现">
+<meta name="twitter:description" content="sourcemap与webpack-sourcemap的实现 vlq和Base64 vlq sourcemap //# sourceMappingURL和//# sourceUrl sourcemap in webpack  beforewebkit-sourcemap初步介绍：http://www.html5rocks.com/en/tutorials/developertools/source">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2016/07/10/sourcemap/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>sourcemap与webpack-sourcemap的实现 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2016/07/10/sourcemap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">sourcemap与webpack-sourcemap的实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-07-10 00:00:00" itemprop="dateCreated datePublished" datetime="2016-07-10T00:00:00+08:00">2016-07-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/07/10/sourcemap/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/07/10/sourcemap/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="sourcemap与webpack-sourcemap的实现"><a href="#sourcemap与webpack-sourcemap的实现" class="headerlink" title="sourcemap与webpack-sourcemap的实现"></a>sourcemap与webpack-sourcemap的实现</h2><ol>
+<li>vlq和Base64 vlq</li>
+<li>sourcemap</li>
+<li><code>//# sourceMappingURL</code>和<code>//# sourceUrl</code></li>
+<li>sourcemap in webpack</li>
+</ol>
+<h3 id="before"><a href="#before" class="headerlink" title="before"></a>before</h3><p>webkit-sourcemap初步介绍：<a href="http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-sourceurl" target="_blank" rel="noopener">http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-sourceurl</a>，介绍了sourcemap的基本实现，包括sourcemap的格式、编码以及sourceMapURL、sourceURL、和profiles里面的displayName（最新版chrome好像已经不支持了。）</p>
+<p>google关于定义sourcemap v3的docs <a href="https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/edit?hl=en_US&amp;pli=1&amp;pli=1" target="_blank" rel="noopener">https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/edit?hl=en_US&amp;pli=1&amp;pli=1</a></p>
+<p>正常来说通过sourceMapURL指定的sources中的路径从服务器找源文件。如果无法定位就是用sourcesContent对应的内容。如果是从sourcesContent获取的源码内容，那么这个source-map文件就是一个完全自包含的source-map（包含映射关系，包含源文件内容）。</p>
+<p>完全自包含的source-map文件常用dataUrl的形式，这样浏览器就能从编译之后的js文件（末行是source-map的dataUrl）中完全解析出源文件，并不依赖其他文件。<br><a id="more"></a></p>
+<h3 id="1-vlq与base64-vlq：variable-length-quantity"><a href="#1-vlq与base64-vlq：variable-length-quantity" class="headerlink" title="1. vlq与base64 vlq：variable length quantity"></a>1. vlq与base64 vlq：variable length quantity</h3><ol>
+<li><a href="https://en.wikipedia.org/wiki/Variable-length_quantity" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Variable-length_quantity</a></li>
+<li><a href="https://blogs.msdn.microsoft.com/davidni/2016/03/14/source-maps-under-the-hood-vlq-base64-and-yoda/" target="_blank" rel="noopener">https://blogs.msdn.microsoft.com/davidni/2016/03/14/source-maps-under-the-hood-vlq-base64-and-yoda/</a></li>
+<li><a href="http://blog.allenm.me/2012/12/base64-vlq-encoding/" target="_blank" rel="noopener">http://blog.allenm.me/2012/12/base64-vlq-encoding/</a></li>
+<li>在线base64vlq：<a href="http://murzwin.com/base64vlq.html" target="_blank" rel="noopener">http://murzwin.com/base64vlq.html</a></li>
+</ol>
+<p>上面几篇文章讲的比较详细，总结一下：</p>
+<ol>
+<li>vlq是用8位字节码来表示一个数字的。base64vlq是使用base64原有的6bit来表示数字。</li>
+<li>以base64vlq为例，每一位字节的二进制第一位表示是否continue，如果1表示下一位字节和当前字节是表示一个数字，如果是0表示该一个字节就可表示一个数字；表示一个数字的一组字节中第一个字节的二进制最后一位表示正负，1表示在负，0表示正；</li>
+</ol>
+<p>以456为例展示一下从数字转换为base64vlq的过程：</p>
+<ol>
+<li>456的二进制为：111001000</li>
+<li>正数在最后一个补0，变为1110010000</li>
+<li>5位分组，分为11100 10000</li>
+<li>从低位到高位转换：1表示继续，0表示结束：结果为110000 011100</li>
+<li>分别对应base64为W和C</li>
+<li>结果就是WC</li>
+</ol>
+<h3 id="2-sourcemap使用base64vql进行位置定位"><a href="#2-sourcemap使用base64vql进行位置定位" class="headerlink" title="2. sourcemap使用base64vql进行位置定位"></a>2. sourcemap使用base64vql进行位置定位</h3><p>在sourcemap文件里：</p>
+<pre><code>{
+    version : 3, // soucemap的版本
+    file: &quot;out.js&quot;, // 对应的输出文件
+    sourceRoot : &quot;&quot;,
+    sources: [&quot;foo.js&quot;, &quot;bar.js&quot;], // 对应的源文件。
+    sourcesContent: [null, null], // 如果无法从服务器上定位sources中的文件，则从这个属性读取，如果从这个属性读取，该sourcemap是自包含的sourcemap。
+    names: [&quot;src&quot;, &quot;maps&quot;, &quot;are&quot;, &quot;fun&quot;], // 原来的变量标识
+    mappings: &quot;AAgBC,SAAQ,CAAEA&quot; // 位置对应表
+}
+</code></pre><p>关于sourcemap的属性可以从v3docs里查看：</p>
+<ol>
+<li>可以结合sources和sourcesContent生成自包含的sourcemap文件。例如webpack就是使用<code>sources: [&quot;webpack://app.vue&quot;]</code>类似的假地址使chrome无法定位源文件，转而使用sourcesContent，最终在浏览器sources面板有一个特定的目录<code>webpack://</code>。</li>
+</ol>
+<p>其中mappings用<code>;</code>表示分行，用<code>,</code>表示一个位置，一个位置的格式分5个:</p>
+<pre><code>　　- 第一位，表示这个位置在（转换后的代码的）的第几列。
+　　- 第二位，表示这个位置属于sources属性中的哪一个文件。
+　　- 第三位，表示这个位置属于转换前代码的第几行。
+　　- 第四位，表示这个位置属于转换前代码的第几列。
+　　- 第五位，表示这个位置属于names属性中的哪一个变量。（非必须）
+</code></pre><h3 id="3-sourceMappingURL和-sourceUrl"><a href="#3-sourceMappingURL和-sourceUrl" class="headerlink" title="3. //# sourceMappingURL和//# sourceUrl"></a>3. <code>//# sourceMappingURL</code>和<code>//# sourceUrl</code></h3><ol>
+<li><code>//# sourceMappingURL=/path/to/file.js.map</code>或者<code>//# sourceMappingURL=dataURL:base64</code>使用在文件的最后-行，指定map文件，可以使url，也可以是dataURL；</li>
+<li><code>//# sourceUrl=webpack:///./components/common-header.vue</code>是用在eval语句中的最后，当代码是在eval里执行的时候，可以在最后加上sourceURL，对eval里面的代码命名，然后我们就可以在dev-tools直接对命名后的eval进行调试。如<a href="https://www.thecssninja.com/demo/source_mapping/compile.html" target="_blank" rel="noopener">demo</a></li>
+<li>在eval执行的代码最后可以使用sourceURL对eval的代码块命名，也可以使用sourceMapURL（path/dataURL）找eval里面的代码块与源文件的对应关系</li>
+</ol>
+<h3 id="4-sourcemap-in-webpack"><a href="#4-sourcemap-in-webpack" class="headerlink" title="4. sourcemap in webpack"></a>4. sourcemap in webpack</h3><p>在webpack sourcemap里面有很多种配置，具体可以看<a href="https://webpack.github.io/docs/configuration.html#devtool" target="_blank" rel="noopener">文档</a>。这里介绍一下用过的几种：</p>
+<ol>
+<li>eval：loader转译之后代码都在eval里面执行，在eval后面添加sourceURL命名eval，并且调试对应的代码（在浏览器展示中）都是loader编译之后的代码。</li>
+<li><p>source-map:loader转译之后代码都在<strong>webpack_require</strong>闭包里面执行，非eval，在最后添加sourceMapURL=path；在浏览器展示中对应的是源文件（里面的mapping应该是webpack和loader的结合）。demo中使用的是webpack server，没在本地库见到生成的commons.js和commons.js.map，应该都在webpack server代理的内存里。(通过webpack命令跑出来的是有commons.js和commons.js.map)。</p>
+<blockquote>
+<p>commons.js.map是一个完全自包含的source-map文件，在sources与sourcesContent里定义了所有源文件的内容，感觉源文件与loader编译后（在浏览器执行的代码）并不是很严格的一一映射。（比如babel转码添加的pollyfill的代码在源文件中并没有映射）</p>
+</blockquote>
+<pre><code>{
+    &quot;version&quot;: 3,
+    &quot;sources&quot;: [&quot;webpack:///account.js&quot;, &quot;webpack:///./pages/account/main.js&quot;, &quot;webpack:///./components/common-lr-router.vue?7dbb*&quot;, &quot;webpack:///./components/common-lr-router.vue?ca26*&quot;, &quot;webpack:///./components/common-lr-router.vue?a5be&quot;, &quot;webpack:///./components/common-lr-router.vue?f2d1*&quot;, &quot;webpack:///line-selector.vue&quot;, &quot;webpack:///addInternal.vue&quot;, &quot;webpack:///app.vue?a737&quot;, &quot;webpack:///./components/form/line-selector.vue?3f48&quot;, &quot;webpack:///./pages/account/addInternal.vue?1145&quot;, &quot;webpack:///./pages/account/app.vue?4958&quot;, &quot;webpack:///./components/form/line-selector.vue?6234&quot;, &quot;webpack:///./pages/account/addInternal.vue?4b7d&quot;, &quot;webpack:///./pages/account/app.vue?0577&quot;, &quot;webpack:///./components/form/line-selector.vue&quot;, &quot;webpack:///./pages/account/addInternal.vue&quot;, &quot;webpack:///./pages/account/app.vue&quot;, &quot;webpack:///./components/form/line-selector.vue?639a&quot;, &quot;webpack:///./pages/account/addInternal.vue?94e5&quot;, &quot;webpack:///./pages/account/app.vue?c5dc&quot;],
+    &quot;names&quot;: [&quot;webpackJsonp&quot;, &quot;0&quot;, &quot;module&quot;, &quot;exports&quot;, &quot;__webpack_require__&quot;, &quot;_interopRequireDefault&quot;, &quot;obj&quot;, &quot;__esModule&quot;, &quot;default&quot;, &quot;_vue&quot;, &quot;_vue2&quot;, &quot;_app&quot;, &quot;_app2&quot;, &quot;_store&quot;, &quot;_store2&quot;, &quot;_vueRouter&quot;, &quot;_vueRouter2&quot;, &quot;_addInternal&quot;, &quot;_addInternal2&quot;, &quot;$&quot;, &quot;use&quot;, &quot;router&quot;, &quot;map&quot;, &quot;*&quot;, &quot;component&quot;, &quot;/addInternal&quot;, &quot;redirect&quot;, &quot;start&quot;, &quot;store&quot;, &quot;components&quot;, &quot;App&quot;, &quot;66&quot;, &quot;Object&quot;, &quot;defineProperty&quot;, &quot;value&quot;, &quot;data&quot;, &quot;111&quot;, &quot;push&quot;, &quot;id&quot;, &quot;version&quot;, &quot;sources&quot;, &quot;names&quot;, &quot;mappings&quot;, &quot;file&quot;, &quot;sourcesContent&quot;, &quot;sourceRoot&quot;, &quot;118&quot;, &quot;124&quot;, &quot;__vue_script__&quot;, &quot;__vue_template__&quot;, &quot;options&quot;, &quot;template&quot;, &quot;126&quot;, &quot;content&quot;, &quot;locals&quot;, &quot;149&quot;, &quot;_lineBase&quot;, &quot;_lineBase2&quot;, &quot;props&quot;, &quot;necessary&quot;, &quot;display&quot;, &quot;Array&quot;, &quot;ready&quot;, &quot;this&quot;, &quot;$els&quot;, &quot;selector&quot;, &quot;firstElementChild&quot;, &quot;LineBase&quot;, &quot;methods&quot;, &quot;getValidate&quot;, &quot;getValue&quot;, &quot;153&quot;, &quot;_lineSelector&quot;, &quot;_lineSelector2&quot;, &quot;_lineInput&quot;, &quot;_lineInput2&quot;, &quot;_passwordInputs&quot;, &quot;_passwordInputs2&quot;, &quot;_phoneInputs&quot;, &quot;_phoneInputs2&quot;, &quot;_actions&quot;, &quot;_notify&quot;, &quot;_notify2&quot;, &quot;vuex&quot;, &quot;actions&quot;, &quot;addUser&quot;, &quot;submitDisable&quot;, &quot;roleOptions&quot;, &quot;text&quot;, &quot;LineSelector&quot;, &quot;FormInput&quot;, &quot;PasswordInputs&quot;, &quot;PhoneInputs&quot;, &quot;submit&quot;, &quot;sendEmail&quot;, &quot;_this&quot;, &quot;validate&quot;, &quot;forEach&quot;, &quot;tag&quot;, &quot;$refs&quot;, &quot;setTimeout&quot;, &quot;phone&quot;, &quot;role&quot;, &quot;username&quot;, &quot;contact&quot;, &quot;email&quot;, &quot;success&quot;, &quot;154&quot;, &quot;_commonHeader&quot;, &quot;_commonHeader2&quot;, &quot;_commonLrRouter&quot;, &quot;_commonLrRouter2&quot;, &quot;getUser&quot;, &quot;commonHeader&quot;, &quot;commonLrRouter&quot;, &quot;183&quot;, &quot;186&quot;, &quot;187&quot;, &quot;214&quot;, &quot;218&quot;, &quot;219&quot;, &quot;244&quot;, &quot;245&quot;, &quot;246&quot;, &quot;271&quot;, &quot;274&quot;, &quot;275&quot;],
+    &quot;mappings&quot;: &quot;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&quot;,
+    &quot;file&quot;: &quot;account.js&quot;,
+    &quot;sourcesContent&quot;: [&quot;webpackJsonp([5],{\n\n/***/ 0:\n/***/ function(module, exports, __webpack_require__) {\n\n\t&apos;use strict&apos;;\n\t\n\tvar _vue = __webpack_require__(3);\n\t\n\tvar _vue2 = _interopRequireDefault(_vue);\n\t\n\tvar _app = __webpack_require__(246);\n\t\n\tvar _app2 = _interopRequireDefault(_app);\n\t\n\tvar _store = __webpack_require__(18);\n\t\n\tvar _store2 = _interopRequireDefault(_store);\n\t\n\tvar _vueRouter = __webpack_require__(63);\n\t\n\tvar _vueRouter2 = _interopRequireDefault(_vueRouter);\n\t\n\tvar _addInternal = __webpack_require__(245);\n\t\n\tvar _addInternal2 = _interopRequireDefault(_addInternal);\n\t\n\tfunction _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { default: obj }; }\n\t\n\t$(function () {\n\t    _vue2.default.use(_vueRouter2.default);\n\t    var router = new _vueRouter2.default();\n\t    router.map({\n\t        &apos;*&apos;: {\n\t            component: _addInternal2.default\n\t        },\n\t        &apos;/addInternal&apos;: {\n\t            component: _addInternal2.default\n\t        }\n\t    });\n\t    router.redirect({\n\t        &apos;*&apos;: &apos;/addInternal&apos;\n\t    });\n\t    router.start({\n\t        store: _store2.default,\n\t        components: {\n\t            App: _app2.default\n\t        }\n\t    }, &apos;#app&apos;);\n\t});\n\n/***/ },\n\n/***/ 66:\n/***/ function(module, exports) {\n\n\t\&quot;use strict\&quot;;\n\t\n\tObject.defineProperty(exports, \&quot;__esModule\&quot;, {\n\t    value: true\n\t});\n\texports.default = {\n\t    data: function data() {\n\t        return {};\n\t    }\n\t};\n\n/***/ },\n\n/***/ 111:\n/***/ function(module, exports, __webpack_require__) {\n\n\texports = module.exports = __webpack_require__(1)();\n\t// imports\n\t\n\t\n\t// module\n\texports.push([module.id, \&quot;body{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column}.lr-router{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;position:relative}.lr-router .left-panel{padding-top:0;position:absolute;top:0;left:0;width:120px;height:100%;box-shadow:2px 0 2px rgba(0,0,0,.05)}.lr-router .left-panel a{position:relative;display:block;margin-right:-3px;text-align:center;line-height:40px}.lr-router .left-panel a:first-of-type.v-link-active{box-shadow:4px 0 0 #fff,inset 0 -2px 2px rgba(0,0,0,.05)}.lr-router .left-panel a.v-link-active{box-shadow:4px 0 0 #fff,inset 0 2px 2px rgba(0,0,0,.05),inset 0 -2px 2px rgba(0,0,0,.05);font-weight:bolder}.lr-router .left-panel a.v-link-active:before{content:&apos;&apos;;position:absolute;width:5px;height:100%;top:0;left:0;background:#359dff}.lr-router .left-panel a.v-link-active:after{content:&apos;&apos;;position:absolute;width:3px;height:100%;top:0;right:0;background:#fff}.lr-router .right-panel{margin-left:120px;position:relative;min-width:600px}\&quot;, \&quot;\&quot;, {\&quot;version\&quot;:3,\&quot;sources\&quot;:[\&quot;/./components/common-lr-router.vue\&quot;],\&quot;names\&quot;:[],\&quot;mappings\&quot;:\&quot;AAAA,KAAK,oBAAoB,qBAAqB,oBAAoB,aAAa,4BAA4B,6BAA6B,8BAA8B,0BAA0B,qBAAqB,CAAC,WAAW,mBAAmB,sBAAsB,kBAAkB,cAAc,iBAAiB,CAAC,uBAAuB,cAAc,kBAAkB,MAAM,OAAO,YAAY,YAAY,oCAAqC,CAAC,yBAAyB,kBAAkB,cAAc,kBAAkB,kBAAkB,gBAAgB,CAAC,qDAAqD,wDAAyD,CAAC,uCAAuC,yFAA2F,kBAAkB,CAAC,8CAA8C,WAAW,kBAAkB,UAAU,YAAY,MAAM,OAAO,kBAAkB,CAAC,6CAA6C,WAAW,kBAAkB,UAAU,YAAY,MAAM,QAAQ,eAAe,CAAC,wBAAwB,kBAAkB,kBAAkB,eAAe,CAAC\&quot;,\&quot;file\&quot;:\&quot;common-lr-router.vue\&quot;,\&quot;sourcesContent\&quot;:[\&quot;body{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column}.lr-router{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;position:relative}.lr-router .left-panel{padding-top:0;position:absolute;top:0;left:0;width:120px;height:100%;box-shadow:2px 0 2px rgba(0,0,0,0.05)}.lr-router .left-panel a{position:relative;display:block;margin-right:-3px;text-align:center;line-height:40px}.lr-router .left-panel a:first-of-type.v-link-active{box-shadow:4px 0 0 #fff,0 -2px 2px rgba(0,0,0,0.05) inset}.lr-router .left-panel a.v-link-active{box-shadow:4px 0 0 #fff,0 2px 2px rgba(0,0,0,0.05) inset,0 -2px 2px rgba(0,0,0,0.05) inset;font-weight:bolder}.lr-router .left-panel a.v-link-active:before{content:&apos;&apos;;position:absolute;width:5px;height:100%;top:0;left:0;background:#359DFF}.lr-router .left-panel a.v-link-active:after{content:&apos;&apos;;position:absolute;width:3px;height:100%;top:0;right:0;background:#fff}.lr-router .right-panel{margin-left:120px;position:relative;min-width:600px}\&quot;],\&quot;sourceRoot\&quot;:\&quot;webpack://\&quot;}]);\n\t\n\t// exports\n\n\n/***/ },\n\n/***/ 118:\n/***/ function(module, exports) {\n\n\tmodule.exports = \&quot;&lt;div class=lr-router&gt; &lt;div class=left-panel&gt; &lt;slot&gt;&lt;/slot&gt; &lt;/div&gt; &lt;div class=right-panel&gt; &lt;router-view&gt;&lt;/router-view&gt; &lt;/div&gt; &lt;/div&gt;\&quot;;\n\n/***/ },\n\n/***/ 124:\n/***/ function(module, exports, __webpack_require__) {\n\n\tvar __vue_script__, __vue_template__\n\t__webpack_require__(126)\n\t__vue_script__ = __webpack_require__(66)\n\t__vue_template__ = __webpack_require__(118)\n\tmodule.exports = __vue_script__ || {}\n\tif (module.exports.__esModule) module.exports = module.exports.default\n\tif (__vue_template__) {\n\t(typeof module.exports === \&quot;function\&quot; ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__\n\t}\n\n\n/***/ },\n\n/***/ 126:\n/***/ function(module, exports, __webpack_require__) {\n\n\t// style-loader: Adds some css to the DOM by adding a &lt;style&gt; tag\n\t\n\t// load the styles\n\tvar content = __webpack_require__(111);\n\tif(typeof content === &apos;string&apos;) content = [[module.id, content, &apos;&apos;]];\n\t// add the styles to the DOM\n\tvar update = __webpack_require__(2)(content, {});\n\tif(content.locals) module.exports = content.locals;\n\t// Hot Module Replacement\n\tif(false) {\n\t\t// When the styles change, update the &lt;style&gt; tags\n\t\tif(!content.locals) {\n\t\t\tmodule.hot.accept(\&quot;!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/less-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./common-lr-router.vue\&quot;, function() {\n\t\t\t\tvar newContent = require(\&quot;!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/less-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./common-lr-router.vue\&quot;);\n\t\t\t\tif(typeof newContent === &apos;string&apos;) newContent = [[module.id, newContent, &apos;&apos;]];\n\t\t\t\tupdate(newContent);\n\t\t\t});\n\t\t}\n\t\t// When the module is disposed, remove the &lt;style&gt; tags\n\t\tmodule.hot.dispose(function() { update(); });\n\t}\n\n/***/ },\n\n/***/ 149:\n/***/ function(module, exports, __webpack_require__) {\n\n\t&apos;use strict&apos;;\n\t\n\tObject.defineProperty(exports, \&quot;__esModule\&quot;, {\n\t\tvalue: true\n\t});\n\t\n\tvar _lineBase = __webpack_require__(17);\n\t\n\tvar _lineBase2 = _interopRequireDefault(_lineBase);\n\t\n\tfunction _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { default: obj }; }\n\t\n\texports.default = {\n\t\tprops: {\n\t\t\tnecessary: {\n\t\t\t\tdefault: true\n\t\t\t},\n\t\t\tdisplay: {\n\t\t\t\tdefault: &apos; &apos;\n\t\t\t},\n\t\t\toptions: Array\n\t\t},\n\t\tdata: function data() {\n\t\t\treturn {\n\t\t\t\tvalue: &apos;&apos;\n\t\t\t};\n\t\t},\n\t\tready: function ready() {\n\t\t\tthis.value = this.$els.selector.firstElementChild.value;\n\t\t},\n\t\n\t\tcomponents: {\n\t\t\tLineBase: _lineBase2.default\n\t\t},\n\t\tmethods: {\n\t\t\tgetValidate: function getValidate() {\n\t\t\t\treturn true;\n\t\t\t},\n\t\t\tgetValue: function getValue() {\n\t\t\t\treturn this.value;\n\t\t\t}\n\t\t}\n\t};\n\n/***/ },\n\n/***/ 153:\n/***/ function(module, exports, __webpack_require__) {\n\n\t&apos;use strict&apos;;\n\t\n\tObject.defineProperty(exports, \&quot;__esModule\&quot;, {\n\t    value: true\n\t});\n\t\n\tvar _vue = __webpack_require__(3);\n\t\n\tvar _vue2 = _interopRequireDefault(_vue);\n\t\n\tvar _lineSelector = __webpack_require__(244);\n\t\n\tvar _lineSelector2 = _interopRequireDefault(_lineSelector);\n\t\n\tvar _lineInput = __webpack_require__(24);\n\t\n\tvar _lineInput2 = _interopRequireDefault(_lineInput);\n\t\n\tvar _passwordInputs = __webpack_require__(57);\n\t\n\tvar _passwordInputs2 = _interopRequireDefault(_passwordInputs);\n\t\n\tvar _phoneInputs = __webpack_require__(58);\n\t\n\tvar _phoneInputs2 = _interopRequireDefault(_phoneInputs);\n\t\n\tvar _lineBase = __webpack_require__(17);\n\t\n\tvar _lineBase2 = _interopRequireDefault(_lineBase);\n\t\n\tvar _actions = __webpack_require__(4);\n\t\n\tvar _notify = __webpack_require__(12);\n\t\n\tvar _notify2 = _interopRequireDefault(_notify);\n\t\n\tfunction _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { default: obj }; }\n\t\n\texports.default = {\n\t    vuex: {\n\t        actions: {\n\t            addUser: _actions.addUser\n\t        }\n\t    },\n\t    data: function data() {\n\t        return {\n\t            submitDisable: false,\n\t            roleOptions: [{\n\t                value: &apos;3&apos;,\n\t                text: &apos;开发者&apos;\n\t            }, {\n\t                value: &apos;2&apos;,\n\t                text: &apos;物料管理员&apos;\n\t            }, {\n\t                value: &apos;1&apos;,\n\t                text: &apos;管理员&apos;\n\t            }]\n\t        };\n\t    },\n\t\n\t    components: {\n\t        LineSelector: _lineSelector2.default,\n\t        FormInput: _lineInput2.default,\n\t        PasswordInputs: _passwordInputs2.default,\n\t        PhoneInputs: _phoneInputs2.default,\n\t        LineBase: _lineBase2.default\n\t    },\n\t    ready: function ready() {},\n\t\n\t    methods: {\n\t        submit: function submit(sendEmail) {\n\t            var _this = this;\n\t\n\t            if (this.submitDisable) {\n\t                return;\n\t            }\n\t            var validate = true;\n\t            [&apos;role&apos;, &apos;username&apos;, &apos;contact&apos;, &apos;email&apos;].forEach(function (tag) {\n\t                if (!_this.$refs[tag].getValidate()) {\n\t                    validate = false;\n\t                } else {\n\t                    _this[tag] = _this.$refs[tag].getValue();\n\t                }\n\t            });\n\t\n\t            if (!validate) {\n\t                return false;\n\t            }\n\t\n\t            this.submitDisable = true;\n\t            setTimeout(function () {\n\t                _this.submitDisable = false;\n\t            }, 1500);\n\t\n\t            this.$refs.phone.getValidate(function (data) {\n\t                _this.phone = _this.$refs.phone.getValue();\n\t                _this.addUser(_this.role, _this.username, _this.contact, _this.phone, _this.email, sendEmail, function (data) {\n\t                    _notify2.default.success(&apos;添加账号成功&apos;, 3000);\n\t                });\n\t            });\n\t        }\n\t    }\n\t};\n\n/***/ },\n\n/***/ 154:\n/***/ function(module, exports, __webpack_require__) {\n\n\t&apos;use strict&apos;;\n\t\n\tObject.defineProperty(exports, \&quot;__esModule\&quot;, {\n\t    value: true\n\t});\n\t\n\tvar _commonHeader = __webpack_require__(43);\n\t\n\tvar _commonHeader2 = _interopRequireDefault(_commonHeader);\n\t\n\tvar _commonLrRouter = __webpack_require__(124);\n\t\n\tvar _commonLrRouter2 = _interopRequireDefault(_commonLrRouter);\n\t\n\tvar _actions = __webpack_require__(4);\n\t\n\tfunction _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { default: obj }; }\n\t\n\texports.default = {\n\t    vuex: {\n\t        actions: {\n\t            getUser: _actions.getUser\n\t        }\n\t    },\n\t    data: function data() {\n\t        return {};\n\t    },\n\t\n\t    components: {\n\t        commonHeader: _commonHeader2.default,\n\t        commonLrRouter: _commonLrRouter2.default\n\t    },\n\t    ready: function ready() {\n\t        this.getUser();\n\t    },\n\t\n\t    methods: {}\n\t};\n\n/***/ },\n\n/***/ 183:\n/***/ function(module, exports, __webpack_require__) {\n\n\texports = module.exports = __webpack_require__(1)();\n\t// imports\n\t\n\t\n\t// module\n\texports.push([module.id, \&quot;.line-input input{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;color:#666}\&quot;, \&quot;\&quot;, {\&quot;version\&quot;:3,\&quot;sources\&quot;:[\&quot;/./components/form/line-selector.vue\&quot;],\&quot;names\&quot;:[],\&quot;mappings\&quot;:\&quot;AAAA,kBAAkB,mBAAmB,sBAAsB,kBAAkB,cAAc,UAAU,CAAC\&quot;,\&quot;file\&quot;:\&quot;line-selector.vue\&quot;,\&quot;sourcesContent\&quot;:[\&quot;.line-input input{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;color:#666}\&quot;],\&quot;sourceRoot\&quot;:\&quot;webpack://\&quot;}]);\n\t\n\t// exports\n\n\n/***/ },\n\n/***/ 186:\n/***/ function(module, exports, __webpack_require__) {\n\n\texports = module.exports = __webpack_require__(1)();\n\t// imports\n\t\n\t\n\t// module\n\texports.push([module.id, \&quot;.add-internal-box{position:absolute;top:70px;left:50%;width:500px;margin-left:-400px;color:#333;font-size:16px}.add-internal-box .line-buttons{margin-top:10px}.add-internal-box .line-buttons input[type=button]{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;color:#fff;font-size:14px}.add-internal-box .line-buttons .btn-submit{margin-right:20px}\&quot;, \&quot;\&quot;, {\&quot;version\&quot;:3,\&quot;sources\&quot;:[\&quot;/./pages/account/addInternal.vue\&quot;],\&quot;names\&quot;:[],\&quot;mappings\&quot;:\&quot;AAAA,kBAAkB,kBAAkB,SAAS,SAAS,YAAY,mBAAmB,WAAW,cAAc,CAAC,gCAAgC,eAAe,CAAC,mDAAqD,mBAAmB,sBAAsB,kBAAkB,cAAc,WAAW,cAAc,CAAC,4CAA4C,iBAAiB,CAAC\&quot;,\&quot;file\&quot;:\&quot;addInternal.vue\&quot;,\&quot;sourcesContent\&quot;:[\&quot;.add-internal-box{position:absolute;top:70px;left:50%;width:500px;margin-left:-400px;color:#333;font-size:16px}.add-internal-box .line-buttons{margin-top:10px}.add-internal-box .line-buttons input[type=\\\&quot;button\\\&quot;]{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;color:#fff;font-size:14px}.add-internal-box .line-buttons .btn-submit{margin-right:20px}\&quot;],\&quot;sourceRoot\&quot;:\&quot;webpack://\&quot;}]);\n\t\n\t// exports\n\n\n/***/ },\n\n/***/ 187:\n/***/ function(module, exports, __webpack_require__) {\n\n\texports = module.exports = __webpack_require__(1)();\n\t// imports\n\t\n\t\n\t// module\n\texports.push([module.id, \&quot;\&quot;, \&quot;\&quot;, {\&quot;version\&quot;:3,\&quot;sources\&quot;:[],\&quot;names\&quot;:[],\&quot;mappings\&quot;:\&quot;\&quot;,\&quot;file\&quot;:\&quot;app.vue\&quot;,\&quot;sourceRoot\&quot;:\&quot;webpack://\&quot;}]);\n\t\n\t// exports\n\n\n/***/ },\n\n/***/ 214:\n/***/ function(module, exports) {\n\n\tmodule.exports = \&quot;&lt;line-base v-ref:base :necessary=necessary :display=display class=line-seletor&gt; &lt;select v-el:selector class=form-control v-model=value&gt; &lt;option v-for=\\\&quot;option in options\\\&quot; :value=option.value&gt;{{option.text}}&lt;/option&gt; &lt;/select&gt; &lt;/line-base&gt;\&quot;;\n\n/***/ },\n\n/***/ 218:\n/***/ function(module, exports) {\n\n\tmodule.exports = \&quot;&lt;div class=add-internal-box&gt; &lt;div class=\\\&quot;form-horizontal form-wrapper\\\&quot;&gt; &lt;line-selector v-ref:role display=角色 :options=roleOptions&gt;&lt;/line-selector&gt; &lt;form-input v-ref:username display=用户名： error=5~30个字符，支持中英文 pattern=[\\\\S]{5,30} placeholder=5~30个字符，支持中英文&gt;&lt;/form-input&gt; &lt;form-input v-ref:contact display=联系人姓名： error=请输入正确的姓名 pattern=[\\\\S]{2,4} placeholder=2到4个字符&gt;&lt;/form-input&gt; &lt;form-input v-ref:email display=联系人邮箱： error=非合法邮箱 pattern=(\\\\w)+(\\\\.\\\\w+)*@(\\\\w)+((\\\\.\\\\w+)+)&gt;&lt;/form-input&gt; &lt;phone-inputs v-ref:phone display=联系人电话： error=非合法电话号码 pattern=\\\\+?\\\\d{5,13} :verify=false&gt;&lt;/phone-inputs&gt; &lt;line-base :necessary=false class=line-buttons&gt; &lt;input type=button value=提交并发送邮件 class=\\\&quot;btn btn-primary btn-submit\\\&quot; :class=\\\&quot;{disabled: submitDisable}\\\&quot; @click=submit(true)&gt; &lt;input type=button value=仅提交 class=\\\&quot;btn btn-primary btn-submit\\\&quot; :class=\\\&quot;{disabled: submitDisable}\\\&quot; @click=submit()&gt; &lt;input type=button value=取消 class=\\\&quot;btn btn-default btn-cancel\\\&quot; @click=\\\&quot;$router.go(&apos;/login&apos;)\\\&quot;&gt; &lt;/line-base&gt; &lt;/div&gt; &lt;/div&gt;\&quot;;\n\n/***/ },\n\n/***/ 219:\n/***/ function(module, exports) {\n\n\tmodule.exports = \&quot;&lt;common-header&gt;&lt;/common-header&gt; &lt;common-lr-router&gt; &lt;a v-link=\\\&quot;{ path: &apos;/addInternal&apos; }\\\&quot;&gt;添加内部帐号&lt;/a&gt; &lt;/common-lr-router&gt;\&quot;;\n\n/***/ },\n\n/***/ 244:\n/***/ function(module, exports, __webpack_require__) {\n\n\tvar __vue_script__, __vue_template__\n\t__webpack_require__(271)\n\t__vue_script__ = __webpack_require__(149)\n\t__vue_template__ = __webpack_require__(214)\n\tmodule.exports = __vue_script__ || {}\n\tif (module.exports.__esModule) module.exports = module.exports.default\n\tif (__vue_template__) {\n\t(typeof module.exports === \&quot;function\&quot; ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__\n\t}\n\n\n/***/ },\n\n/***/ 245:\n/***/ function(module, exports, __webpack_require__) {\n\n\tvar __vue_script__, __vue_template__\n\t__webpack_require__(274)\n\t__vue_script__ = __webpack_require__(153)\n\t__vue_template__ = __webpack_require__(218)\n\tmodule.exports = __vue_script__ || {}\n\tif (module.exports.__esModule) module.exports = module.exports.default\n\tif (__vue_template__) {\n\t(typeof module.exports === \&quot;function\&quot; ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__\n\t}\n\n\n/***/ },\n\n/***/ 246:\n/***/ function(module, exports, __webpack_require__) {\n\n\tvar __vue_script__, __vue_template__\n\t__webpack_require__(275)\n\t__vue_script__ = __webpack_require__(154)\n\t__vue_template__ = __webpack_require__(219)\n\tmodule.exports = __vue_script__ || {}\n\tif (module.exports.__esModule) module.exports = module.exports.default\n\tif (__vue_template__) {\n\t(typeof module.exports === \&quot;function\&quot; ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__\n\t}\n\n\n/***/ },\n\n/***/ 271:\n/***/ function(module, exports, __webpack_require__) {\n\n\t// style-loader: Adds some css to the DOM by adding a &lt;style&gt; tag\n\t\n\t// load the styles\n\tvar content = __webpack_require__(183);\n\tif(typeof content === &apos;string&apos;) content = [[module.id, content, &apos;&apos;]];\n\t// add the styles to the DOM\n\tvar update = __webpack_require__(2)(content, {});\n\tif(content.locals) module.exports = content.locals;\n\t// Hot Module Replacement\n\tif(false) {\n\t\t// When the styles change, update the &lt;style&gt; tags\n\t\tif(!content.locals) {\n\t\t\tmodule.hot.accept(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./line-selector.vue\&quot;, function() {\n\t\t\t\tvar newContent = require(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./line-selector.vue\&quot;);\n\t\t\t\tif(typeof newContent === &apos;string&apos;) newContent = [[module.id, newContent, &apos;&apos;]];\n\t\t\t\tupdate(newContent);\n\t\t\t});\n\t\t}\n\t\t// When the module is disposed, remove the &lt;style&gt; tags\n\t\tmodule.hot.dispose(function() { update(); });\n\t}\n\n/***/ },\n\n/***/ 274:\n/***/ function(module, exports, __webpack_require__) {\n\n\t// style-loader: Adds some css to the DOM by adding a &lt;style&gt; tag\n\t\n\t// load the styles\n\tvar content = __webpack_require__(186);\n\tif(typeof content === &apos;string&apos;) content = [[module.id, content, &apos;&apos;]];\n\t// add the styles to the DOM\n\tvar update = __webpack_require__(2)(content, {});\n\tif(content.locals) module.exports = content.locals;\n\t// Hot Module Replacement\n\tif(false) {\n\t\t// When the styles change, update the &lt;style&gt; tags\n\t\tif(!content.locals) {\n\t\t\tmodule.hot.accept(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./addInternal.vue\&quot;, function() {\n\t\t\t\tvar newContent = require(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./addInternal.vue\&quot;);\n\t\t\t\tif(typeof newContent === &apos;string&apos;) newContent = [[module.id, newContent, &apos;&apos;]];\n\t\t\t\tupdate(newContent);\n\t\t\t});\n\t\t}\n\t\t// When the module is disposed, remove the &lt;style&gt; tags\n\t\tmodule.hot.dispose(function() { update(); });\n\t}\n\n/***/ },\n\n/***/ 275:\n/***/ function(module, exports, __webpack_require__) {\n\n\t// style-loader: Adds some css to the DOM by adding a &lt;style&gt; tag\n\t\n\t// load the styles\n\tvar content = __webpack_require__(187);\n\tif(typeof content === &apos;string&apos;) content = [[module.id, content, &apos;&apos;]];\n\t// add the styles to the DOM\n\tvar update = __webpack_require__(2)(content, {});\n\tif(content.locals) module.exports = content.locals;\n\t// Hot Module Replacement\n\tif(false) {\n\t\t// When the styles change, update the &lt;style&gt; tags\n\t\tif(!content.locals) {\n\t\t\tmodule.hot.accept(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./app.vue\&quot;, function() {\n\t\t\t\tvar newContent = require(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./app.vue\&quot;);\n\t\t\t\tif(typeof newContent === &apos;string&apos;) newContent = [[module.id, newContent, &apos;&apos;]];\n\t\t\t\tupdate(newContent);\n\t\t\t});\n\t\t}\n\t\t// When the module is disposed, remove the &lt;style&gt; tags\n\t\tmodule.hot.dispose(function() { update(); });\n\t}\n\n/***/ }\n\n});\n\n\n/** WEBPACK FOOTER **\n ** account.js\n **/&quot;, &quot;/**\n * @file 帐号管理的入口文件\n * @author zhanglei55\n */\nimport Vue from &apos;vue&apos;;\nimport App from &apos;./app&apos;;\nimport store from &apos;store/store&apos;;\nimport VueRouter from &apos;vue-router&apos;;\nimport AddInternal from &apos;./addInternal&apos;;\n\n$(function () {\n    Vue.use(VueRouter);\n    let router = new VueRouter();\n    router.map({\n        &apos;*&apos;: {\n            component: AddInternal\n        },\n        &apos;/addInternal&apos;: {\n            component: AddInternal\n        }\n    });\n    router.redirect({\n        &apos;*&apos;: &apos;/addInternal&apos;\n    });\n    router.start({\n        store,\n        components: {\n            App\n        }\n    }, &apos;#app&apos;);\n});\n\n\n\n/** WEBPACK FOOTER **\n ** ./pages/account/main.js\n **/&quot;, &quot;exports = module.exports = require(\&quot;./../../node_modules/css-loader/lib/css-base.js\&quot;)();\n// imports\n\n\n// module\nexports.push([module.id, \&quot;body{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column}.lr-router{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;position:relative}.lr-router .left-panel{padding-top:0;position:absolute;top:0;left:0;width:120px;height:100%;box-shadow:2px 0 2px rgba(0,0,0,.05)}.lr-router .left-panel a{position:relative;display:block;margin-right:-3px;text-align:center;line-height:40px}.lr-router .left-panel a:first-of-type.v-link-active{box-shadow:4px 0 0 #fff,inset 0 -2px 2px rgba(0,0,0,.05)}.lr-router .left-panel a.v-link-active{box-shadow:4px 0 0 #fff,inset 0 2px 2px rgba(0,0,0,.05),inset 0 -2px 2px rgba(0,0,0,.05);font-weight:bolder}.lr-router .left-panel a.v-link-active:before{content:&apos;&apos;;position:absolute;width:5px;height:100%;top:0;left:0;background:#359dff}.lr-router .left-panel a.v-link-active:after{content:&apos;&apos;;position:absolute;width:3px;height:100%;top:0;right:0;background:#fff}.lr-router .right-panel{margin-left:120px;position:relative;min-width:600px}\&quot;, \&quot;\&quot;, {\&quot;version\&quot;:3,\&quot;sources\&quot;:[\&quot;/./components/common-lr-router.vue\&quot;],\&quot;names\&quot;:[],\&quot;mappings\&quot;:\&quot;AAAA,KAAK,oBAAoB,qBAAqB,oBAAoB,aAAa,4BAA4B,6BAA6B,8BAA8B,0BAA0B,qBAAqB,CAAC,WAAW,mBAAmB,sBAAsB,kBAAkB,cAAc,iBAAiB,CAAC,uBAAuB,cAAc,kBAAkB,MAAM,OAAO,YAAY,YAAY,oCAAqC,CAAC,yBAAyB,kBAAkB,cAAc,kBAAkB,kBAAkB,gBAAgB,CAAC,qDAAqD,wDAAyD,CAAC,uCAAuC,yFAA2F,kBAAkB,CAAC,8CAA8C,WAAW,kBAAkB,UAAU,YAAY,MAAM,OAAO,kBAAkB,CAAC,6CAA6C,WAAW,kBAAkB,UAAU,YAAY,MAAM,QAAQ,eAAe,CAAC,wBAAwB,kBAAkB,kBAAkB,eAAe,CAAC\&quot;,\&quot;file\&quot;:\&quot;common-lr-router.vue\&quot;,\&quot;sourcesContent\&quot;:[\&quot;body{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column}.lr-router{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;position:relative}.lr-router .left-panel{padding-top:0;position:absolute;top:0;left:0;width:120px;height:100%;box-shadow:2px 0 2px rgba(0,0,0,0.05)}.lr-router .left-panel a{position:relative;display:block;margin-right:-3px;text-align:center;line-height:40px}.lr-router .left-panel a:first-of-type.v-link-active{box-shadow:4px 0 0 #fff,0 -2px 2px rgba(0,0,0,0.05) inset}.lr-router .left-panel a.v-link-active{box-shadow:4px 0 0 #fff,0 2px 2px rgba(0,0,0,0.05) inset,0 -2px 2px rgba(0,0,0,0.05) inset;font-weight:bolder}.lr-router .left-panel a.v-link-active:before{content:&apos;&apos;;position:absolute;width:5px;height:100%;top:0;left:0;background:#359DFF}.lr-router .left-panel a.v-link-active:after{content:&apos;&apos;;position:absolute;width:3px;height:100%;top:0;right:0;background:#fff}.lr-router .right-panel{margin-left:120px;position:relative;min-width:600px}\&quot;],\&quot;sourceRoot\&quot;:\&quot;webpack://\&quot;}]);\n\n// exports\n\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/css-loader?sourceMap!../~/vue-loader/lib/style-rewriter.js!../~/less-loader?sourceMap!../~/vue-loader/lib/selector.js?type=style&amp;index=0!./components/common-lr-router.vue\n ** module id = 111\n ** module chunks = 1 5\n **/&quot;, &quot;module.exports = \&quot;&lt;div class=lr-router&gt; &lt;div class=left-panel&gt; &lt;slot&gt;&lt;/slot&gt; &lt;/div&gt; &lt;div class=right-panel&gt; &lt;router-view&gt;&lt;/router-view&gt; &lt;/div&gt; &lt;/div&gt;\&quot;;\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/vue-html-loader!../~/vue-loader/lib/selector.js?type=template&amp;index=0!./components/common-lr-router.vue\n ** module id = 118\n ** module chunks = 1 5\n **/&quot;, &quot;var __vue_script__, __vue_template__\nrequire(\&quot;!!vue-style-loader!css-loader?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!less-loader?sourceMap!./../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./common-lr-router.vue\&quot;)\n__vue_script__ = require(\&quot;!!babel-loader?presets[]=es2015&amp;plugins[]=transform-runtime&amp;comments=false!./../../node_modules/vue-loader/lib/selector.js?type=script&amp;index=0!./common-lr-router.vue\&quot;)\n__vue_template__ = require(\&quot;!!vue-html-loader!./../../node_modules/vue-loader/lib/selector.js?type=template&amp;index=0!./common-lr-router.vue\&quot;)\nmodule.exports = __vue_script__ || {}\nif (module.exports.__esModule) module.exports = module.exports.default\nif (__vue_template__) {\n(typeof module.exports === \&quot;function\&quot; ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__\n}\n\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ./components/common-lr-router.vue\n ** module id = 124\n ** module chunks = 1 5\n **/&quot;, &quot;// style-loader: Adds some css to the DOM by adding a &lt;style&gt; tag\n\n// load the styles\nvar content = require(\&quot;!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/less-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./common-lr-router.vue\&quot;);\nif(typeof content === &apos;string&apos;) content = [[module.id, content, &apos;&apos;]];\n// add the styles to the DOM\nvar update = require(\&quot;!./../../node_modules/vue-style-loader/addStyles.js\&quot;)(content, {});\nif(content.locals) module.exports = content.locals;\n// Hot Module Replacement\nif(module.hot) {\n\t// When the styles change, update the &lt;style&gt; tags\n\tif(!content.locals) {\n\t\tmodule.hot.accept(\&quot;!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/less-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./common-lr-router.vue\&quot;, function() {\n\t\t\tvar newContent = require(\&quot;!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/less-loader/index.js?sourceMap!./../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./common-lr-router.vue\&quot;);\n\t\t\tif(typeof newContent === &apos;string&apos;) newContent = [[module.id, newContent, &apos;&apos;]];\n\t\t\tupdate(newContent);\n\t\t});\n\t}\n\t// When the module is disposed, remove the &lt;style&gt; tags\n\tmodule.hot.dispose(function() { update(); });\n}\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/vue-style-loader!../~/css-loader?sourceMap!../~/vue-loader/lib/style-rewriter.js!../~/less-loader?sourceMap!../~/vue-loader/lib/selector.js?type=style&amp;index=0!./components/common-lr-router.vue\n ** module id = 126\n ** module chunks = 1 5\n **/&quot;, &quot;&lt;style lang=\&quot;less\&quot;&gt;\n\t.line-input {\n        input {\n            flex: auto 1 1;\n            color: #666;\n        }\n\t}\n&lt;/style&gt;\n\n&lt;template&gt;\n    &lt;line-base v-ref:base :necessary=\&quot;necessary\&quot; :display=\&quot;display\&quot; class=\&quot;line-seletor\&quot;&gt;\n    \t&lt;select v-el:selector class=\&quot;form-control\&quot; v-model=\&quot;value\&quot; &gt;\n        \t&lt;option v-for=\&quot;option in options\&quot; :value=\&quot;option.value\&quot; &gt;{{option.text}}&lt;/option&gt;\n        &lt;/select&gt;\n    &lt;/line-base&gt;\n&lt;/template&gt;\n\n&lt;script&gt;\nimport LineBase from &apos;components/form/line-base&apos;;\n\nexport default {\n\tprops: {\n\t\tnecessary: {\n\t\t\tdefault: true\n\t\t},\n\t\tdisplay: {\n\t\t\tdefault: &apos; &apos;\n\t\t},\n\t\toptions: Array\n\t},\n\tdata() {\n\t\treturn {\n\t\t\tvalue: &apos;&apos;\n\t\t}\n\t},\n\tready() {\n\t\tthis.value = this.$els.selector.firstElementChild.value;\n\t},\n\tcomponents: {\n\t\tLineBase\n\t},\n\tmethods: {\n\t\tgetValidate() {\n\t\t\treturn true;\n\t\t},\n\t\tgetValue() {\n\t\t\treturn this.value;\n\t\t}\n\t}\n}\n&lt;/script&gt;\n\n\n/** WEBPACK FOOTER **\n ** line-selector.vue?f28cdc50\n **/&quot;, &quot;&lt;style lang=\&quot;less\&quot;&gt;\n.add-internal-box {\n    position: absolute;\n    top: 70px;\n    left: 50%;\n    width: 500px;\n    margin-left: -400px;\n    color: #333;\n    font-size: 16px;\n\n    \n    .line-buttons {\n        margin-top: 10px;\n        input[type=\&quot;button\&quot;] {\n            flex: auto 1 1;\n            color: #fff;\n            font-size: 14px;\n        }\n        .btn-submit {\n            margin-right: 20px;\n        }\n        .btn-cancel {}\n    }\n}\n&lt;/style&gt;\n\n&lt;template&gt;\n    &lt;div class=\&quot;add-internal-box\&quot;&gt;\n        &lt;div class=\&quot;form-horizontal form-wrapper\&quot;&gt;\n            &lt;line-selector v-ref:role display=\&quot;角色\&quot; :options=\&quot;roleOptions\&quot;&gt;&lt;/line-selector&gt;\n            &lt;form-input v-ref:username display=\&quot;用户名：\&quot;  error=\&quot;5~30个字符，支持中英文\&quot; pattern=\&quot;[\\S]{5,30}\&quot; placeholder=\&quot;5~30个字符，支持中英文\&quot;&gt;&lt;/form-input&gt;\n            &lt;!-- &lt;password-inputs v-ref:password  error=\&quot;6-32位字符，包括数字、大小写英文字母\&quot; pattern=\&quot;[0-9a-zA-Z]{6,32}\&quot; placeholder=\&quot;6-32位字符，包括数字、大小写英文字母\&quot;&gt;&lt;/password-inputs&gt; --&gt;\n            &lt;form-input v-ref:contact display=\&quot;联系人姓名：\&quot; error=\&quot;请输入正确的姓名\&quot; pattern=\&quot;[\\S]{2,4}\&quot; placeholder=\&quot;2到4个字符\&quot;&gt;&lt;/form-input&gt;\n            &lt;form-input v-ref:email display=\&quot;联系人邮箱：\&quot; error=\&quot;非合法邮箱\&quot; pattern=\&quot;(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)\&quot;&gt;&lt;/form-input&gt;\n            &lt;phone-inputs v-ref:phone display=\&quot;联系人电话：\&quot; error=\&quot;非合法电话号码\&quot; pattern=\&quot;\\+?\\d{5,13}\&quot; :verify=\&quot;false\&quot;&gt;&lt;/phone-inputs&gt;\n            &lt;line-base :necessary=\&quot;false\&quot; class=\&quot;line-buttons\&quot;&gt;\n                &lt;input type=\&quot;button\&quot; value=\&quot;提交并发送邮件\&quot; class=\&quot;btn btn-primary btn-submit\&quot; :class=\&quot;{disabled: submitDisable}\&quot; @click=\&quot;submit(true)\&quot;&gt;\n                &lt;input type=\&quot;button\&quot; value=\&quot;仅提交\&quot; class=\&quot;btn btn-primary btn-submit\&quot; :class=\&quot;{disabled: submitDisable}\&quot; @click=\&quot;submit()\&quot;&gt;\n                &lt;input type=\&quot;button\&quot; value=\&quot;取消\&quot; class=\&quot;btn btn-default btn-cancel\&quot; @click=\&quot;$router.go(&apos;/login&apos;)\&quot;&gt;\n            &lt;/line-base&gt;\n        &lt;/div&gt;\n    &lt;/div&gt;\n&lt;/template&gt;\n\n&lt;script&gt;\nimport Vue from &apos;vue&apos;;\nimport LineSelector from &apos;components/form/line-selector&apos;;\nimport FormInput from &apos;components/form/line-input&apos;;\nimport PasswordInputs from &apos;components/form/password-inputs&apos;;\nimport PhoneInputs from &apos;components/form/phone-inputs&apos;;\nimport LineBase from &apos;components/form/line-base&apos;;\nimport {\n    addUser\n} from &apos;store/actions&apos;;\nimport Notify from &apos;common/notify&apos;;\n\nexport default {\n    vuex: {\n        actions: {\n            addUser\n        }\n    },\n    data() {\n        return {\n            submitDisable: false,\n            roleOptions: [\n                {\n                    value: &apos;3&apos;,\n                    text: &apos;开发者&apos;\n                },\n                {\n                    value: &apos;2&apos;,\n                    text: &apos;物料管理员&apos;\n                },\n                {\n                    value: &apos;1&apos;,\n                    text: &apos;管理员&apos;\n                }\n            ]\n        }\n    },\n    components: {\n        LineSelector,\n        FormInput,\n        PasswordInputs,\n        PhoneInputs,\n        LineBase\n    },\n    ready() {\n\n    },\n    methods: {\n        submit(sendEmail) {\n            if (this.submitDisable) {\n                return;\n            }\n            var validate = true;\n            [&apos;role&apos;, &apos;username&apos;, &apos;contact&apos;, &apos;email&apos;].forEach(tag =&gt; {\n                if (!this.$refs[tag].getValidate()) {\n                    validate = false;\n                } else {\n                    this[tag] = this.$refs[tag].getValue();\n                }\n            });\n            \n            if (!validate) {\n                return false;\n            }\n\n            this.submitDisable = true;\n            setTimeout(() =&gt; {\n                this.submitDisable = false;\n            }, 1500);\n\n            this.$refs.phone.getValidate(data =&gt; {\n                this.phone = this.$refs.phone.getValue();\n                this.addUser(this.role, this.username, this.contact, this.phone, this.email, sendEmail, data =&gt; {\n                    Notify.success(&apos;添加账号成功&apos;, 3000);\n                });\n            });\n        }\n    }\n}\n&lt;/script&gt;\n\n\n/** WEBPACK FOOTER **\n ** addInternal.vue?3e65ee0a\n **/&quot;, &quot;&lt;style lang=\&quot;less\&quot;&gt;\n&lt;/style&gt;\n\n&lt;template&gt;\n    &lt;common-header&gt;&lt;/common-header&gt;\n    &lt;common-lr-router&gt;\n        &lt;a v-link=\&quot;{ path: &apos;/addInternal&apos; }\&quot;&gt;添加内部帐号&lt;/a&gt;\n    &lt;/common-lr-router&gt;\n&lt;/template&gt;\n\n&lt;script&gt;\nimport commonHeader from &apos;components/common-header&apos;;\nimport commonLrRouter from &apos;components/common-lr-router&apos;;\nimport {\n    getUser\n} from &apos;store/actions&apos;;\n\nexport default {\n    vuex: {\n        actions: {\n            getUser\n        }\n    },\n    data() {\n        return {}\n    },\n    components: {\n        commonHeader,\n        commonLrRouter\n    },\n    ready() {\n        this.getUser();\n    },\n    methods: {}\n}\n&lt;/script&gt;\n\n\n/** WEBPACK FOOTER **\n ** app.vue?12bb772a\n **/&quot;, &quot;exports = module.exports = require(\&quot;./../../../node_modules/css-loader/lib/css-base.js\&quot;)();\n// imports\n\n\n// module\nexports.push([module.id, \&quot;.line-input input{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;color:#666}\&quot;, \&quot;\&quot;, {\&quot;version\&quot;:3,\&quot;sources\&quot;:[\&quot;/./components/form/line-selector.vue\&quot;],\&quot;names\&quot;:[],\&quot;mappings\&quot;:\&quot;AAAA,kBAAkB,mBAAmB,sBAAsB,kBAAkB,cAAc,UAAU,CAAC\&quot;,\&quot;file\&quot;:\&quot;line-selector.vue\&quot;,\&quot;sourcesContent\&quot;:[\&quot;.line-input input{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;color:#666}\&quot;],\&quot;sourceRoot\&quot;:\&quot;webpack://\&quot;}]);\n\n// exports\n\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/css-loader?sourceMap!../~/vue-loader/lib/style-rewriter.js!../~/less-loader?sourceMap!../~/vue-loader/lib/selector.js?type=style&amp;index=0!./components/form/line-selector.vue\n ** module id = 183\n ** module chunks = 5\n **/&quot;, &quot;exports = module.exports = require(\&quot;./../../../node_modules/css-loader/lib/css-base.js\&quot;)();\n// imports\n\n\n// module\nexports.push([module.id, \&quot;.add-internal-box{position:absolute;top:70px;left:50%;width:500px;margin-left:-400px;color:#333;font-size:16px}.add-internal-box .line-buttons{margin-top:10px}.add-internal-box .line-buttons input[type=button]{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;color:#fff;font-size:14px}.add-internal-box .line-buttons .btn-submit{margin-right:20px}\&quot;, \&quot;\&quot;, {\&quot;version\&quot;:3,\&quot;sources\&quot;:[\&quot;/./pages/account/addInternal.vue\&quot;],\&quot;names\&quot;:[],\&quot;mappings\&quot;:\&quot;AAAA,kBAAkB,kBAAkB,SAAS,SAAS,YAAY,mBAAmB,WAAW,cAAc,CAAC,gCAAgC,eAAe,CAAC,mDAAqD,mBAAmB,sBAAsB,kBAAkB,cAAc,WAAW,cAAc,CAAC,4CAA4C,iBAAiB,CAAC\&quot;,\&quot;file\&quot;:\&quot;addInternal.vue\&quot;,\&quot;sourcesContent\&quot;:[\&quot;.add-internal-box{position:absolute;top:70px;left:50%;width:500px;margin-left:-400px;color:#333;font-size:16px}.add-internal-box .line-buttons{margin-top:10px}.add-internal-box .line-buttons input[type=\\\&quot;button\\\&quot;]{-webkit-box-flex:1;-webkit-flex:auto 1 1;-ms-flex:auto 1 1;flex:auto 1 1;color:#fff;font-size:14px}.add-internal-box .line-buttons .btn-submit{margin-right:20px}\&quot;],\&quot;sourceRoot\&quot;:\&quot;webpack://\&quot;}]);\n\n// exports\n\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/css-loader?sourceMap!../~/vue-loader/lib/style-rewriter.js!../~/less-loader?sourceMap!../~/vue-loader/lib/selector.js?type=style&amp;index=0!./pages/account/addInternal.vue\n ** module id = 186\n ** module chunks = 5\n **/&quot;, &quot;exports = module.exports = require(\&quot;./../../../node_modules/css-loader/lib/css-base.js\&quot;)();\n// imports\n\n\n// module\nexports.push([module.id, \&quot;\&quot;, \&quot;\&quot;, {\&quot;version\&quot;:3,\&quot;sources\&quot;:[],\&quot;names\&quot;:[],\&quot;mappings\&quot;:\&quot;\&quot;,\&quot;file\&quot;:\&quot;app.vue\&quot;,\&quot;sourceRoot\&quot;:\&quot;webpack://\&quot;}]);\n\n// exports\n\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/css-loader?sourceMap!../~/vue-loader/lib/style-rewriter.js!../~/less-loader?sourceMap!../~/vue-loader/lib/selector.js?type=style&amp;index=0!./pages/account/app.vue\n ** module id = 187\n ** module chunks = 5\n **/&quot;, &quot;module.exports = \&quot;&lt;line-base v-ref:base :necessary=necessary :display=display class=line-seletor&gt; &lt;select v-el:selector class=form-control v-model=value&gt; &lt;option v-for=\\\&quot;option in options\\\&quot; :value=option.value&gt;{{option.text}}&lt;/option&gt; &lt;/select&gt; &lt;/line-base&gt;\&quot;;\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/vue-html-loader!../~/vue-loader/lib/selector.js?type=template&amp;index=0!./components/form/line-selector.vue\n ** module id = 214\n ** module chunks = 5\n **/&quot;, &quot;module.exports = \&quot;&lt;div class=add-internal-box&gt; &lt;div class=\\\&quot;form-horizontal form-wrapper\\\&quot;&gt; &lt;line-selector v-ref:role display=角色 :options=roleOptions&gt;&lt;/line-selector&gt; &lt;form-input v-ref:username display=用户名： error=5~30个字符，支持中英文 pattern=[\\\\S]{5,30} placeholder=5~30个字符，支持中英文&gt;&lt;/form-input&gt; &lt;form-input v-ref:contact display=联系人姓名： error=请输入正确的姓名 pattern=[\\\\S]{2,4} placeholder=2到4个字符&gt;&lt;/form-input&gt; &lt;form-input v-ref:email display=联系人邮箱： error=非合法邮箱 pattern=(\\\\w)+(\\\\.\\\\w+)*@(\\\\w)+((\\\\.\\\\w+)+)&gt;&lt;/form-input&gt; &lt;phone-inputs v-ref:phone display=联系人电话： error=非合法电话号码 pattern=\\\\+?\\\\d{5,13} :verify=false&gt;&lt;/phone-inputs&gt; &lt;line-base :necessary=false class=line-buttons&gt; &lt;input type=button value=提交并发送邮件 class=\\\&quot;btn btn-primary btn-submit\\\&quot; :class=\\\&quot;{disabled: submitDisable}\\\&quot; @click=submit(true)&gt; &lt;input type=button value=仅提交 class=\\\&quot;btn btn-primary btn-submit\\\&quot; :class=\\\&quot;{disabled: submitDisable}\\\&quot; @click=submit()&gt; &lt;input type=button value=取消 class=\\\&quot;btn btn-default btn-cancel\\\&quot; @click=\\\&quot;$router.go(&apos;/login&apos;)\\\&quot;&gt; &lt;/line-base&gt; &lt;/div&gt; &lt;/div&gt;\&quot;;\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/vue-html-loader!../~/vue-loader/lib/selector.js?type=template&amp;index=0!./pages/account/addInternal.vue\n ** module id = 218\n ** module chunks = 5\n **/&quot;, &quot;module.exports = \&quot;&lt;common-header&gt;&lt;/common-header&gt; &lt;common-lr-router&gt; &lt;a v-link=\\\&quot;{ path: &apos;/addInternal&apos; }\\\&quot;&gt;添加内部帐号&lt;/a&gt; &lt;/common-lr-router&gt;\&quot;;\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/vue-html-loader!../~/vue-loader/lib/selector.js?type=template&amp;index=0!./pages/account/app.vue\n ** module id = 219\n ** module chunks = 5\n **/&quot;, &quot;var __vue_script__, __vue_template__\nrequire(\&quot;!!vue-style-loader!css-loader?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!less-loader?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./line-selector.vue\&quot;)\n__vue_script__ = require(\&quot;!!babel-loader?presets[]=es2015&amp;plugins[]=transform-runtime&amp;comments=false!./../../../node_modules/vue-loader/lib/selector.js?type=script&amp;index=0!./line-selector.vue\&quot;)\n__vue_template__ = require(\&quot;!!vue-html-loader!./../../../node_modules/vue-loader/lib/selector.js?type=template&amp;index=0!./line-selector.vue\&quot;)\nmodule.exports = __vue_script__ || {}\nif (module.exports.__esModule) module.exports = module.exports.default\nif (__vue_template__) {\n(typeof module.exports === \&quot;function\&quot; ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__\n}\n\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ./components/form/line-selector.vue\n ** module id = 244\n ** module chunks = 5\n **/&quot;, &quot;var __vue_script__, __vue_template__\nrequire(\&quot;!!vue-style-loader!css-loader?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!less-loader?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./addInternal.vue\&quot;)\n__vue_script__ = require(\&quot;!!babel-loader?presets[]=es2015&amp;plugins[]=transform-runtime&amp;comments=false!./../../../node_modules/vue-loader/lib/selector.js?type=script&amp;index=0!./addInternal.vue\&quot;)\n__vue_template__ = require(\&quot;!!vue-html-loader!./../../../node_modules/vue-loader/lib/selector.js?type=template&amp;index=0!./addInternal.vue\&quot;)\nmodule.exports = __vue_script__ || {}\nif (module.exports.__esModule) module.exports = module.exports.default\nif (__vue_template__) {\n(typeof module.exports === \&quot;function\&quot; ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__\n}\n\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ./pages/account/addInternal.vue\n ** module id = 245\n ** module chunks = 5\n **/&quot;, &quot;var __vue_script__, __vue_template__\nrequire(\&quot;!!vue-style-loader!css-loader?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!less-loader?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./app.vue\&quot;)\n__vue_script__ = require(\&quot;!!babel-loader?presets[]=es2015&amp;plugins[]=transform-runtime&amp;comments=false!./../../../node_modules/vue-loader/lib/selector.js?type=script&amp;index=0!./app.vue\&quot;)\n__vue_template__ = require(\&quot;!!vue-html-loader!./../../../node_modules/vue-loader/lib/selector.js?type=template&amp;index=0!./app.vue\&quot;)\nmodule.exports = __vue_script__ || {}\nif (module.exports.__esModule) module.exports = module.exports.default\nif (__vue_template__) {\n(typeof module.exports === \&quot;function\&quot; ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__\n}\n\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ./pages/account/app.vue\n ** module id = 246\n ** module chunks = 5\n **/&quot;, &quot;// style-loader: Adds some css to the DOM by adding a &lt;style&gt; tag\n\n// load the styles\nvar content = require(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./line-selector.vue\&quot;);\nif(typeof content === &apos;string&apos;) content = [[module.id, content, &apos;&apos;]];\n// add the styles to the DOM\nvar update = require(\&quot;!./../../../node_modules/vue-style-loader/addStyles.js\&quot;)(content, {});\nif(content.locals) module.exports = content.locals;\n// Hot Module Replacement\nif(module.hot) {\n\t// When the styles change, update the &lt;style&gt; tags\n\tif(!content.locals) {\n\t\tmodule.hot.accept(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./line-selector.vue\&quot;, function() {\n\t\t\tvar newContent = require(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./line-selector.vue\&quot;);\n\t\t\tif(typeof newContent === &apos;string&apos;) newContent = [[module.id, newContent, &apos;&apos;]];\n\t\t\tupdate(newContent);\n\t\t});\n\t}\n\t// When the module is disposed, remove the &lt;style&gt; tags\n\tmodule.hot.dispose(function() { update(); });\n}\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/vue-style-loader!../~/css-loader?sourceMap!../~/vue-loader/lib/style-rewriter.js!../~/less-loader?sourceMap!../~/vue-loader/lib/selector.js?type=style&amp;index=0!./components/form/line-selector.vue\n ** module id = 271\n ** module chunks = 5\n **/&quot;, &quot;// style-loader: Adds some css to the DOM by adding a &lt;style&gt; tag\n\n// load the styles\nvar content = require(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./addInternal.vue\&quot;);\nif(typeof content === &apos;string&apos;) content = [[module.id, content, &apos;&apos;]];\n// add the styles to the DOM\nvar update = require(\&quot;!./../../../node_modules/vue-style-loader/addStyles.js\&quot;)(content, {});\nif(content.locals) module.exports = content.locals;\n// Hot Module Replacement\nif(module.hot) {\n\t// When the styles change, update the &lt;style&gt; tags\n\tif(!content.locals) {\n\t\tmodule.hot.accept(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./addInternal.vue\&quot;, function() {\n\t\t\tvar newContent = require(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./addInternal.vue\&quot;);\n\t\t\tif(typeof newContent === &apos;string&apos;) newContent = [[module.id, newContent, &apos;&apos;]];\n\t\t\tupdate(newContent);\n\t\t});\n\t}\n\t// When the module is disposed, remove the &lt;style&gt; tags\n\tmodule.hot.dispose(function() { update(); });\n}\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/vue-style-loader!../~/css-loader?sourceMap!../~/vue-loader/lib/style-rewriter.js!../~/less-loader?sourceMap!../~/vue-loader/lib/selector.js?type=style&amp;index=0!./pages/account/addInternal.vue\n ** module id = 274\n ** module chunks = 5\n **/&quot;, &quot;// style-loader: Adds some css to the DOM by adding a &lt;style&gt; tag\n\n// load the styles\nvar content = require(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./app.vue\&quot;);\nif(typeof content === &apos;string&apos;) content = [[module.id, content, &apos;&apos;]];\n// add the styles to the DOM\nvar update = require(\&quot;!./../../../node_modules/vue-style-loader/addStyles.js\&quot;)(content, {});\nif(content.locals) module.exports = content.locals;\n// Hot Module Replacement\nif(module.hot) {\n\t// When the styles change, update the &lt;style&gt; tags\n\tif(!content.locals) {\n\t\tmodule.hot.accept(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./app.vue\&quot;, function() {\n\t\t\tvar newContent = require(\&quot;!!./../../../node_modules/css-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/less-loader/index.js?sourceMap!./../../../node_modules/vue-loader/lib/selector.js?type=style&amp;index=0!./app.vue\&quot;);\n\t\t\tif(typeof newContent === &apos;string&apos;) newContent = [[module.id, newContent, &apos;&apos;]];\n\t\t\tupdate(newContent);\n\t\t});\n\t}\n\t// When the module is disposed, remove the &lt;style&gt; tags\n\tmodule.hot.dispose(function() { update(); });\n}\n\n\n/*****************\n ** WEBPACK FOOTER\n ** ../~/vue-style-loader!../~/css-loader?sourceMap!../~/vue-loader/lib/style-rewriter.js!../~/less-loader?sourceMap!../~/vue-loader/lib/selector.js?type=style&amp;index=0!./pages/account/app.vue\n ** module id = 275\n ** module chunks = 5\n **/&quot;],
+    &quot;sourceRoot&quot;: &quot;&quot;
+}
+</code></pre></li>
+<li><p>eval-source-map:loader转译之后的代码都在eval里面执行，在eval代码里最后面使用sourceMappingURL=dataURL:base64；在浏览器展示中对应的是源文件。这里的dataURL就是一个完全自包含的source-map。</p>
+<blockquote>
+<p>在eval-source-map:eval最后的dataurl base64解码之后得到完整的*.js.map文件内容如下：</p>
+</blockquote>
+<pre><code>{
+    &quot;version&quot;: 3,
+    &quot;sources&quot;: [&quot;webpack:///app.vue?a737&quot;],
+    &quot;names&quot;: [],
+    &quot;mappings&quot;: &quot;;;;;;;AAWA;;;;AACA;;;;AAKA;;;;;;;AAMA;AAHA;AADA;0BAKA;eACA;AACA;;;AAEA;AAEA;AAHA;4BAIA;aACA;AACA;;aACA;AAhBA&quot;,
+    &quot;file&quot;: &quot;154.js&quot;,
+    &quot;sourcesContent&quot;: [&quot;&lt;style lang=\&quot;less\&quot;&gt;\n&lt;/style&gt;\n\n&lt;template&gt;\n    &lt;common-header&gt;&lt;/common-header&gt;\n    &lt;common-lr-router&gt;\n        &lt;a v-link=\&quot;{ path: &apos;/addInternal&apos; }\&quot;&gt;添加内部帐号&lt;/a&gt;\n    &lt;/common-lr-router&gt;\n&lt;/template&gt;\n\n&lt;script&gt;\nimport commonHeader from &apos;components/common-header&apos;;\nimport commonLrRouter from &apos;components/common-lr-router&apos;;\nimport {\n    getUser\n} from &apos;store/actions&apos;;\n\nexport default {\n    vuex: {\n        actions: {\n            getUser\n        }\n    },\n    data() {\n        return {}\n    },\n    components: {\n        commonHeader,\n        commonLrRouter\n    },\n    ready() {\n        this.getUser();\n    },\n    methods: {}\n}\n&lt;/script&gt;\n\n\n/** WEBPACK FOOTER **\n ** app.vue?12bb772a\n **/&quot;],
+    &quot;sourceRoot&quot;: &quot;&quot;
+}
+</code></pre><blockquote>
+<p>可以从*.js.map（定义了sources、sourceConent）中完美解析出一个app.vue源文件。包括source-map内容告诉浏览器源文件的自定义地址。。</p>
+</blockquote>
+</li>
+<li><p>inline-source-map：loader转译之后代码都在<strong>webpack_require</strong>闭包里面执行，非eval，在最后添加sourceMapURL=dataURL。（建议使用）</p>
+</li>
+</ol>
+<h4 id="结论："><a href="#结论：" class="headerlink" title="结论："></a>结论：</h4><ol>
+<li>webpack产生的source-map基本上都是自包含的source-map</li>
+<li>webpack要求loader提供sourcemap，webpack的source-map与loader的source-map关系还不是很明确，（最终肯定是结合产生的sourcemap）；在webpack里面可能有很多种策略，关于如何使用loader的sourcemap，需要进一步阅读webpack的源码查找。</li>
+<li>webpack sourcemap在eval模式下页面加载过程中设置的短点是无效的；建议使用inline-sourcemap的模式，可以在一开始加载就有效。</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sourcemap/" rel="tag"># sourcemap</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/30/javascript_key/" rel="next" title="java解密">
+                <i class="fa fa-chevron-left"></i> java解密
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/18/javascript_secret/" rel="prev" title="javascript解密">
+                javascript解密 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sourcemap与webpack-sourcemap的实现"><span class="nav-text">sourcemap与webpack-sourcemap的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#before"><span class="nav-text">before</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-vlq与base64-vlq：variable-length-quantity"><span class="nav-text">1. vlq与base64 vlq：variable length quantity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-sourcemap使用base64vql进行位置定位"><span class="nav-text">2. sourcemap使用base64vql进行位置定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-sourceMappingURL和-sourceUrl"><span class="nav-text">3. //# sourceMappingURL和//# sourceUrl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-sourcemap-in-webpack"><span class="nav-text">4. sourcemap in webpack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#结论："><span class="nav-text">结论：</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2016/07/10/sourcemap/';
+        this.page.identifier = '2016/07/10/sourcemap/';
+        this.page.title = 'sourcemap与webpack-sourcemap的实现';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

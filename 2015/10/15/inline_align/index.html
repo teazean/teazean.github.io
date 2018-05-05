@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="关于block、inline终极解密 一个display:inline-block上下无法对齐的原因 关于vertical-align： block box, inline box BFC IFC 使用IFC实现垂直居中  一个display:inline-block上下无法对齐的原因 对于相邻inline-block元素之间有3px间距的问题，可以通过父标签font-size:0来解决。 下面说">
+<meta name="keywords" content="inline block inline-block">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于 block、inline 终极解密">
+<meta property="og:url" content="http://teazean.com/2015/10/15/inline_align/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="关于block、inline终极解密 一个display:inline-block上下无法对齐的原因 关于vertical-align： block box, inline box BFC IFC 使用IFC实现垂直居中  一个display:inline-block上下无法对齐的原因 对于相邻inline-block元素之间有3px间距的问题，可以通过父标签font-size:0来解决。 下面说">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://teazean.com/images/inline-block/inline-block-bug.jpg">
+<meta property="og:image" content="http://teazean.com/images/inline-block/inline-block-solved.jpg">
+<meta property="og:image" content="http://teazean.com/images/inline-block/middle.png">
+<meta property="og:image" content="http://teazean.com/images/inline-block/result.png">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.828Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于 block、inline 终极解密">
+<meta name="twitter:description" content="关于block、inline终极解密 一个display:inline-block上下无法对齐的原因 关于vertical-align： block box, inline box BFC IFC 使用IFC实现垂直居中  一个display:inline-block上下无法对齐的原因 对于相邻inline-block元素之间有3px间距的问题，可以通过父标签font-size:0来解决。 下面说">
+<meta name="twitter:image" content="http://teazean.com/images/inline-block/inline-block-bug.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2015/10/15/inline_align/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>关于 block、inline 终极解密 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2015/10/15/inline_align/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于 block、inline 终极解密
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2015-10-15 00:00:00" itemprop="dateCreated datePublished" datetime="2015-10-15T00:00:00+08:00">2015-10-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/10/15/inline_align/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/10/15/inline_align/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="关于block、inline终极解密"><a href="#关于block、inline终极解密" class="headerlink" title="关于block、inline终极解密"></a>关于block、inline终极解密</h2><ol>
+<li>一个<code>display:inline-block</code>上下无法对齐的原因</li>
+<li>关于vertical-align：</li>
+<li>block box, inline box</li>
+<li>BFC</li>
+<li>IFC</li>
+<li>使用IFC实现垂直居中</li>
+</ol>
+<h3 id="一个display-inline-block上下无法对齐的原因"><a href="#一个display-inline-block上下无法对齐的原因" class="headerlink" title="一个display:inline-block上下无法对齐的原因"></a>一个<code>display:inline-block</code>上下无法对齐的原因</h3><ol>
+<li>对于相邻inline-block元素之间有3px间距的问题，可以通过父标签<code>font-size:0</code>来解决。</li>
+<li>下面说一个inline-block元素之间上下无法对齐的问题</li>
+</ol>
+<p><img src="/images/inline-block/inline-block-bug.jpg"><br><strong>问题：</strong> 图中，每一个框框都是通过”display:inline-block;”来实现，但是达不到上下对其的效果。</p>
+<p><strong>原因：</strong> <a href="http://www.w3.org/TR/CSS21/visudet.html#propdef-vertical-align" target="_blank" rel="noopener">http://www.w3.org/TR/CSS21/visudet.html#propdef-vertical-align</a></p>
+<ol>
+<li><p>The baseline of an ‘inline-block’ is the baseline of its last line box in the normal flow, unless it has either no in-flow line boxes or if its ‘overflow’ property has a computed value other than ‘visible’, in which case the baseline is the bottom margin edge.</p>
+<blockquote>
+<p>inline-block元素默认的baseline是它内部inline元素最后一行的baseline。除非inline-block元素没有内部元素或者它的overflow非visible（BFC），此时它的baseline是它的margin底部边缘（外围）。</p>
+</blockquote>
+</li>
+<li><p>vertical-align默认是baseline对齐，所以会出现上线对不起的问题。</p>
+</li>
+</ol>
+<p><strong>解决方案</strong></p>
+<ol>
+<li>为每一个框框设置vertical-align为<code>非baseline</code></li>
+<li>或者为每一个框框设置overflow为<code>非visiable</code>如hidden。</li>
+</ol>
+<p><img src="/images/inline-block/inline-block-solved.jpg"></p>
+<a id="more"></a>
+<h3 id="关于vertical-align："><a href="#关于vertical-align：" class="headerlink" title="关于vertical-align："></a>关于vertical-align：</h3><p><a href="http://www.w3.org/TR/CSS21/visudet.html#propdef-vertical-align" target="_blank" rel="noopener">http://www.w3.org/TR/CSS21/visudet.html#propdef-vertical-align</a></p>
+<p>vertical-align应用于<code>内联（inline）元素</code>和<code>table-cell元素</code>。</p>
+<ol>
+<li>baseline：默认，将元素的baseline与父标签的baseline对齐。如果元素没有baseline，则将它的底部边缘与父元素的baseline对其。</li>
+<li>middle：将元素的midpoint与父标签的baseline+x字母高的1/2对齐。</li>
+<li>sub：降低元素的baseline，将baseline与父标签的下标对齐。</li>
+<li>super：升高元素的baseline，将baseline与父标签的上标对齐。</li>
+<li>text-top：将元素的top与父标签content area的top对齐。</li>
+<li>text-bottom：将元素的bottom与父标签content area的bottom对齐。</li>
+<li>top：将对齐的元素的top与line box的bottom对齐。</li>
+<li>bootom：将对齐的元素的bottom与line box的bottom对齐。</li>
+<li>length：通过距离升高（正值）或降低（负值）元素。’0cm’等同于’baseline’</li>
+<li>percent：通过距离（相对于line-height值的百分大小）升高（正值）或降低（负值）元素。’0%’等同于’baseline’</li>
+</ol>
+<h3 id="block-box-inline-box"><a href="#block-box-inline-box" class="headerlink" title="block box, inline box"></a>block box, inline box</h3><p><a href="http://www.w3.org/TR/CSS2/visuren.html" target="_blank" rel="noopener">http://www.w3.org/TR/CSS2/visuren.html</a></p>
+<ol>
+<li>html标签分为block element（block-level box）和inline element（inline-level box），但并不是所有的块级元素都应用BFC，所有的内联元素都应用IFC.</li>
+<li>container box指应用BFC或者IFC的盒子。</li>
+<li>block box指应用BFC的块级元素。</li>
+<li>inline box指应用IFC的块级元素。</li>
+</ol>
+<h3 id="BFC-（block-formatting-context）"><a href="#BFC-（block-formatting-context）" class="headerlink" title="BFC （block formatting context）"></a>BFC （block formatting context）</h3><p>if a block container box (such as that generated for the DIV above) has a block-level box inside it (such as the P above), then we force it to have only block-level boxes inside it.</p>
+<blockquote>
+<p>如果一个块级盒子内部有一个块级元素，那么我们强制这个块级盒子里只有块级元素。</p>
+</blockquote>
+<pre><code>&lt;div&gt;
+    Some text
+    &lt;p&gt;Other text&lt;/p&gt;
+    More text
+&lt;/div&gt;
+
+在上面，如果我们设置div块为一个block box（BFC），那么div中将有3个块级元素`匿名跨级元素`、`p元素`、`匿名跨级元素`；
+</code></pre><p>Floats, absolutely positioned elements, block containers (such as inline-blocks, table-cells, and table-captions) that are not block boxes, and block boxes with ‘overflow’ other than ‘visible’ (except when that value has been propagated to the viewport) establish new block formatting contexts for their contents.</p>
+<blockquote>
+<p>根元素、float属性不为none、osition为absolute或fixed、display为<code>inline-block</code>, <code>table-cell</code>, <code>table-caption</code>, <code>flex</code>, <code>inline-flex</code>、overflow不为visible会创建自己的BFC容器。</p>
+</blockquote>
+<pre><code>1. 内部的Box会在垂直方向，一个接一个地放置。
+2. Box垂直方向的距离由margin决定。属于同一个BFC的两个相邻Box的margin会发生重叠
+3. 每个元素的margin box的左边， 与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。
+4. BFC的区域不会与float box重叠。
+5. BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。(其他几条都在体现这个)
+6. 计算BFC的高度时，浮动元素也参与计算。（可以使用overflow:hidden来清除浮动，此时浮动元素也全部显示）
+</code></pre><h3 id="IFC（inline-formatting-context）"><a href="#IFC（inline-formatting-context）" class="headerlink" title="IFC（inline formatting context）"></a>IFC（inline formatting context）</h3><p><a href="http://blog.ohweb.cn/archives/category/fe" target="_blank" rel="noopener">http://blog.ohweb.cn/archives/category/fe</a></p>
+<p>Any text that is directly contained inside a block container element (not inside an inline element) must be treated as an anonymous inline element.</p>
+<blockquote>
+<p>任何直接包含在块级元素中间的文本（非内联元素的文本）必须被当成是一个匿名内联元素。</p>
+</blockquote>
+<pre><code>&lt;p&gt;Some &lt;em&gt;emphasized&lt;/em&gt; text&lt;/p&gt;
+p是一个块状元素，它内部创建了一个line box，这里面有三个内联元素，&quot;匿名内联元素&quot;、&quot;em元素&quot;、&quot;匿名内联元素&quot;
+</code></pre><p>In an inline formatting context, boxes are laid out horizontally, one after the other, beginning at the top of a containing block. <strong>Horizontal margins, borders, and padding are respected between these boxes.</strong> The boxes may be aligned vertically in different ways: their bottoms or tops may be aligned, or the baselines of text within them may be aligned. <strong>The rectangular area that contains the boxes that form a line is called a line box.</strong></p>
+<blockquote>
+<ol>
+<li>在一个IFC容器里，里面的元素一个接一个的水平放置。水平方向的margin、borders、padding都是好用的。IFC中的每一个元素可能按照顶部、底部或者baseline对齐。<strong>包含这些内联元素，并组成一行的方块区域被称为line box</strong>；</li>
+<li>其实这句话解释了为什么内联元素是不能设置垂直方向的padding,margin等，因为即使设置了，也不会影响line box的高度,可能会在每个浏览器的表现各异，但大多数不会达到预期的效果。</li>
+</ol>
+</blockquote>
+<p>The width of a line box is determined by a containing block and the presence of floats. The height of a line box is determined by the rules given in the section on line height calculations.</p>
+<blockquote>
+<ol>
+<li>line box的宽度由包含容器和中间的浮动元素决定。<strong>line box的高度是由它所有包含的元素的vertical-align方式以及高度决定</strong>。</li>
+<li><a href="http://christopheraue.net/2014/03/05/vertical-align/" target="_blank" rel="noopener">http://christopheraue.net/2014/03/05/vertical-align/</a>，可以见这篇文章，里面分析了一个line box的高度的确定。line box的高度随着它内部元素一个个放置，伴随着内部元素的高度、对齐方式将line box的高度撑高。</li>
+</ol>
+</blockquote>
+<p>A line box is always tall enough for all of the boxes it contains. However, it may be taller than the tallest box it contains (if, for example, boxes are aligned so that baselines line up). When the height of a box B is less than the height of the line box containing it, the vertical alignment of B within the line box is determined by the ‘vertical-align’ property. When several inline-level boxes cannot fit horizontally within a single line box, they are distributed among two or more vertically-stacked line boxes. Thus, a paragraph is a vertical stack of line boxes. Line boxes are stacked with no vertical separation (except as specified elsewhere) and they never overlap.</p>
+<blockquote>
+<ol>
+<li>一个line box足够高以至于能包含它所有的内部元素。当一个内部元素没有line box高时，它的位置将有它的vertical-align来决定。</li>
+<li>当内部元素在一行放不下是，他们将拆分成多个line box。这么多个line box均为于一个IFC容器里。</li>
+</ol>
+</blockquote>
+<p>In general, the left edge of a line box touches the left edge of its containing block and the right edge touches the right edge of its containing block. However, floating boxes may come between the containing block edge and the line box edge. Thus, although line boxes in the same inline formatting context generally have the same width (that of the containing block), they may vary in width if available horizontal space is reduced due to floats. Line boxes in the same inline formatting context generally vary in height (e.g., one line might contain a tall image while the others contain only text).</p>
+<blockquote>
+<ol>
+<li>通常多行line box的宽度是一样的，但它会受浮动元素的影响。</li>
+<li>多个line box的高度通常也是一样的，但也会受line box内部的元素的影响，如一行包含一个比较高的图片。</li>
+</ol>
+</blockquote>
+<p>When the total width of the inline-level boxes on a line is less than the width of the line box containing them, their horizontal distribution within the line box is determined by the ‘text-align’ property. If that property has the value ‘justify’, the user agent may stretch spaces and words in inline boxes (but not inline-table and inline-block boxes) as well.</p>
+<blockquote>
+<p>如果所有的内联元素的宽度加起来比容器的要小，那么line box的位置由容器的<code>text-align</code>属性决定。若<code>text-align</code>的值是<code>justify</code>，那么浏览器就会对line box拉伸。</p>
+</blockquote>
+<p>When an inline box exceeds the width of a line box, it is split into several boxes and these boxes are distributed across several line boxes. If an inline box cannot be split (e.g., if the inline box contains a single character, or language specific word breaking rules disallow a break within the inline box, or if the inline box is affected by a white-space value of nowrap or pre), then the inline box overflows the line box.</p>
+<blockquote>
+<ol>
+<li>如果一个内联元素到达了line box的末端，他将被分割开，分不在多个line box上。</li>
+<li>如果一个内联元素设置的不可拆行（如white-space:nowrap/pre）,那么这个内联元素将会从line box上溢出。</li>
+</ol>
+</blockquote>
+<p>When an inline box is split, margins, borders, and padding have no visual effect where the split occurs (or at any split, when there are several).</p>
+<blockquote>
+<p>当一个内联元素被拆分的时候，margins、borders、paddings并没有任何的视觉效果。</p>
+</blockquote>
+<p>Inline boxes may also be split into several boxes within the same line box due to bidirectional text processing.</p>
+<p>Line boxes are created as needed to hold inline-level content within an inline formatting context. Line boxes that contain no text, no preserved white space, no inline elements with non-zero margins, padding, or borders, and no other in-flow content (such as images, inline blocks or inline tables), and do not end with a preserved newline must be treated as zero-height line boxes for the purposes of determining the positions of any elements inside of them, and must be treated as not existing for any other purpose.</p>
+<blockquote>
+<ol>
+<li>line box的生存条件是在一个IFC容器里，并且内部有内联元素。如果line box内部没有文本、空白、换行符、内联元素，将被设为0高度，被认为是没有意义的。</li>
+</ol>
+</blockquote>
+<h3 id="使用IFC实现垂直居中"><a href="#使用IFC实现垂直居中" class="headerlink" title="使用IFC实现垂直居中"></a>使用IFC实现垂直居中</h3><p>原理：在IFC容器下，是line box的高度是包含块容器的高度，这样让line box内部元素使用<code>vertical-align:middle</code>，达到垂直居中的效果。</p>
+<p>实现：在line box中，我们使用一个高度100%，并且<code>vertical-align:middle;</code>的inline-block元素撑开line box的高度为包含块的高度。</p>
+<blockquote>
+<ol>
+<li>‘height:100%’是为了撑开line-box的高度。</li>
+<li><code>vertical-align:middle</code>，是为了调整包含块容器的line box的baseline的位置，因为这个元素的高度是最高的，那么它引起的调整后的baseline的位置就成为了整个line box的baseline的位置，相应的就成为了其他元素对齐的基线，其他元素的vertical-align:middle才有实际意义。详细见：<a href="http://christopheraue.net/2014/03/05/vertical-align/" target="_blank" rel="noopener">http://christopheraue.net/2014/03/05/vertical-align/</a></li>
+</ol>
+</blockquote>
+<p>概念图：</p>
+<p><img src="/images/inline-block/middle.png"></p>
+<p>代码：</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Z-order positioning&lt;/title&gt;
+    &lt;style&gt;
+        #container{
+            background: #ccc;
+            height: 300px;
+            width: 500px;
+        }
+
+        #container:after{
+            content: &quot;&quot;;
+            display: inline-block;
+            height: 100%;
+            width: 20px;
+            background: green;
+            vertical-align: middle;
+        }
+
+        #middle{
+            display: inline-block;
+            vertical-align: middle;
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id=&quot;container&quot;&gt;
+        &lt;div id=&quot;middle&quot;&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>最终结果；<br><img src="/images/inline-block/result.png" style="max-width:400px"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/inline-block-inline-block/" rel="tag"># inline block inline-block</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/29/angular_js_notes/" rel="next" title="angularjs使用笔记">
+                <i class="fa fa-chevron-left"></i> angularjs使用笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/20/underscore/" rel="prev" title="underscore学习笔记">
+                underscore学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于block、inline终极解密"><span class="nav-text">关于block、inline终极解密</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一个display-inline-block上下无法对齐的原因"><span class="nav-text">一个display:inline-block上下无法对齐的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于vertical-align："><span class="nav-text">关于vertical-align：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#block-box-inline-box"><span class="nav-text">block box, inline box</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BFC-（block-formatting-context）"><span class="nav-text">BFC （block formatting context）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IFC（inline-formatting-context）"><span class="nav-text">IFC（inline formatting context）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用IFC实现垂直居中"><span class="nav-text">使用IFC实现垂直居中</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2015/10/15/inline_align/';
+        this.page.identifier = '2015/10/15/inline_align/';
+        this.page.title = '关于 block、inline 终极解密';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

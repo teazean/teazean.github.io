@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="目录： Vue1主要类图 Vue1生命周期 Vue1的疑问与解答 Vue2生命周期 Vue2的疑问与解答  1. Vue1主要类图 如上图：Vue1的结构中主要有4个类，  Vue/VueComponent：创建Vue实例的类 Dep：为所有要被监测的数据（data、props等）包括他们的属性、递归地建立getter、setter，并分别创建一个Dep与一堆getter、setter相关。当某一">
+<meta name="keywords" content="vue mvvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue 源码阅读">
+<meta property="og:url" content="http://teazean.com/2016/05/27/vue/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="目录： Vue1主要类图 Vue1生命周期 Vue1的疑问与解答 Vue2生命周期 Vue2的疑问与解答  1. Vue1主要类图 如上图：Vue1的结构中主要有4个类，  Vue/VueComponent：创建Vue实例的类 Dep：为所有要被监测的数据（data、props等）包括他们的属性、递归地建立getter、setter，并分别创建一个Dep与一堆getter、setter相关。当某一">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://teazean.com/images/vue/class.png">
+<meta property="og:image" content="http://teazean.com/images/vue/lifecycle.png">
+<meta property="og:image" content="http://teazean.com/images/vue/vue2.jpg">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.833Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vue 源码阅读">
+<meta name="twitter:description" content="目录： Vue1主要类图 Vue1生命周期 Vue1的疑问与解答 Vue2生命周期 Vue2的疑问与解答  1. Vue1主要类图 如上图：Vue1的结构中主要有4个类，  Vue/VueComponent：创建Vue实例的类 Dep：为所有要被监测的数据（data、props等）包括他们的属性、递归地建立getter、setter，并分别创建一个Dep与一堆getter、setter相关。当某一">
+<meta name="twitter:image" content="http://teazean.com/images/vue/class.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2016/05/27/vue/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>vue 源码阅读 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2016/05/27/vue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vue 源码阅读
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-05-27 00:00:00" itemprop="dateCreated datePublished" datetime="2016-05-27T00:00:00+08:00">2016-05-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/05/27/vue/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/05/27/vue/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="目录："><a href="#目录：" class="headerlink" title="目录："></a>目录：</h2><ol>
+<li>Vue1主要类图</li>
+<li>Vue1生命周期</li>
+<li>Vue1的疑问与解答</li>
+<li>Vue2生命周期</li>
+<li>Vue2的疑问与解答</li>
+</ol>
+<h3 id="1-Vue1主要类图"><a href="#1-Vue1主要类图" class="headerlink" title="1. Vue1主要类图"></a>1. Vue1主要类图</h3><p><img src="/images/vue/class.png" alt="classStature"></p>
+<p>如上图：Vue1的结构中主要有4个类，</p>
+<ol>
+<li>Vue/VueComponent：创建Vue实例的类</li>
+<li>Dep：为所有要被监测的数据（data、props等）包括他们的属性、递归地建立getter、setter，并分别创建一个Dep与一堆getter、setter相关。当某一个数据的setter被触发，对应Dep对象的所有subscribers(Watcher实例)都会update。</li>
+<li>Directive：数据帮顶、指令的主要实现，数据绑定也被转化为Directive；Directive主要是关联Dom-Node与数据，当Directive.update被调用，也就对Dom-Node进行更新操作；在创建Directive的时候，会创建一个Watcher去监听与该Directive-expressoin相关联的数据的Dep；</li>
+<li>Watcher：真正去监听Dep的对象。该对象负责解析expression与数据-Dep之间的关系，并去监听（subcribe）相关数据的Dep。</li>
+</ol>
+<a id="more"></a>
+<h3 id="2-Vue1生命周期"><a href="#2-Vue1生命周期" class="headerlink" title="2. Vue1生命周期"></a>2. Vue1生命周期</h3><p><img src="/images/vue/lifecycle.png" alt="lifecycleStracture"></p>
+<ol>
+<li>Watcher与Dep的对应关系：每一个Dep对应一个属性的getter、setter，而Directive会创建一Watcher加入到该Directive依赖的所有属性的Dep对象的监听者中。当属性更改时，会通知[Watcher]进行更新（即Directive的更新）。</li>
+<li>Dep与Watcher监听关系的建立：在Directive创建Watcher的时候，Directive会有一个expression表达式，此时会先Dep.target赋值当前Watcher，并尝试计算一次该expression（即一次gettter.call操作）；那么计算expression的时候，里面所依赖的属性们都会触发一次getter操作，同时在属性的getter中会判断Dep.target有没有值，如果有值（Watcher），则将该Watcher加入到自己Dep的监听者中；expression计算结束之后，Dep.target=null。（这里有一个bug：如果一个expression过于复杂，有条件判断，则有些属性有可能触发不了getter操作，那么就没法监听该属性。不过没问题，如果某些属性没使用，表示其他属性的值使得这些属性无效，要让这些属性有效，必要更改其他属性，更改其他属性的时候，该expression的getter重新触发，deps就会有所更新）。</li>
+<li>通过expression解析获得该Watcher的getter、setter的时候会有一个expressionCache。以便表达式相同，重复利用。（在计算getter的时候会传入scope，不用担心不同scope相同expression的情况）。</li>
+<li>Directive多数对应一个Watcher，Watcher与Dep多对多。</li>
+<li><p>创建VueComponent，第一步<code>MyComponent=Vue.extend({})</code>，创建的是类；第二步<code>myComponent=new MyComponent()</code>,创建一个实例，触发（init、created）；第三步<code>myComponent.$mount(el)</code>,挂载到dom上，触发ready</p>
+<pre><code>var MyComponent = Vue.extend({
+  template: &apos;&lt;div&gt;Hello!&lt;/div&gt;&apos;
+})
+
+// 创建并挂载到 #app (会替换 #app)
+new MyComponent().$mount(&apos;#app&apos;)
+
+// 同上
+new MyComponent({ el: &apos;#app&apos; })
+
+// 手动挂载
+new MyComponent().$mount().$appendTo(&apos;#container&apos;)
+</code></pre></li>
+<li><p>vm._callhook(‘ready’)，触发的方法不仅仅包含vm._events[‘ready’]下面的方法，还有vm[‘ready’]方法。</p>
+</li>
+</ol>
+<h3 id="3-Vue1的疑问与解答"><a href="#3-Vue1的疑问与解答" class="headerlink" title="3. Vue1的疑问与解答"></a>3. Vue1的疑问与解答</h3><ol>
+<li><p>ready触发的时机？插入到dom or fragment</p>
+<blockquote>
+<p>触发机制可以从图里看到;</p>
+<p>对于Component Directive而言，此时会生成一个空的占位<code>TextNode</code>替换ComponentElement所在的位置。而ComponentElement则作为options.el传递给VueComponnent的构造参数。<code>VueComponent-1</code>实例在compile阶段，会把元素的template插入到fragmentDocument中，若<code>replace=true</code>,<code>VueComponent-1.$el=fragementDocument</code>。若<code>replace=false</code>，<code>VueComponent-1.$el=ComponentElement.appendChild(fragmentElement)</code>，在Directive的update阶段调用<code>VueComponent-1.$before(TextNode)</code>插入到页面之中。</p>
+</blockquote>
+</li>
+<li><p>更新dom的机制。</p>
+<blockquote>
+<p>几乎所有的directive都与node绑定（排除props），即使是TextNode，当directive的watcher监测到数据变化话，会触发Directive.update，对node进行dom操作，更新dom。</p>
+</blockquote>
+</li>
+<li><p>componentDirective的依赖expOrFn是？</p>
+<blockquote>
+<p>expOrFn是child-test，componentDirective不创建watcher，传入的literal是true。</p>
+</blockquote>
+</li>
+<li><p>prop Director： dep是recurcively？</p>
+<blockquote>
+<p>yes defineReactive 是recurcively</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="4-Vue2生命周期"><a href="#4-Vue2生命周期" class="headerlink" title="4. Vue2生命周期"></a>4. Vue2生命周期</h3><p><img src="/images/vue/vue2.jpg" alt="vue2-lifecycle"></p>
+<ol>
+<li>Vue2中最大的不同就是各种api不在是vm的原型方法，从compile过程(template-&gt;vnode-render函数:ast-&gt;vnode)以及render过程(vnode-&gt;element)都是纯粹的api。这样的好处就是在web-render以及server-render可以共享代码。(注意这里面有些混淆：compile中的vnode-render函数是compile最终的结果，该render函数是用来生成vnode的；而render过程是将vnode转换成html的过程。)（代码名字起的不太好。）</li>
+<li>Vue2中的更新监测是对一个Vue/VueComponent实例的整体监测。每当一个数据更新，触发Dep-&gt;Watcher，整个Vue/VueComponent实例会重新走render过程，生成vnode，最后进行比较更新。</li>
+<li>关于代码中<code>directives</code>和<code>modules</code>的关系。<code>directives</code>和<code>modules</code>都是处理html上可能出现的各种属性/指令的。最开始<code>web/runtime/directives</code>下面的所有指令都绑定在<code>Vue.options.directives</code>上。在<code>vm._update/__patch__</code>的时候，此时的<code>modules</code>(即<code>cbs</code>)(<code>vdom/modules[directive,ref]</code>和<code>web/runtime/mudules[events,class,style,props,attrs,transitions]</code>)会用<code>hook:create</code>来设置<code>vnode/vnode.elm</code>，而其中<code>vdom/modules/directive</code>指令处理的就是从<code>compile/parse</code>阶段传过来的<code>rumtime</code>的指令(<code>web/runtime/directives[model,show]</code>,这些<code>runtime</code>的指令可以从<code>vnode.context.$options.directives</code>中获取引用)（方法对应：create-bind,update-update,postpatch-postupdate,destroy-unbind）。好了，设置完成了，好绕！！！</li>
+<li>关于vnode的更新：在patchVnode的时候，会调用所有上一步的<code>modules即cbs</code>的<code>hook:update(oldVnode, vnode)</code>;</li>
+</ol>
+<h3 id="5-Vue2的疑问与解答"><a href="#5-Vue2的疑问与解答" class="headerlink" title="5. Vue2的疑问与解答"></a>5. Vue2的疑问与解答</h3><ol>
+<li>lifecycle的不同：vue2中暂时没有ready，替代的是mounted</li>
+<li><p>server-render是怎么的一个实现？</p>
+<blockquote>
+<p>server-render的目的：进行seo优化，利用现有的vue代码，在服务端临时渲染出纯内容，返回给前端，进行seo优化</p>
+<p>vue-ssr的实现是：server-render独立实现了一套从vnode生成html的render过程。所以在使用server-render之前一定要自已调用compile过程，将template转成射给你陈工vnode的vnode-render函数。server-render最终结果只是生成纯粹的html内容。在页面初始化的时候也会被web-render给覆盖掉。</p>
+</blockquote>
+</li>
+<li><p>vdom：<a href="https://github.com/paldepind/snabbdom" target="_blank" rel="noopener">https://github.com/paldepind/snabbdom</a></p>
+</li>
+<li>html parser : <a href="http://erik.eae.net/simplehtmlparser/simplehtmlparser.js" target="_blank" rel="noopener">http://erik.eae.net/simplehtmlparser/simplehtmlparser.js</a></li>
+<li>关于vnode.ele（dom-elment对象）的属性：只有第一次用vnode去初始化页面的时候才会走createElement的流程，也只有第一次才会有这个属性，其他时间段ele为空</li>
+<li><p>vdom的计算和更新时每次一个setter触发都会执行一次的吗？</p>
+<blockquote>
+<p>不是，vue2里面有两层，<br>第一层：dom依赖的一些Dep(computed, getter)没有发生变更，就不会引起vdom的计算；若是发生了变更，还有第二层<br>第二层：vue2里面有一个shedule，每一个tick一个周期更新vdom，这是一个throttle的逻辑。</p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vue-mvvm/" rel="tag"># vue mvvm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/28/html5/" rel="next" title="html5 api">
+                <i class="fa fa-chevron-left"></i> html5 api
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/08/ecomfe/" rel="prev" title="ecomfe工具链杂记">
+                ecomfe工具链杂记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录："><span class="nav-text">目录：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Vue1主要类图"><span class="nav-text">1. Vue1主要类图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Vue1生命周期"><span class="nav-text">2. Vue1生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Vue1的疑问与解答"><span class="nav-text">3. Vue1的疑问与解答</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Vue2生命周期"><span class="nav-text">4. Vue2生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Vue2的疑问与解答"><span class="nav-text">5. Vue2的疑问与解答</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2016/05/27/vue/';
+        this.page.identifier = '2016/05/27/vue/';
+        this.page.title = 'vue 源码阅读';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

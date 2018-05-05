@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Git学习笔记 git push -u origin master:The -u tells Git to remember the parameters, so that next time we can simply run git push and Git will know what to do. 查看git命令的帮助： // 下面两个等价 git help config man git-">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git学习笔记">
+<meta property="og:url" content="http://teazean.com/2016/01/12/git_learn/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="Git学习笔记 git push -u origin master:The -u tells Git to remember the parameters, so that next time we can simply run git push and Git will know what to do. 查看git命令的帮助： // 下面两个等价 git help config man git-">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://teazean.com/images/git/reset.png">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.832Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git学习笔记">
+<meta name="twitter:description" content="Git学习笔记 git push -u origin master:The -u tells Git to remember the parameters, so that next time we can simply run git push and Git will know what to do. 查看git命令的帮助： // 下面两个等价 git help config man git-">
+<meta name="twitter:image" content="http://teazean.com/images/git/reset.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2016/01/12/git_learn/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>git学习笔记 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2016/01/12/git_learn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">git学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-01-12 00:00:00" itemprop="dateCreated datePublished" datetime="2016-01-12T00:00:00+08:00">2016-01-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/study/" itemprop="url" rel="index"><span itemprop="name">study</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/01/12/git_learn/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/01/12/git_learn/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Git学习笔记"><a href="#Git学习笔记" class="headerlink" title="Git学习笔记"></a>Git学习笔记</h2><ol>
+<li><code>git push -u origin master</code>:The -u tells Git to remember the parameters, so that next time we can simply run git push and Git will know what to do.</li>
+<li><p>查看git命令的帮助：</p>
+<pre><code>// 下面两个等价
+git help config
+man git-config
+
+// 查看简略的参数
+git config -h
+</code></pre></li>
+</ol>
+<a id="more"></a>
+<ol start="3">
+<li>git中的4个对象：blob object、tree（解决文件接口）、commit object、tag object</li>
+<li>git commit对象可以有多个parent，git分支的结构更像是一个单向图。</li>
+<li>git分支的本质：一个指向一系列提交之首的指针或者引用ref</li>
+<li>git引用：HEAD引用、tag引用、remotes引用</li>
+<li><p>git常用的目录</p>
+<pre><code>.git
+|--HEAD
+|--config
+|--description
+|--logs/
+        |--HEAD
+        |--refs/
+                |--heads/
+                        |--master
+                        |--other local branch
+                |--remotes/
+                        |--origin/
+                                |--master
+                                |--other remote/origin branch
+                        |--other git reposity
+|--hooks/
+|--info/
+|--objects/
+        |--pack/
+        |--..(sha-1[0-1])/....(sha-1[2-40])
+|--refs/
+        |--heads/
+                |--master
+                |--other local branch
+        |--remotes
+                |--origin/
+                        |--master
+                        |--other remote/origin branch
+                |--test/
+                |--other git reposity
+        |--tags/
+</code></pre></li>
+</ol>
+<ol start="7">
+<li>git gc:git文件的保存一开始是loose模式，即每个文件单独存放，但在<code>git gc</code>或者<code>git push</code>之前会将所有commit的文件打包，放到<code>.git/objects/pack</code>下，里面的文件会以差异记录的方式保存，更有意思的是旧文件以新文件为基础做差异记录。</li>
+<li><code>git push origin master</code>中各字段的含义：origin是remotes仓库在本地的别名，一般默认使用origin，当然也可以通过<code>git remote</code>命令创建新的remote仓库，如上面的目录图中的<code>/refs/remotes/test</code>就是另外定义的；master是<code>master:master</code>的缩写，第一个master是本地分支(refs/heads/master)，第二个master是远程分支(refs/remotes/origin/master)</li>
+<li>git有两种传输协议：哑协议（只能拉去数据，无法提交，http实现）和智能协议（拉去数据和提交数据，可以通过ssh、http(s)实现，之中有<code>send-pack</code>、<code>receive-pack</code>两个进程进行更新与同步）。更有趣的时，可以通过ssh(send-pack/receive-pack)、http(s)(get/post)来获取或提交关于git中你想要的一切信息，只要自己去解析引用与数据之间的关系。</li>
+<li>我们可以通过修改git引用或者git commit 历史记录引用的任何信息来修改或者恢复git库，常用的命令有<code>git log --pretty=oneline</code>、<code>git log -g</code>有效等同于<code>git reflog</code>(会记录HEAD每次改变的记录)、甚至于<code>git fsck -full</code>(会查找所有object中没被其他对象引用对象（blob、tree、commit、tag)，找到这些引用可以用来恢复一些硬操作）</li>
+<li>关于<code>git reset --soft/--hard HEAD</code><a href="https://git-scm.com/docs/git-reset" target="_blank" rel="noopener">linsk</a>，<code>--soft</code>不会改变当前工作区的文件，<code>--hard</code>会丢弃当前工作区的文件。<code>HEAD</code>、<code>HEAD^</code>、<code>HEAD~2</code>、<code>HEAD~3</code>、<code>HEAD@{n}</code>(git reflog 或者git log -g查看)，请看下一张图：<br><img src="/images/git/reset.png" alt="git reset"></li>
+<li>In its default mode, git pull is shorthand for git fetch followed by git merge FETCH_HEAD.(git pull就是git fetch + git merge fetch_head)</li>
+<li>在连接gerrit的时候会有<code>git push origin HEAD:refs/for/brancha</code>，这里的refs/for/brancha在本地是没有的，git也会push到server端，介入gerrit的时候，会先由gerrit处理refs/for/brancha，这样会创建一个CR的模块。</li>
+<li>git merge：合并指定的分支到当前分支，如果指定的分支和当前分支历史记录不一致，git会自动找到他们最近的共同祖先，然后比较合并指定分支和当前分支，会在当前分支生成最新的merge commit记录，如果中间有同一个文件同一个地方的合并冲突，git会停下commit，将合并过程中产生的修改置于工作区，之后由使用者处理冲突后，并执行git commit。<blockquote>
+<p>git merge，如果两个分支有差异，git merge会把两个分支的commits历史记录按照commit的时间顺序重新排序，在最后生成一个merge commit的历史记录。</p>
+</blockquote>
+</li>
+<li>git rebase: 将当前分支的所有commits产生的修改存放到一个临时的区域，然后当前的分支被重置到指定的分支（git reset –hard），最后将存放到临时区域的commits记录，一个一个的重新应用到当前分支，产生新的commit记录。如果当前分支分支有一些failure的merge commit，可能会导致rebase自动完成的失败，这时候使用者就要出来这些merge failure，然后执行 git rebase –continue;还有git rebase –onto <newbase> <upsteam> <branch>，可以用来将branch不在upstream的修改以newbase为基础重构。<blockquote>
+<p>注意注意：什么是git rebase <branch>中当前分支产生的修改，是指当前分支currentBranch与<branch>差异的部分，比如当前分支currentBranch与<branch>有一个共同的祖先<commit-a>，那么当前分支产生的修改就是从<commit-a>开始（不包括<commit-a>）</commit-a></commit-a></commit-a></branch></branch></branch></p>
+</blockquote>
+</branch></upsteam></newbase></li>
+<li>git fetch <reposity> <refspec>: 可以获取远程仓库reposity的refspec的分支的所有commits记录，仅仅是把远程分支fetch下来，并不合并到当前分支。</refspec></reposity></li>
+<li>注意像git merge、git rebase等都是分支操作，只有git fetch才会与远程reposity进行交互。</li>
+<li>git pull <reposity> <refspec>：等于git fetch + git merge</refspec></reposity></li>
+<li>git pull –rebase <reposity> <refspec>：等于git fetch + git rebase</refspec></reposity></li>
+<li>git remote add/rename/remove/set*：可以将远程仓库在本地做一个别名。强调一下：git是基于是历史记录的，完全可以将不同于当前git库的引用放置到当前git库中，并且完全可以用当前库的代码去提交、修改不同于当前库的其他远程git库。只要你有权限提交、修改，并且最好两个git库的历史记录其实也是相似的（才有意义啊）。</li>
+<li>git push <reposity> <refspec>：git push用于将本地分支提交到远程分支上，基本上就是overwrite ref，通常git会做检查，如果远程分支不是本地分支的祖先，git会拒绝本次提交。但可以使用git push -f，可以使git跳过这些检查，强行overwrite远程分支的ref，但这就有可能会是远程分支丢失一些commits，慎用。（回滚的时候可以使用）</refspec></reposity></li>
+<li>git cherry-pick <commit>：在当前分支重新应用一个commit的修改，并在当前分支产生一个新的commit记录。如果中间有冲突，使用者resolve冲突、并自己commit。</commit></li>
+<li>git apply <patch>：git apply是应用patch到当前分支的文件上,并不会提交，可以冲stdin中读取。patch可以是通过git diff产生的（git diff &gt; patch-1），也可以通过git format-patch。(未使用过).</patch></li>
+<li>git am：可以合并一个文件、或者一个目录下的所有path，或者邮箱目录下的patch，使用git apply，但do more than apply。<blockquote>
+<p>git am uses git apply behind the scenes, but does more work before (reading a Maildir or mbox, and parsing email messages) and after (creating commits).</p>
+</blockquote>
+</li>
+<li>git submodule: 可以在当前git库中，引入其他的git库作为依赖。会在当前git库中创建.gitmodules文件，submodule可以指定目录等。</li>
+<li>git commit对象！！！一开始以为一个commit对象引用另外一个commit对象，就像是List结构链一样，还一直纠结为什么git graph要岔开，岔开的结构是怎么存储的！！！其实commit对象是可以有很多parent的，git的结构设计就是如此，修改记录并不是List结构链，而是更像是一个单向图。</li>
+<li>git merge的操作就是一个3-way-merge，就是当前分支commit-A和其他分支commit-B要合并，有一个共同祖先commit-C，就是在以commit-C作为比较的基础上，找到commt-A和commit-B的差异，然后合并处理，生成一个新的commit-D，commit-D有两个parent，第一个parent就是当前分支commit-A，第二个parent就是commit-B。<blockquote>
+<p>three-way merge: <a href="https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge</a></p>
+</blockquote>
+</li>
+<li>git merge的基础是<code>git merge-base &lt;commit-1&gt; &lt;commit-2&gt; &lt;commit-3&gt; ...&lt;commit-n&gt;</code>，git merge的工作原理是先对<commit-n-1>和<commit-n>执行3-way的合并，得到<commit-cn-1>，然后拿<commit-cn-1>与<commit-n-2>3-way合并的到<commit-cn-2>依次例推。知道最后都合并。</commit-cn-2></commit-n-2></commit-cn-1></commit-cn-1></commit-n></commit-n-1></li>
+<li>git rebase: 一次auto merge失败，然后人工resolve，merged。如果这次merge commit重新被apply，应该是要重新手动处理冲突的。(经常会出现在branch-a分支过了许久从分支git pull -r origin master，然后又在branch-a上执行git pull -r origin branch-a);<blockquote>
+<p>It is possible that a merge failure will prevent this process from being completely automatic. You will have to resolve any such merge failure and run git rebase –continue. Another option is to bypass the commit that caused the merge failure with git rebase –skip.</p>
+</blockquote>
+</li>
+</ol>
+<p>注意，经常会遇到几种场景：</p>
+<ol>
+<li>在当前branch-a中，修改commit-a1，提交push到远程仓库remote/branch-a；（于此同时远程remote/master仓库也有了新的commit-m1，比如他们之前共同的祖先是commit-0），然后在本地branch-a中执行’git pull –rebase origin master’，本地的提交历史就会变成’commit-0 commit-m1 commit-na1’，commit-na1表示commit-a1在rebase的时候重新apply了一遍，产生了新的commit记录，如果此时再执行<code>git push origin branch-a</code>，push操作就会拒绝此次push，因为remote/branch-a此时已经不是本地branch-a的祖先了。需要先执行‘git pull’进行merge操作，然后保证remote/branch-a是本地分支的祖先，才能push。</li>
+<li>在本地分支branch-a多次<code>git pull --rebase origin master</code>，其实是没意义的，git rebase只找两个分支之间最近的差异，如果远程分支的差异为0次，则此次rebase是无效的。如果本地分支的差异为0次，只是相当于更新，把本地分支branch-a的引用设置成remote/master分支的引用。</li>
+<li>git checkout仅仅仅仅仅仅仅仅只是从本地registry checkout，要是想用remote最新的，应该先git fetch。</li>
+<li>可以使用git checkout sha-hash，获取一个老版本，如果你在老版本上进行了修改，则需要-f push，或者merge</li>
+<li>一次<code>git pull -r origin master</code>之后丢失本地commit的记录：</li>
+</ol>
+<blockquote>
+<p>在本地o1-o2-o3-o4,其中o4是一个(无论是否带有冲突的)merge操作，远程master的记录是o1-o2-m1，在使用git pull -r origin master的时候，处理到o4重新应用的时候，貌似是重新应用没法自动处理这个merge操作，然后导致o4没法重新应用，丢失；</p>
+</blockquote>
+<blockquote>
+<p>据说：git rebase其实是一组新的git cherrypick，对于cherrypick是查找当前commit和它的parent的差异，重新应用，但如果是一个merge操作，cherrypick就无法确定使用哪一个parent，所有就失败了。（cherrypick可以通过-m参数指定parent）</p>
+</blockquote>
+<blockquote>
+<p>另外一个git rebase丢失记录的可能是git判断要应用的commit的修改在之前都有，然后就丢失了</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/05/web_secure/" rel="next" title="Web 安全-《白帽子web安全阅读笔记》">
+                <i class="fa fa-chevron-left"></i> Web 安全-《白帽子web安全阅读笔记》
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/22/javascript_ninja/" rel="prev" title="javascript、css阅读摘要">
+                javascript、css阅读摘要 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git学习笔记"><span class="nav-text">Git学习笔记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2016/01/12/git_learn/';
+        this.page.identifier = '2016/01/12/git_learn/';
+        this.page.title = 'git学习笔记';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

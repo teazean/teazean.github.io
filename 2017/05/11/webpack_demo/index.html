@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1. 背景背景就是写一个h5，大概的结构就是: --index.html     -- main.js(一堆js，以main.js做入口)     -- main.less(一堆less，以main.less做入口)     -- assets/xxx.jpg|png 要求是：  将所有的styles打包到一个bundle.css,并计算文件的md5生成[hash].css，自动更新index.h">
+<meta name="keywords" content="webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录一次webpack以html为入口打包h5的实践">
+<meta property="og:url" content="http://teazean.com/2017/05/11/webpack_demo/index.html">
+<meta property="og:site_name" content="Teazean&#39;s Hive">
+<meta property="og:description" content="1. 背景背景就是写一个h5，大概的结构就是: --index.html     -- main.js(一堆js，以main.js做入口)     -- main.less(一堆less，以main.less做入口)     -- assets/xxx.jpg|png 要求是：  将所有的styles打包到一个bundle.css,并计算文件的md5生成[hash].css，自动更新index.h">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-05T04:31:28.838Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记录一次webpack以html为入口打包h5的实践">
+<meta name="twitter:description" content="1. 背景背景就是写一个h5，大概的结构就是: --index.html     -- main.js(一堆js，以main.js做入口)     -- main.less(一堆less，以main.less做入口)     -- assets/xxx.jpg|png 要求是：  将所有的styles打包到一个bundle.css,并计算文件的md5生成[hash].css，自动更新index.h">
+
+
+
+
+
+
+  <link rel="canonical" href="http://teazean.com/2017/05/11/webpack_demo/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>记录一次webpack以html为入口打包h5的实践 | Teazean's Hive</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70ec9118c8b324ea1b3aec03ab8166dd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Teazean's Hive</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://teazean.com/2017/05/11/webpack_demo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Teazean">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Teazean's Hive">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">记录一次webpack以html为入口打包h5的实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-05-11 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-11T00:00:00+08:00">2017-05-11</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-05 12:31:28" itemprop="dateModified" datetime="2018-05-05T12:31:28+08:00">2018-05-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/11/webpack_demo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/05/11/webpack_demo/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h3><p>背景就是写一个h5，大概的结构就是:</p>
+<pre><code>--index.html
+    -- main.js(一堆js，以main.js做入口)
+    -- main.less(一堆less，以main.less做入口)
+    -- assets/xxx.jpg|png
+</code></pre><p>要求是：</p>
+<ol>
+<li>将所有的styles打包到一个<code>bundle.css</code>,并计算文件的md5生成[hash].css，自动更新index.html的样式引用</li>
+<li>将所有的js打包到一个<code>bundle.js</code>，并计算文件的md5生成[hash].js，自动更新到index.html的js引用</li>
+<li><p>将其他所有引用的图片资源等,assets目录下的，计算资源的md5，更新到index.html、main.css的引用中。</p>
+<blockquote>
+<p>其实也有对更新main.js中assets路径的资源字符串的引用更新的需求，此需求请自写loader，处理这个</p>
+</blockquote>
+</li>
+<li>将更新后的index.html也输出</li>
+</ol>
+<a id="more"></a>
+<h3 id="2-尝试js为entry"><a href="#2-尝试js为entry" class="headerlink" title="2. 尝试js为entry"></a>2. 尝试js为entry</h3><p>以<code>main.js</code>为entry，把<code>index.html</code>和<code>main.css</code>作为一个引入项加入到<code>main.js</code>中，再使用<code>ExtractTextPlugin</code>去提取<code>index.html</code>和<code>main.css</code>，遇到的问题是：</p>
+<blockquote>
+<p>使用<code>ExtractTextPlugin</code>去提取<code>index.html</code>，会无法满足要求1和要求2，更新<code>index.html</code>中的文件的md5路径。原因是这种设计和需求，引出了一个<code>index.html</code>和<code>main.js</code>循环依赖的问题，本身程序就无法处理</p>
+</blockquote>
+<h3 id="3-实现"><a href="#3-实现" class="headerlink" title="3. 实现"></a>3. 实现</h3><p>先看配置项：</p>
+<pre><code>{
+    entry: [
+        &apos;./index.html&apos;
+    ],
+    output: {
+        filename: &apos;[name].xxxjs&apos;,
+        path: path.resolve(__dirname, &apos;dist&apos;),
+        publicPath: ENV_CONFIG.publicPath
+    },
+    module: {
+        rules: [
+            {
+                test: /index\.html$/,
+                use: [
+                    {
+                        loader: &apos;file-loader&apos;,
+                        query: {
+                            name: &apos;[name].[ext]&apos;
+                        }
+                    },
+                    &apos;extract-loader&apos;,
+                    {
+                        loader: &apos;html-loader&apos;,
+                        query: {
+                            attrs: [
+                                &apos;img:data-src&apos;,
+                                &apos;link:href&apos;,
+                                &apos;script:src&apos;
+                            ],
+                            minimize: true
+                        }
+                    },
+                ]
+            },
+            {
+                test: /assets/,
+                loader: &apos;file-loader&apos;,
+                query: {
+                    name: &apos;[hash].[ext]&apos;
+                }
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    {
+                        loader: &apos;file-loader&apos;,
+                        query: {
+                            name: &apos;[hash].css&apos;
+                        }
+                    },
+                    &apos;extract-loader&apos;,
+                    &apos;css-loader&apos;,
+                    &apos;less-loader&apos;
+                ]
+            },
+            {
+                test: /\.js$/,
+                use: [
+                    {
+                        loader: &apos;file-loader&apos;,
+                        options: {
+                            name: &apos;[hash].[ext]&apos;
+                        }
+                    },
+                    &apos;uglify-loader&apos;,
+                    {
+                        loader: &apos;rollup-loader&apos;,
+                        options: {
+                            format: &apos;iife&apos;,
+                            external: [],
+                            plugins: [
+                                RollupPluginNodeResovle(),
+                                RollupPluginCommonjs({
+                                    include: &apos;node_modules/**&apos;
+                                }),
+                                RollupPluginBabel({
+                                    exclude: &apos;node_modules/**&apos;,
+                                    presets: &apos;es2015-rollup&apos;
+                                })
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    resolveLoader: {
+        modules: [&apos;lib&apos;, &apos;node_modules&apos;]
+    }
+}
+</code></pre><p>思路：</p>
+<ol>
+<li>如果以<code>index.html</code>为入口，那么就要使用<code>html-loader</code>去解析html，同时配合<code>extract-loader</code>解析<code>index.html</code>的<code>main.less</code>、<code>assets/*</code>去触发webpack对<code>less</code>、<code>assets/*</code>的配置module.loader，这样就会完成对less、assets的md5、引用更新的处理。(这是官方推荐）</li>
+<li><p>但是以相同的思路去处理<code>index.html[script:src]</code>（main.js）的时候，就会出错，无论如何也进不了<code>config#module.rule#/.js</code>的匹配项，这个就要通过看源码进行思考，见<a href="https://github.com/peerigon/extract-loader/blob/master/src/extractLoader.js" target="_blank" rel="noopener"><code>extract-loader/src/extractLoader#46</code></a>:</p>
+<pre><code>// If the required file is a JS-file, we just evaluate it with node&apos;s require
+// This is necessary because of the css-loader which uses a helper module (css-base.js) to export stuff
+if (/\.js$/i.test(resourcePath)) {
+    return require(absPath);
+}
+</code></pre><p> 原来<code>extract-loader</code>在遇到js后缀的时候，会直接通过’node#require’进行执行，不走和<code>less</code>、<code>assets</code>同样的逻辑，为什么要这么做，解释里面有，上一步的<code>css-loader</code>会把:</p>
+<pre><code>&lt;link ref=&quot;stylesheet&quot; href=&quot;main.less&quot;&gt;
+</code></pre><p> 转换成下面的结果，</p>
+<pre><code>&apos;&lt;link ref=&quot;stylesheet&quot; href=&quot;&apos; + require(&apos;css-loader!main.less&apos;) + &apos;&quot;&gt;&apos;
+</code></pre><p> 可以看到<code>extract-loader</code>要保证<code>css-loader</code>可以正常执行，因此有了这个上面对js的限制。但是<code>css-loader</code>一般只会出现在<code>node_module</code>下，因此可以对<code>extract-loader</code>进行改造，把配置js的正则表达式改成如下，来保证我们自己项目里面的js走<code>config#module#rule</code>的匹配项见<a href="https://github.com/peerigon/extract-loader/pull/7" target="_blank" rel="noopener">pr</a>：</p>
+<pre><code>if (/node_modules.*?\.js$/i.test(resourcePath)) {
+    return require(absPath);
+}
+</code></pre><p> 请自行改动extract-loader，放到自己项目根目录下lib下，（也可以是其他目录，通过config#resolveLoader来解决，优先使用本地的）;</p>
+</li>
+<li><p>这样就解决了js不经过<code>config#moudle#rule#/.js</code>的匹配项，但是下面又发现，通过<code>extract-loader</code>引起<code>config#module#rule#/.js</code>的配置去解析js，如果只是单纯是使用webpack的默认行为，只使用<code>babel-loader</code>去解析js，就会得到最终输出的<code>bundle.js</code>仅仅只有<code>main.js</code>的内容，猜测可能和webpack处理了js的机制有关，毕竟webpack主要是处理js的。如果解决这种问题的，如果webpack自己的行为无法解决，那么我可以使用其他build-tools的loader来输出一个<code>js bundle</code>，越过webpack处理js的其他过程。比如我这里使用的<code>rollup-loader</code>，也幸亏有这样一个loader。</p>
+</li>
+<li><p>整体的流程就这样走通了，每一个rule下面都使用<code>file-loader</code>来处理文件的输出和md5的计算。最终可以使用上面的这些配置来以html为入口，来打包js、less、assets、更改html对文件的引用。</p>
+</li>
+</ol>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>就不做总结了。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/webpack/" rel="tag"># webpack</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/04/var_let_const/" rel="next" title="var let const的区别">
+                <i class="fa fa-chevron-left"></i> var let const的区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/07/process_thread/" rel="prev" title="进程与线程">
+                进程与线程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Teazean</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/teazean" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/teazean11" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/teazean/activities" target="_blank" title="Zhihu"><i class="fa fa-fw fa-leanpub"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          
+            
+          
+          <div class="post-toc expand">
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-背景"><span class="nav-text">1. 背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-尝试js为entry"><span class="nav-text">2. 尝试js为entry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-实现"><span class="nav-text">3. 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-总结"><span class="nav-text">4. 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Teazean</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://teazean.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://teazean.com/2017/05/11/webpack_demo/';
+        this.page.identifier = '2017/05/11/webpack_demo/';
+        this.page.title = '记录一次webpack以html为入口打包h5的实践';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://teazean.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
