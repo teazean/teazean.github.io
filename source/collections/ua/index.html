@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html,body {
+      margin: 0;
+      padding: 0;
+    }
+    #test {
+      padding: 20px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="test"></div>
+  <script src="./ua-parser.min.js"></script>
+  <script>
+    window.getResultFromUA = function(uastring) {
+      var p = new UAParser();
+      p.setUA(uastring);
+      return p.getResult();
+    }
+
+    var currentResult = getResultFromUA(navigator.userAgent);
+    console.log(currentResult);
+    document.querySelector('#test').innerHTML = JSON.stringify(currentResult, null, 4);
+  </script>
+</body>
+</html>
